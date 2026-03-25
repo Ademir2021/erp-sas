@@ -64,9 +64,7 @@ export function PersonList({ persons, setChildren, setStep }: Props) {
               <a href="#up-person"
                 onClick={() => updatePerson(person)}
                 className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
-              >
-                Atualizar
-              </a>
+              >Atualizar</a>
             </td>
           </tr>
         ))}
