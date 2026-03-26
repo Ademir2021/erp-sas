@@ -13,7 +13,7 @@ type Props = {
     unitMeasures: TUnitMeasure[]
     msg: string
     handleSubmit: any
-    items:TItem[]
+    items: TItem[]
 }
 
 export default function ItemsForm({
@@ -33,8 +33,10 @@ export default function ItemsForm({
 
     return <>
         <div className="max-w-3xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
-            <form className="space-y-6">
-                <p>Incluir Item</p>
+            <form id="up-item" className="space-y-6">
+                <p className="font-bold">{children.id === 0 ?
+                "Registar Item" :
+                "Atualizar Item :" + children.id}</p>
                 <input className="w-full p-3 border rounded-lg"
                     type="text"
                     name='name'
@@ -95,7 +97,7 @@ export default function ItemsForm({
                 <label>SubGrupos dos Items</label>
                 <select
                     className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    value={children.brand.id || ''}
+                    value={children.subGroup.id || ''}
                     name="id"
                     onChange={(e) => setChildren({
                         ...children, subGroup: {
@@ -108,9 +110,9 @@ export default function ItemsForm({
                     <option disabled value="">
                         Selecione o subGrupo do Item ...
                     </option>
-                    {subGroups.map((brand) => (
-                        <option key={brand.id}
-                            value={brand.id}>{brand.name}</option>
+                    {subGroups.map((subGroup) => (
+                        <option key={subGroup.id}
+                            value={subGroup.id}>{subGroup.name}</option>
                     ))}
                 </select>
                 <label>Tabelas de Tributações dos Items</label>
@@ -200,19 +202,20 @@ export default function ItemsForm({
                             value={unitMeasure.id}>{unitMeasure.name}</option>
                     ))}
                 </select>
-                {msg && <p>{msg}</p>}
-                <button
+                <p className="text-gray-300 ">{msg && msg}</p>
+                <a
+                href="#up-item"
                     type="submit"
                     onClick={handleSubmit}
                     className="px-4 py-2 bg-green-600 text-white rounded-lg"
                 >{children.id === 0 ? "Registrar Item" :
                     "Atualizar Item"}
-                </button>
+                </a>
             </form>
         </div>
         <ItemsList
-        items={items}
-        setChildren={setChildren}
+            items={items}
+            setChildren={setChildren}
         />
     </>
 }

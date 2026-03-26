@@ -7,6 +7,7 @@ import { TUser } from "@/app/models/TUser";
 import { useRouter } from 'next/navigation'
 import { getUser } from "@/app/lib/auth";
 import { loadHandle } from "@/app/lib/handleApi";
+import { TResponseMessage } from "@/app/models/TMessage";
 
 export default function Items() {
 
@@ -61,40 +62,42 @@ export default function Items() {
 
      async function updateItem(item: TItem) {
        
-        const ITEM_USER:any[] = [item, user]
+        const ITEM_USER = [item, user]
 
             const res = await fetch('/api/item', {
                 method: 'PUT',
                 body: JSON.stringify(ITEM_USER),
             })
     
-            const resp: any = await res.json()
+            const resp: TResponseMessage = await res.json()
     
             if (!res.ok) {
-                setMsg(`Erro ao atualizar Pessoa: ${resp.error}`)
+                setMsg(`Erro ao atualizar Item: ${resp.error}`)
                 return
             }
-            router.push('/item')
+            router.push('/items')
             setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
             router.refresh()
         }
 
      async function saveItem(item: TItem) {
 
-           const ITEM_USER:any[] = [item, user]
+           const ITEM_USER = [item, user]
         
             const res = await fetch('/api/item', {
                 method: 'POST',
                 body: JSON.stringify(ITEM_USER),
             })
+
+              const resp: TResponseMessage = await res.json()
     
             if (!res.ok) {
-                setMsg(`Erro ao registrar Item: ${JSON.stringify(res)}`)
+                setMsg(`Erro ao registrar Item: ${resp?.details}`)
                 return
             }
     
-            router.push('/item')
-            setMsg('Item registrado com sucesso')
+            router.push('/items')
+              setMsg(`${resp.data.message} Name: ${resp.data.name} : ${resp.success}`)
             router.refresh()
         }
 
@@ -104,7 +107,7 @@ export default function Items() {
     }
 
     return <>
-    <p>{JSON.stringify(item)}</p>
+    {/* <div>{JSON.stringify(item)}</div> */}
         <ItemsForm
             handleChange={handleChange}
             setChildren={setItem}

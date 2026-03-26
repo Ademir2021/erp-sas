@@ -8,12 +8,9 @@ import { useRouter } from 'next/navigation'
 import { getUser } from "@/app/lib/auth";
 import { TZipCode } from "@/app/models/TAddress";
 import { loadHandle } from "@/app/lib/handleApi";
+import { TResponseMessage } from "@/app/models/TMessage";
 
-type TResponseMessage = {
-    success: boolean,
-    data: { message: string, id: number },
-    error: string
-}
+
 
 export default function Person() {
 

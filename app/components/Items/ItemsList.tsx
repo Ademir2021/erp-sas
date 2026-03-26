@@ -51,7 +51,7 @@ export default function ItemsList({
                             {item.subGroup.name}
                         </td>
                         <td className="px-4 py-2 text-center">
-                            <a href="#up-person"
+                            <a href="#up-item"
                                 onClick={() => updateList(item)}
                                 className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
                             >Atualizar</a>

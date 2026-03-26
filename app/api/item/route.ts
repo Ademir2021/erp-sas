@@ -7,8 +7,8 @@ export async function POST(request: Request) {
 
   const ITEM_USER: any = await request.json()
   const item: TItem = ITEM_USER[0]
-  console.log(item)
   const user: TUser = ITEM_USER[1]
+  console.log(user)
 
   if (!item.name) {
     return NextResponse.json(
@@ -17,7 +17,6 @@ export async function POST(request: Request) {
     )
   }
 
-  
    if (!user.token) {
    return NextResponse.json(
   { error: 'Token não encontrado' },
@@ -34,13 +33,14 @@ export async function POST(request: Request) {
     body: JSON.stringify(item)
   })
 
-  const data = await apiResponse.json()
+    const data = await apiResponse.json()
 
-  if (!apiResponse.ok) {
+ if (!apiResponse.ok) {
     return NextResponse.json(data, { status: apiResponse.status })
   }
 
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, data })
+
 };
 
 export async function PUT(request: Request) {
@@ -49,7 +49,7 @@ export async function PUT(request: Request) {
   const item: TItem = ITEM_USER[0]
   const user: TUser = ITEM_USER[1]
 
-  if (!user.id) {
+  if (!item.id) {
     return NextResponse.json(
       { error: 'ID é obrigatório para atualização' },
       { status: 400 }
@@ -81,9 +81,11 @@ export async function PUT(request: Request) {
 
   const data = await apiResponse.json()
 
-  if (!apiResponse.ok) {
+ if (!apiResponse.ok) {
     return NextResponse.json(data, { status: apiResponse.status })
   }
+
+  return NextResponse.json({ success: true, data })
 }
 
 export async function GET(request: Request) {
