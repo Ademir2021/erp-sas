@@ -27,11 +27,12 @@ export default function Sales() {
         itemsSale: []
     })
 
-
     useEffect(() => {
         async function loadUser() {
             const user = await getUser()
             setUser(user)
+            if(user) // adiciona o usar a venda
+                sale.user = user
         }
         loadUser()
     }, [])
@@ -64,8 +65,7 @@ export default function Sales() {
     }, [user, searchItemName])
 
     return <>
-        <div>{JSON.stringify(sale.itemsSale)}</div>
-     
+        <div>{JSON.stringify(sale)}</div>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
