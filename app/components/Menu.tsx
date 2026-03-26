@@ -41,6 +41,13 @@ export default function Menu() {
           >Dados dos Items</Link>
         </li>
         <hr />
+         <li>
+          <Link
+            href="/sales"
+            className={styles_links}
+          >Console de Venda</Link>
+        </li>
+        <hr />
         <li>
           <Link
             href="/perfil"

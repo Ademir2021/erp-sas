@@ -14,4 +14,5 @@ export type TItemsSale = {
     item: TItem
     amount: number
     price: number
+    tItem?:number
 }

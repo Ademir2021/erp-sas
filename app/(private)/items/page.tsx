@@ -57,7 +57,7 @@ export default function Items() {
         loadHandle(token, setTypeItems, 'typeitems')
         loadHandle(token, setItemsClasses, 'itemsclasses')
         loadHandle(token, setUnitMeasures, 'unitmeasures')
-         loadHandle(token, setItems, 'item')
+        loadHandle(token, setItems, 'item')
     }, [user]);
 
      async function updateItem(item: TItem) {
