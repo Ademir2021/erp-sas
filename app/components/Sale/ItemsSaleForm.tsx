@@ -3,19 +3,14 @@ import { TItemsSale } from "@/app/models/TSale";
 
 type Props = {
     items:TItem[]
-    itemsSale:TItemsSale[]
     setItemsSale:Function
 }
 
 
 export default function ITemsSaleForm ({
-    items, itemsSale, setItemsSale,
+    items,  setItemsSale,
 }:Props){
 
-//  function insertItem(item: TItem) {
-//     const newItem:TItemsSale = {item:item, amount:1, price:item.priceMax}
-//   setItemsSale((prev:any) => [...prev, newItem])
-// }
 
 function insertItem(item: TItem) {
   setItemsSale((prev: TItemsSale[]) => {

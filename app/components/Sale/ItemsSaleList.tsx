@@ -2,14 +2,16 @@ import { TItemsSale } from "@/app/models/TSale"
 
 type Props = {
     itemsSale: TItemsSale[]
+    setItemsSale: Function
 }
 
-export function ItemsSaleList({ itemsSale }: Props) {
+export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
 
     function removeItem(itemSale: TItemsSale) {
-        console.log(itemSale)
+        setItemsSale((prev: any) =>
+            prev.filter((i: TItemsSale) => i.item.id !== itemSale.item.id)
+        )
     }
-
     return <>
         <br />
         <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
@@ -19,7 +21,7 @@ export function ItemsSaleList({ itemsSale }: Props) {
                     <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Descrição</th>
                     <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Quant</th>
                     <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Preço</th>
-                                        <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">TItem</th>
+                    <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">TItem</th>
                     <th className="px-4 py-2 text-center text-sm font-semibold text-gray-700">Ações</th>
                 </tr>
             </thead>}
@@ -35,7 +37,7 @@ export function ItemsSaleList({ itemsSale }: Props) {
                             {item.item.priceMax}
                         </td>
 
-                             <td className="px-4 py-2 text-left">
+                        <td className="px-4 py-2 text-left">
                             {item.tItem = item.amount * item.price}
                         </td>
 

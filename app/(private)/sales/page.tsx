@@ -22,17 +22,25 @@ export default function Sales() {
             roles: UserRole.ADMIN,
             token: ''
         },
-        person: { id: 0 },
+        person: { id: 1 },
         discount: 0,
         itemsSale: []
     })
+
 
     useEffect(() => {
         async function loadUser() {
             const user = await getUser()
             setUser(user)
-            if(user) // adiciona o usar a venda
-                sale.user = user
+            if (user) {
+                const userSale: TUser = {
+                    id: user.id,
+                    login: user.login,
+                    roles: user.roles,
+                    token: ''
+                }
+                sale.user = userSale
+            }
         }
         loadUser()
     }, [])
@@ -64,13 +72,26 @@ export default function Sales() {
         searchItemsByName()
     }, [user, searchItemName])
 
+    function loadSale(sale: TSale) {
+        if (itemsSale.length > 0)
+            sale.itemsSale = itemsSale
+        console.log(sale)
+    }
+
+    function hanldeSubmit(e: Event) {
+        e.preventDefault()
+        loadSale(sale)
+
+    }
+
     return <>
-        <div>{JSON.stringify(sale)}</div>
+        {/* <div>{JSON.stringify(sale)}</div> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
             itemsSale={itemsSale}
             setItemsSale={setItemsSale}
+            handleSubmit={hanldeSubmit}
         >
             {sale}
         </SaleForm>
