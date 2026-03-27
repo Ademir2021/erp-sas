@@ -2,86 +2,73 @@ import { TItem } from "@/app/models/TITem";
 import { TItemsSale } from "@/app/models/TSale";
 
 type Props = {
-    items:TItem[]
-    setItemsSale:Function
+    items: TItem[]
+    setItemsSale: Function
 }
 
+export default function ITemsSaleForm({
+    items, setItemsSale,
+}: Props) {
 
-export default function ITemsSaleForm ({
-    items,  setItemsSale,
-}:Props){
+    const styles_th = "px-4 py-2 text-[11px] font-semibold text-gray-700"
+    const styles_td = "px-4 py-2 text-[11px]"
 
+    function insertItem(item: TItem) {
 
-function insertItem(item: TItem) {
-  setItemsSale((prev: TItemsSale[]) => {
-    const existingItemIndex = prev.findIndex(
-      (i) => i.item.id === item.id // ajuste conforme a chave única do item
-    );
+        setItemsSale((prev: TItemsSale[]) => {
+            const existingItemIndex = prev.findIndex(
+                (i) => i.item.id === item.id) // Ajuste conforme a chave única do item
 
-    if (existingItemIndex !== -1) {
-      // Item já existe → incrementa quantidade
-      return prev.map((i, index) =>
-        index === existingItemIndex
-          ? { ...i, amount: i.amount + 1, tItem:i.amount * i.price }
-          : i
-      );
+            if (existingItemIndex !== -1) { // Item já existe → incrementa quantidade
+                return prev.map((i, index) =>
+                    index === existingItemIndex
+                        ? { ...i, amount: i.amount + 1, tItem: i.amount * i.price } : i)
+            }
+
+            const newItem: TItemsSale = {  // Item não existe → adiciona novo
+                item,
+                amount: 1,
+                price: item.priceMax
+            }
+
+            return [...prev, newItem]
+        })
     }
-
-    // Item não existe → adiciona novo
-    const newItem: TItemsSale = {
-      item,
-      amount: 1,
-      price: item.priceMax,
-    //   tItem: item.priceMax
-    };
-    return [...prev, newItem];
-  });
-}
     return <>
-     <br />
+        <div className="mt-2 w-full overflow-x-auto">
             <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
                 {items.length > 0 && <thead className="bg-gray-100">
                     <tr>
-                        <th className="px-4 py-2 text-center text-sm font-semibold text-gray-700">ID</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Descrição</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Preço min</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Preço max</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">BarCode</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">SubGrupo</th>
-                        <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700">Grupo</th>
-                        <th className="px-4 py-2 text-center text-sm font-semibold text-gray-700">Ações</th>
+                        <th className={`${styles_th} text-center`}>ID</th>
+                        <th className={`${styles_th} text-left`}>Descrição</th>
+                        <th className={`${styles_th} text-left`}>Preço min</th>
+                        <th className={`${styles_th} text-left`}>Preço max</th>
+                        <th className={`${styles_th} text-left`}>BarCode</th>
+                        <th className={`${styles_th} text-left`}>SubGrupo</th>
+                        <th className={`${styles_th} text-left`}>Grupo</th>
+                        <th className={`${styles_th} text-center`}>Ações</th>
                     </tr>
                 </thead>}
-    
+                
                 <tbody className="divide-y divide-gray-200">
                     {items.map((item: TItem) => (
                         <tr key={item.id} className="hover:bg-gray-600 transition text-sky-100 ">
-                            <td className="px-4 py-2 text-center">{item.id}</td>
-                            <td className="px-4 py-2 text-left">{item.name}</td>
-                            <td className="px-4 py-2 text-left">
-                                {item.priceMin}
-                            </td>
-                            <td className="px-4 py-2 text-left">
-                                {item.priceMax}
-                            </td>
-                            <td className="px-4 py-2">
-                                {item.barCode}
-                            </td>
-                            <td className="px-4 py-2">
-                                {item.subGroup.group.name}
-                            </td>
-                            <td className="px-4 py-2">
-                                {item.subGroup.name}
-                            </td>
-                            <td className="px-4 py-2 text-center">
-                                <a href="#up-item"
-                                    onClick={() => insertItem(item)}
-                                    className="px-3 py-1 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
-                                >Inserir</a>
+                            <td className={`${styles_td} text-center`}>{item.id}</td>
+                            <td className={`${styles_td} text-left`}>{item.name}</td>
+                            <td className={`${styles_td} text-left`}>{item.priceMin}</td>
+                            <td className={`${styles_td} text-left`}>{item.priceMax}</td>
+                            <td className={`${styles_td} text-left`}>{item.barCode}</td>
+                            <td className={`${styles_td} text-left`}>{item.subGroup.group.name}</td>
+                            <td className={`${styles_td} text-left`}>{item.subGroup.name}</td>
+                            <td className={`${styles_td} text-center`}><a href="#up-item"
+                                onClick={() => insertItem(item)}
+                                className="px-3 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+                            >Inserir</a>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+        </div>
     </>
 }

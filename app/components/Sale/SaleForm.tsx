@@ -22,36 +22,37 @@ export default function SaleForm({
     );
 
     return <>
+        <div id="up-sale" className="max-w-7xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
 
-        <div>
-            <h1 className="font-bold">Console de Vendas</h1>
-            {<p className="mt-1"><b>Total da Compra </b>{totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
-            <hr/>
-        </div>
+            <div>
+                <h1 className="font-bold">Console de Vendas</h1>
+                {<p className="mt-1"><b>Total da Compra </b>{totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
+                <hr />
+            </div>
 
-        <ItemsSaleList
-            itemsSale={itemsSale}
-            setItemsSale={setItemsSale}
-        />
-
-        <form>
-            <label className="font-black p-2">Pesquisar Items ...</label>
-            <input
-                className="mb-3 w-full p-3 border rounded-lg"
-                placeholder="Buscar Item ..."
-                onChange={(e) => setSearchITemName(e.target.value.toString())}
+            <ItemsSaleList
+                itemsSale={itemsSale}
+                setItemsSale={setItemsSale}
             />
-        </form>
 
-        <form>
-            <a className="  px-2 py-2 bg-green-600 text-white rounded-lg"
-                onClick={handleSubmit}>
-                Finalizar Compra</a>
-        </form>
+            <form>
+                <label className="font-black p-2">Pesquisar Items ...</label>
+                <input
+                    className="mb-3 w-full p-3 border rounded-lg"
+                    placeholder="Buscar Item ..."
+                    onChange={(e) => setSearchITemName(e.target.value.toString())}
+                />
+            </form>
 
-        <ITemsSaleForm
-            items={items}
-            setItemsSale={setItemsSale}
-        />
+            <form className="flex justify-end">
+                <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
+                    onClick={handleSubmit}
+                >Finalizar Compra</a>
+            </form>
+            <ITemsSaleForm
+                items={items}
+                setItemsSale={setItemsSale}
+            />
+        </div>
     </>
 }
