@@ -32,7 +32,8 @@ export default function Sales() {
     })
     const [creditCard, setCreditCard] = useState<TCreditCart>({
         public_key: "", holder: "", number: "",
-        ex_month: "", ex_year: "", secure_code: "", encrypted: ""
+        ex_month: "", ex_year: "", secure_code: "", encrypted: "",
+        installments:1, payment:0
     });
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
@@ -171,7 +172,7 @@ export default function Sales() {
 
     const mapPargSeguroCard = (pagSeguroCard: TPagSeguroCard) => {
         pagSeguroCard.reference_id = sale.user.id?.toString() as any
-        pagSeguroCard.description = sale.operationSale.description.toString()
+        pagSeguroCard.description = operationSale.description
         pagSeguroCard.customer.name = person?.name.toString() as any
         pagSeguroCard.customer.email = sale.user.login
         pagSeguroCard.customer.tax_id = persons[0].cpf
@@ -188,7 +189,7 @@ export default function Sales() {
         pagSeguroCard.shipping.address.country = person?.address.zipCode?.city?.country.acronym as any
         pagSeguroCard.shipping.address.postal_code = person?.address.zipCode?.code.replace(/[..-]/g, '') as any
         pagSeguroCard.charges[0].reference_id = sale.user.id?.toString() as any
-        pagSeguroCard.charges[0].description = "Compras Online"
+        pagSeguroCard.charges[0].description = operationSale.description
         pagSeguroCard.charges[0].payment_method.installments = 1 //informar parcelas
         pagSeguroCard.charges[0].payment_method.holder.tax_id = person?.cpf || person?.cnpj as any
         pagSeguroCard.charges[0].amount.value = 10
@@ -197,6 +198,7 @@ export default function Sales() {
     };
 
     function pagSeguroItens(pagSeguroCard: TPagSeguroCard, saleItens: TItemsSale[]) {
+        pagSeguroCard.items = []
         for (let i of saleItens) {
             const newItem: TPagSeguroItems = {
                 reference_id: i.item.id.toString(),
@@ -250,7 +252,7 @@ export default function Sales() {
 
 
     return <>
-        <p>{JSON.stringify(person)}</p>
+        <p>{JSON.stringify(pagSeguroCard)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

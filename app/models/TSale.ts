@@ -41,4 +41,6 @@ export type TCreditCart = {
     ex_year: string
     secure_code: string
     encrypted: string
+    installments:number
+    payment:number 
 }
