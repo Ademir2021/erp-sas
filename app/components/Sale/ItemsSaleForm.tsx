@@ -4,10 +4,11 @@ import { TItemsSale } from "@/app/models/TSale";
 type Props = {
     items: TItem[]
     setItemsSale: Function
+    msg: string
 }
 
 export default function ITemsSaleForm({
-    items, setItemsSale,
+    items, setItemsSale, msg
 }: Props) {
 
     const styles_th = "px-4 py-2 text-[11px] font-semibold text-gray-700"
@@ -43,13 +44,13 @@ export default function ITemsSaleForm({
                         <th className={`${styles_th} text-left`}>Descrição</th>
                         <th className={`${styles_th} text-left`}>Preço min</th>
                         <th className={`${styles_th} text-left`}>Preço max</th>
-                        <th className={`${styles_th} text-left`}>BarCode</th>
-                        <th className={`${styles_th} text-left`}>SubGrupo</th>
+                        <th className={`${styles_th} text-left`}>Código de barras</th>
+                        <th className={`${styles_th} text-left`}>Sub grupo</th>
                         <th className={`${styles_th} text-left`}>Grupo</th>
                         <th className={`${styles_th} text-center`}>Ações</th>
                     </tr>
                 </thead>}
-                
+
                 <tbody className="divide-y divide-gray-200">
                     {items.map((item: TItem) => (
                         <tr key={item.id} className="hover:bg-gray-600 transition text-sky-100 ">

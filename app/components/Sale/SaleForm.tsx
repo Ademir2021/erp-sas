@@ -1,7 +1,10 @@
-import { TItemsSale, TSale } from "@/app/models/TSale"
+'use client'
+import { TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
 import { TItem } from "@/app/models/TITem"
 import { ItemsSaleList } from "./ItemsSaleList"
+import { TPerson } from "@/app/models/TPerson"
+import { useState } from "react"
 
 type Props = {
     children: TSale
@@ -10,11 +13,21 @@ type Props = {
     itemsSale: TItemsSale[]
     setItemsSale: Function
     handleSubmit: any
+    msg: string
+    setChildren: Function
+    persons: TPerson[]
+    operationsSale: TOperationSale[]
+    setOperationSale: Function
+    operationSale:TOperationSale
 }
 
 export default function SaleForm({
     children, setSearchITemName,
-    items, itemsSale, setItemsSale, handleSubmit }: Props) {
+    items, itemsSale, setItemsSale,
+    handleSubmit, msg, setChildren, persons,
+    operationsSale, setOperationSale, operationSale }: Props) {
+
+    const [step, setStep] = useState(false)
 
     const totalSale = itemsSale.reduce(
         (total, i) => total + i.amount * i.price,
@@ -43,15 +56,81 @@ export default function SaleForm({
                     onChange={(e) => setSearchITemName(e.target.value.toString())}
                 />
             </form>
+            {step === false ? <a href="##" onClick={() => setStep(true)}>+</a> :
+                <a href="##" onClick={() => setStep(false)}>-</a>}
+            {step === true && <> <div className="mb-2">
 
-            <form className="flex justify-end">
-                <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
-                    onClick={handleSubmit}
-                >Finalizar Compra</a>
-            </form>
+                <>
+                    {/**Operações de Venda */}
+                    <label>Operações de vendas</label>
+                    <select
+                        className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        value={children.operationSale?.id || ''}
+                        onChange={(e) => {
+                            const selectedId = Number(e.target.value);
+
+                            children.operationSale.id = selectedId // para o id da operação para venda
+
+                            const selectedOperation = operationsSale.find(
+                                (op) => op.id === selectedId
+                            );
+
+                            setOperationSale(selectedOperation);
+                        }}
+                    >
+                        <option disabled value="">
+                            Selecione uma Operação de Venda ...
+                        </option>
+
+                        {operationsSale.map((operationSale) => (
+                            <option
+                                key={operationSale.id}
+                                value={operationSale.id}
+                            >
+                                {operationSale.description}
+                            </option>
+                        ))}
+                    </select>
+
+                    {/**Dados do cartão */}
+                    {operationSale.id === 1 && <div>
+                        <form>
+                            <p>Dados do cartão</p>
+                        </form>
+                    </div>}
+
+                    {/**Compradores */}
+                    <label>Selecionar o nome do Comprador</label>
+                    <select
+                        className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        value={children.person.id || ''}
+                        name="id"
+                        onChange={(e) => setChildren({
+                            ...children, person: {
+                                id: parseInt(e.target.value),
+                            }
+                        })}>
+                        <option disabled value="">
+                            Selecione o Comprador ...
+                        </option>
+                        {persons.map((person) => (
+                            <option key={person.id}
+                                value={person.id}>{person.name}</option>
+                        ))}
+                    </select>
+                </>
+            </div>
+
+                <form className="flex justify-end">
+                    <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
+                        onClick={handleSubmit}
+                    >Finalizar Compra</a>
+                </form> </>}
+            <p className="text-gray-300 ">{msg && msg}</p>
             <ITemsSaleForm
                 items={items}
                 setItemsSale={setItemsSale}
+                msg={msg}
             />
         </div>
     </>

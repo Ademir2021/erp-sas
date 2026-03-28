@@ -8,11 +8,27 @@ export type TSale = {
     person: Pick<TPerson, 'id'>
     discount: number
     itemsSale: TItemsSale[]
+    operationSale:TOperationSale
 }
 
 export type TItemsSale = {
     item: TItem
     amount: number
     price: number
-    tItem?:number
+    tItem?: number
+}
+
+export type TOperationSale = {
+    id: number
+    description: string
+    type:string
+    controlsStock:boolean
+    generateFinancial:boolean
+    allowDiscount:boolean
+    updateCost:boolean
+    requiresInvoice:boolean
+    isReturn:boolean
+    cfop:string
+    defaultNature:string
+    active:boolean
 }

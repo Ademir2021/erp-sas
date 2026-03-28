@@ -8,7 +8,6 @@ export async function POST(request: Request) {
   const ITEM_USER: any = await request.json()
   const item: TItem = ITEM_USER[0]
   const user: TUser = ITEM_USER[1]
-  console.log(user)
 
   if (!item.name) {
     return NextResponse.json(
