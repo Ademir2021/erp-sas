@@ -154,7 +154,7 @@ export default function Sales() {
             persons={persons}
             operationsSale={operationsSale}
             setOperationSale={setOperationSale}
-            operationSale={operationSale as any}
+            operationSale={operationSale}
         >
             {sale}
         </SaleForm>

@@ -5,6 +5,7 @@ import { TItem } from "@/app/models/TITem"
 import { ItemsSaleList } from "./ItemsSaleList"
 import { TPerson } from "@/app/models/TPerson"
 import { useState } from "react"
+import CreditCardForm from "./CreditCardForm"
 
 type Props = {
     children: TSale
@@ -18,7 +19,7 @@ type Props = {
     persons: TPerson[]
     operationsSale: TOperationSale[]
     setOperationSale: Function
-    operationSale:TOperationSale
+    operationSale: TOperationSale
 }
 
 export default function SaleForm({
@@ -93,11 +94,8 @@ export default function SaleForm({
                     </select>
 
                     {/**Dados do cartão */}
-                    {operationSale.id === 1 && <div>
-                        <form>
-                            <p>Dados do cartão</p>
-                        </form>
-                    </div>}
+                    {operationSale.id === 1 &&
+                        <CreditCardForm />}
 
                     {/**Compradores */}
                     <label>Selecionar o nome do Comprador</label>
