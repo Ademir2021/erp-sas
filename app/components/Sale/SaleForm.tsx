@@ -1,5 +1,5 @@
 'use client'
-import { TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
+import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
 import { TItem } from "@/app/models/TITem"
 import { ItemsSaleList } from "./ItemsSaleList"
@@ -20,13 +20,17 @@ type Props = {
     operationsSale: TOperationSale[]
     setOperationSale: Function
     operationSale: TOperationSale
+    creditCard: TCreditCart
+    setCreditCard: Function
+    handleSubmitCreditCard:any
 }
 
 export default function SaleForm({
     children, setSearchITemName,
     items, itemsSale, setItemsSale,
     handleSubmit, msg, setChildren, persons,
-    operationsSale, setOperationSale, operationSale }: Props) {
+    operationsSale, setOperationSale, operationSale,
+    creditCard, setCreditCard, handleSubmitCreditCard }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -57,8 +61,8 @@ export default function SaleForm({
                     onChange={(e) => setSearchITemName(e.target.value.toString())}
                 />
             </form>
-            {step === false ? <a href="##" onClick={() => setStep(true)}>+</a> :
-                <a href="##" onClick={() => setStep(false)}>-</a>}
+            {step === false ? <a href="##" onClick={() => setStep(true)}>{">"}</a> :
+                <a href="##" onClick={() => setStep(false)}>{"<"}</a>}
             {step === true && <> <div className="mb-2">
 
                 <>
@@ -95,7 +99,11 @@ export default function SaleForm({
 
                     {/**Dados do cartão */}
                     {operationSale.id === 1 &&
-                        <CreditCardForm />}
+                        <CreditCardForm
+                        creditCard={creditCard}
+                        setCreditCard={setCreditCard}
+                        handleSubmitCreditCard={handleSubmitCreditCard}
+                        />}
 
                     {/**Compradores */}
                     <label>Selecionar o nome do Comprador</label>

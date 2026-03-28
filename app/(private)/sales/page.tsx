@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
+import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import { TUser, UserRole } from "@/app/models/TUser"
 import { useRouter } from 'next/navigation'
 import SaleForm from "@/app/components/Sale/SaleForm"
@@ -11,10 +11,31 @@ import { TResponseMessage } from "@/app/models/TMessage"
 import { TPerson } from "@/app/models/TPerson"
 import { loadHandle } from "@/app/lib/handleApi"
 
+import pagSeguroCardJSON from "./JSON/pagSeguroCard.json"
+import { TPagSeguroCard, TPagSeguroItems, TPublicKey } from "@/app/models/TPagSeguroCard"
+
+
+// Adiciona a definição de PagSeguro ao tipo Window
+declare global {
+    interface Window {
+        PagSeguro?: any;
+    }
+}
 
 export default function Sales() {
 
     const router = useRouter()
+
+    const pagSeguroCard_: any = pagSeguroCardJSON
+    const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCard_);
+
+    const [publicKey, setPublicKey] = useState<TPublicKey>({
+        public_key: '', created_at: ''
+    })
+    const [creditCard, setCreditCard] = useState<TCreditCart>({
+        public_key: "", holder: "", number: "",
+        ex_month: "", ex_year: "", secure_code: "", encrypted: ""
+    });
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
     const [statusSaveSale, setStatusSaveSale] = useState(false)
@@ -35,14 +56,22 @@ export default function Sales() {
         person: { id: 0 },
         discount: 0,
         itemsSale: [],
-        operationSale:{id:0,description:'',type:"",controlsStock:false,
-            generateFinancial:false,allowDiscount:false,updateCost:false,
-            requiresInvoice:false,isReturn:false,cfop:'',defaultNature:'',
-            active:true
+        operationSale: {
+            id: 0, description: '', type: "", controlsStock: false,
+            generateFinancial: false, allowDiscount: false, updateCost: false,
+            requiresInvoice: false, isReturn: false, cfop: '', defaultNature: '',
+            active: true
         }
     })
     const [operationSale, setOperationSale] = useState<TOperationSale>(sale.operationSale)
 
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src =
+            "https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js";
+        script.async = true;
+        document.body.appendChild(script);
+    }, []);
 
     useEffect(() => {
         async function loadUser() {
@@ -64,7 +93,8 @@ export default function Sales() {
     useEffect(() => {
         const token = user?.token as string
         loadHandle(token, setPersons, 'person')
-          loadHandle(token, setOperationsSale, 'operationsale')
+        loadHandle(token, setOperationsSale, 'operationsale')
+        loadHandle(token, setPublicKey, 'pagseguro')
     }, [user]);
 
     useEffect(() => {
@@ -96,7 +126,7 @@ export default function Sales() {
         searchItemsByName()
     }, [user, searchItemName])
 
-    function loadItemsSale(sale: TSale | any  ) {
+    function loadItemsSale(sale: TSale | any) {
 
         if (itemsSale.length > 0) {
             sale.itemsSale = itemsSale.map(i => ({
@@ -107,7 +137,7 @@ export default function Sales() {
             }))
         };
 
-        
+
     }
 
     async function saveSale(sale: TSale) {
@@ -140,9 +170,84 @@ export default function Sales() {
         }
     }
 
+ const getPargSeguroCard = (pagSeguroCard: TPagSeguroCard) => {
+        pagSeguroCard.reference_id = sale.user.id?.toString() as any
+        pagSeguroCard.description = "pagamento da nota"
+        // pagSeguroCard.customer.name = persons[0].name
+        pagSeguroCard.customer.email = sale.user.login
+        // pagSeguroCard.customer.tax_id = persons[0].cpf
+        // pagSeguroCard.customer.phones[0].number = sale.person.phone_pers.substring(2)
+        pagSeguroCard.customer.phones[0].country = "55"
+        // pagSeguroCard.customer.phones[0].area = sale.person.phone_pers.slice(0, -9);
+        pagSeguroCard.customer.phones[0].type = "MOBILE"
+        // pagSeguroCard.shipping.address.street = sale.person.address.address_pers
+        // pagSeguroCard.shipping.address.number = parseInt(sale.person.address.num_address)
+        pagSeguroCard.shipping.address.complement = null
+        // pagSeguroCard.shipping.address.locality = sale.person.address.bairro_pers
+        // pagSeguroCard.shipping.address.city = sale.person.address.name_city
+        // pagSeguroCard.shipping.address.region_code = sale.person.address.uf
+        pagSeguroCard.shipping.address.country = 'BRA'
+        // pagSeguroCard.shipping.address.postal_code = sale.person.address.num_cep.replace(/[..-]/g, '')
+        pagSeguroCard.charges[0].reference_id = sale.user.id?.toString() as any
+        pagSeguroCard.charges[0].description = "Compras Online"
+        pagSeguroCard.charges[0].payment_method.installments = 1 //informar parcelas
+        // pagSeguroCard.charges[0].payment_method.holder.tax_id = persons[0].cpf
+        pagSeguroCard.charges[0].amount.value = 10
+        pagSeguroItens(pagSeguroCard, itemsSale)
+        setPagSeguroCard(pagSeguroCard)
+    };
+
+    function pagSeguroItens(PagSeguro: TPagSeguroCard, SaleItens: TItemsSale[]) {
+        for (let i of SaleItens) {
+            const newItem: TPagSeguroItems = {
+                reference_id: i.item.id.toString(),
+                name: i.item.name.toString(),
+                quantity: i.amount,
+                unit_amount: i.item.priceMax.toString().replace(/[.]/g, '')
+            }
+            PagSeguro.items.push(newItem)
+        }
+    };
+
+    const sdkPagSeguro = async () => {
+        if (!window.PagSeguro || !publicKey) {
+            setMsg("SDK não carregado corretamente.");
+            return;
+        }
+        try {
+            const encrypted = await window.PagSeguro.encryptCard({
+                publicKey: publicKey.public_key,
+                holder: creditCard.holder,
+                number: creditCard.number,
+                expMonth: creditCard.ex_month,
+                expYear: creditCard.ex_year,
+                securityCode: creditCard.secure_code,
+            });
+
+            if (encrypted) {
+                pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
+                getPargSeguroCard(pagSeguroCard) // seta os dados da Venda
+                // registerPagSeguroCard() // efetua o pagamento
+                console.log(pagSeguroCard)
+            }
+
+            if (encrypted.hasErrors === true) {
+                setMsg(JSON.stringify(encrypted.errors[0].code))
+            }
+        } catch (err: unknown) {
+            setMsg('ErroEncryptCard: ' + err)
+        }
+    };
+
+
+    function handleSubmitCreditCard(e: Event) {
+        e.preventDefault()
+        sdkPagSeguro()
+    }
+
 
     return <>
-        {/* <p>{JSON.stringify(sale)}</p> */}
+        <p>{JSON.stringify(pagSeguroCard)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
@@ -155,6 +260,9 @@ export default function Sales() {
             operationsSale={operationsSale}
             setOperationSale={setOperationSale}
             operationSale={operationSale}
+            creditCard={creditCard}
+            setCreditCard={setCreditCard}
+            handleSubmitCreditCard={handleSubmitCreditCard}
         >
             {sale}
         </SaleForm>

@@ -32,3 +32,13 @@ export type TOperationSale = {
     defaultNature:string
     active:boolean
 }
+
+export type TCreditCart = {
+    public_key: string
+    holder: string
+    number: string
+    ex_month: string
+    ex_year: string
+    secure_code: string
+    encrypted: string
+}
