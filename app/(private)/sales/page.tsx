@@ -10,10 +10,8 @@ import { getUser } from "@/app/lib/auth"
 import { TResponseMessage } from "@/app/models/TMessage"
 import { TPerson } from "@/app/models/TPerson"
 import { loadHandle } from "@/app/lib/handleApi"
-
 import pagSeguroCardJSON from "./JSON/pagSeguroCard.json"
 import { TPagSeguroCard, TPagSeguroItems, TPublicKey } from "@/app/models/TPagSeguroCard"
-
 
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
@@ -64,6 +62,7 @@ export default function Sales() {
         }
     })
     const [operationSale, setOperationSale] = useState<TOperationSale>(sale.operationSale)
+    const [person, setPerson] = useState<TPerson | null>()
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -94,7 +93,7 @@ export default function Sales() {
         const token = user?.token as string
         loadHandle(token, setPersons, 'person')
         loadHandle(token, setOperationsSale, 'operationsale')
-        loadHandle(token, setPublicKey, 'pagseguro')
+        loadHandle(token, setPublicKey, 'pagseguropublickey')
     }, [user]);
 
     useEffect(() => {
@@ -170,44 +169,50 @@ export default function Sales() {
         }
     }
 
- const getPargSeguroCard = (pagSeguroCard: TPagSeguroCard) => {
+    const mapPargSeguroCard = (pagSeguroCard: TPagSeguroCard) => {
         pagSeguroCard.reference_id = sale.user.id?.toString() as any
-        pagSeguroCard.description = "pagamento da nota"
-        // pagSeguroCard.customer.name = persons[0].name
+        pagSeguroCard.description = sale.operationSale.description.toString()
+        pagSeguroCard.customer.name = person?.name.toString() as any
         pagSeguroCard.customer.email = sale.user.login
-        // pagSeguroCard.customer.tax_id = persons[0].cpf
-        // pagSeguroCard.customer.phones[0].number = sale.person.phone_pers.substring(2)
-        pagSeguroCard.customer.phones[0].country = "55"
-        // pagSeguroCard.customer.phones[0].area = sale.person.phone_pers.slice(0, -9);
+        pagSeguroCard.customer.tax_id = persons[0].cpf
+        pagSeguroCard.customer.phones[0].number = person?.phone.substring(2) as any
+        pagSeguroCard.customer.phones[0].country = person?.address.zipCode?.city?.country.ddi as any
+        pagSeguroCard.customer.phones[0].area = person?.phone.slice(0, -9) as any
         pagSeguroCard.customer.phones[0].type = "MOBILE"
-        // pagSeguroCard.shipping.address.street = sale.person.address.address_pers
-        // pagSeguroCard.shipping.address.number = parseInt(sale.person.address.num_address)
-        pagSeguroCard.shipping.address.complement = null
-        // pagSeguroCard.shipping.address.locality = sale.person.address.bairro_pers
-        // pagSeguroCard.shipping.address.city = sale.person.address.name_city
-        // pagSeguroCard.shipping.address.region_code = sale.person.address.uf
-        pagSeguroCard.shipping.address.country = 'BRA'
-        // pagSeguroCard.shipping.address.postal_code = sale.person.address.num_cep.replace(/[..-]/g, '')
+        pagSeguroCard.shipping.address.street = person?.address.street as any
+        pagSeguroCard.shipping.address.number = parseInt(person?.address.number as any)
+        pagSeguroCard.shipping.address.complement = person?.address.complement.toString() as any
+        pagSeguroCard.shipping.address.locality = person?.address.neighborhood as any
+        pagSeguroCard.shipping.address.city = person?.address.zipCode?.city?.name as any
+        pagSeguroCard.shipping.address.region_code = person?.address.zipCode?.city?.state.acronym as any
+        pagSeguroCard.shipping.address.country = person?.address.zipCode?.city?.country.acronym as any
+        pagSeguroCard.shipping.address.postal_code = person?.address.zipCode?.code.replace(/[..-]/g, '') as any
         pagSeguroCard.charges[0].reference_id = sale.user.id?.toString() as any
         pagSeguroCard.charges[0].description = "Compras Online"
         pagSeguroCard.charges[0].payment_method.installments = 1 //informar parcelas
-        // pagSeguroCard.charges[0].payment_method.holder.tax_id = persons[0].cpf
+        pagSeguroCard.charges[0].payment_method.holder.tax_id = person?.cpf || person?.cnpj as any
         pagSeguroCard.charges[0].amount.value = 10
         pagSeguroItens(pagSeguroCard, itemsSale)
         setPagSeguroCard(pagSeguroCard)
     };
 
-    function pagSeguroItens(PagSeguro: TPagSeguroCard, SaleItens: TItemsSale[]) {
-        for (let i of SaleItens) {
+    function pagSeguroItens(pagSeguroCard: TPagSeguroCard, saleItens: TItemsSale[]) {
+        for (let i of saleItens) {
             const newItem: TPagSeguroItems = {
                 reference_id: i.item.id.toString(),
                 name: i.item.name.toString(),
                 quantity: i.amount,
                 unit_amount: i.item.priceMax.toString().replace(/[.]/g, '')
             }
-            PagSeguro.items.push(newItem)
+            pagSeguroCard.items.push(newItem)
         }
     };
+
+    async function registerPagSeguroCard (){
+        // aguardadno logica 
+        console.log(pagSeguroCard)
+        return
+    }
 
     const sdkPagSeguro = async () => {
         if (!window.PagSeguro || !publicKey) {
@@ -226,9 +231,8 @@ export default function Sales() {
 
             if (encrypted) {
                 pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
-                getPargSeguroCard(pagSeguroCard) // seta os dados da Venda
-                // registerPagSeguroCard() // efetua o pagamento
-                console.log(pagSeguroCard)
+                mapPargSeguroCard(pagSeguroCard) // seta os dados da Venda
+                registerPagSeguroCard() // efetua o pagamento  
             }
 
             if (encrypted.hasErrors === true) {
@@ -239,7 +243,6 @@ export default function Sales() {
         }
     };
 
-
     function handleSubmitCreditCard(e: Event) {
         e.preventDefault()
         sdkPagSeguro()
@@ -247,7 +250,7 @@ export default function Sales() {
 
 
     return <>
-        <p>{JSON.stringify(pagSeguroCard)}</p>
+        <p>{JSON.stringify(person)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
@@ -263,6 +266,8 @@ export default function Sales() {
             creditCard={creditCard}
             setCreditCard={setCreditCard}
             handleSubmitCreditCard={handleSubmitCreditCard}
+            person={person as any}
+            setPerson={setPerson}
         >
             {sale}
         </SaleForm>

@@ -23,6 +23,8 @@ type Props = {
     creditCard: TCreditCart
     setCreditCard: Function
     handleSubmitCreditCard:any
+    person:TPerson
+    setPerson:Function
 }
 
 export default function SaleForm({
@@ -30,7 +32,7 @@ export default function SaleForm({
     items, itemsSale, setItemsSale,
     handleSubmit, msg, setChildren, persons,
     operationsSale, setOperationSale, operationSale,
-    creditCard, setCreditCard, handleSubmitCreditCard }: Props) {
+    creditCard, setCreditCard, handleSubmitCreditCard, person, setPerson }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -111,11 +113,17 @@ export default function SaleForm({
                         className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                         value={children.person.id || ''}
                         name="id"
-                        onChange={(e) => setChildren({
-                            ...children, person: {
-                                id: parseInt(e.target.value),
-                            }
-                        })}>
+                         onChange={(e) => {
+                            const selectedId = Number(e.target.value);
+
+                            children.person.id = selectedId // para o id da Pessoa da venda
+
+                            const selectedOperation = persons.find(
+                                (per) => per.id === selectedId
+                            );
+
+                            setPerson(selectedOperation);
+                        }}>
                         <option disabled value="">
                             Selecione o Comprador ...
                         </option>
