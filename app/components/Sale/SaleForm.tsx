@@ -4,7 +4,7 @@ import ITemsSaleForm from "./ItemsSaleForm"
 import { TItem } from "@/app/models/TITem"
 import { ItemsSaleList } from "./ItemsSaleList"
 import { TPerson } from "@/app/models/TPerson"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CreditCardForm from "./CreditCardForm"
 
 type Props = {
@@ -22,9 +22,9 @@ type Props = {
     operationSale: TOperationSale
     creditCard: TCreditCart
     setCreditCard: Function
-    handleSubmitCreditCard:any
-    person:TPerson
-    setPerson:Function
+    handleSubmitCreditCard: any
+    person: TPerson
+    setPerson: Function
 }
 
 export default function SaleForm({
@@ -40,6 +40,13 @@ export default function SaleForm({
         (total, i) => total + i.amount * i.price,
         0
     );
+
+    useEffect(() => {
+        setCreditCard((prev: TCreditCart) => ({
+            ...prev,
+            payment: totalSale
+        }));
+    }, [totalSale]);
 
     return <>
         <div id="up-sale" className="max-w-7xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
@@ -102,9 +109,9 @@ export default function SaleForm({
                     {/**Dados do cartão */}
                     {operationSale.id === 1 &&
                         <CreditCardForm
-                        creditCard={creditCard}
-                        setCreditCard={setCreditCard}
-                        handleSubmitCreditCard={handleSubmitCreditCard}
+                            creditCard={creditCard}
+                            setCreditCard={setCreditCard}
+                            handleSubmitCreditCard={handleSubmitCreditCard}
                         />}
 
                     {/**Compradores */}
@@ -113,7 +120,7 @@ export default function SaleForm({
                         className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                         value={children.person.id || ''}
                         name="id"
-                         onChange={(e) => {
+                        onChange={(e) => {
                             const selectedId = Number(e.target.value);
 
                             children.person.id = selectedId // para o id da Pessoa da venda

@@ -250,9 +250,10 @@ export default function Sales() {
         sdkPagSeguro()
     }
 
+    console.log(creditCard.payment)
 
     return <>
-        <p>{JSON.stringify(pagSeguroCard)}</p>
+        <p>{JSON.stringify(creditCard.payment)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
