@@ -33,7 +33,7 @@ export default function Person() {
             id: 0,
             login: '',
             password: '',
-            roles: UserRole.ADMIN,
+            role: "ADMIN" as UserRole,
             token: ''
         },
         name: '',
@@ -69,7 +69,7 @@ export default function Person() {
             const user = await getUser()
             setUser(user)
             if (user) {
-                person.user.roles = user.roles
+                person.user.role = user.roles
                 person.user.token = user.token
             }
         }
@@ -86,7 +86,7 @@ export default function Person() {
     async function updatePerson(person: TPerson) {
         if (user) {
             person.user.token = user.token
-            person.user.roles = user.roles
+            person.user.role = "USER" as UserRole
         }
         const res = await fetch('/api/person', {
             method: 'PUT',
@@ -108,7 +108,7 @@ export default function Person() {
         if (person)
             person.user.id = user?.id || 0
         person.user.login = user?.login || ""
-        person.user.roles = 0 as any
+        person.user.role = "USER" as UserRole
         person.cpf = person.cpf || null as any
         person.rg = person.rg || null as any
         person.cnpj = person.cnpj || null as any

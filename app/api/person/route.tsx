@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
 
   const person: TPerson = await request.json()
-
+console.log(person)
   if (!person.id) {
     return NextResponse.json(
       { error: 'ID é obrigatório para atualização' },

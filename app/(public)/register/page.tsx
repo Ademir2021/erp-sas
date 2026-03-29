@@ -26,8 +26,11 @@ export default function Register() {
             method: 'POST',
             body: JSON.stringify(user),
         })
+
+        const resp = await res.json()
+
         if (!res.ok) {
-            setMsg(`Erro ao registrar Usuário: ${JSON.stringify(res)}`)
+            setMsg(`Erro ao registrar Usuário: ${JSON.stringify(resp.error)}`)
             return
         }
         router.push('/register')

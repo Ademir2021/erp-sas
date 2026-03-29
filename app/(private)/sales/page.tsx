@@ -22,13 +22,9 @@ declare global {
 
 export default function Sales() {
 
-    // res.charges[0].amount.summary.paid
-
     const router = useRouter()
-
     const pagSeguroCard_: any = pagSeguroCardJSON
     const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCard_);
-
     const [publicKey, setPublicKey] = useState<TPublicKey>({
         public_key: '', created_at: ''
     })
@@ -52,7 +48,7 @@ export default function Sales() {
             id: 0,
             login: '',
             password: '',
-            role: UserRole.ADMIN,
+            role: "USER" as UserRole,
             token: ''
         },
         person: { id: 0 },
@@ -84,7 +80,7 @@ export default function Sales() {
                 const userSale: TUser = {
                     id: user.id,
                     login: user.login,
-                    role: user.role,
+                    role: "USER" as UserRole,
                     token: user.token
                 }
                 sale.user = userSale
@@ -101,9 +97,7 @@ export default function Sales() {
     }, [user]);
 
     useEffect(() => {
-
         async function searchItemsByName() {
-
             const token = user?.token
             const params = new URLSearchParams({
                 name: searchItemName,
@@ -141,57 +135,55 @@ export default function Sales() {
     }
 
     async function saveSale(sale: TSale) {
-
         const res = await fetch('/api/sale', {
             method: 'POST',
             body: JSON.stringify(sale),
         })
-
         const resp: TResponseMessage = await res.json()
-
         if (!res.ok) {
             setMsg(`Erro ao registrar Venda: ${JSON.stringify(resp)}`)
             return
         }
-
         router.push('/sales')
         setMsg(`Mensagems: ${resp.data.message}, ID Venda:${resp.data.id}, Venda OK:${resp.success}`)
         router.refresh()
     }
-
-    function hanldeSubmit(e: Event) {
-        e.preventDefault()
+    function handlesaveSale() {
         if (statusSaveSale === false) {
             loadItemsSale(sale)
             saveSale(sale)
-            setStatusSaveSale(true)
         } else {
             setMsg("Esta venda já foi gravada")
-        }
+        };
+    }
+    function hanldeSubmit(e: Event) {
+        e.preventDefault()
+        handlesaveSale()
     }
 
     const mapFieldsPagSeguro = (p: TPagSeguroCard) => {
         p.reference_id = sale.user.id?.toString() as any
-        p.description = operationSale.description
+        p.description = operationSale.description.toString()
         p.customer.name = person?.name.toString() as any
-        p.customer.email = sale.user.login
-        p.customer.tax_id = persons[0].cpf
+        p.customer.email = sale.user.login.toString()
+        p.customer.tax_id = person?.cpf.toString() as any
         p.customer.phones[0].number = person?.phone.substring(2) as any
-        p.customer.phones[0].country = person?.address.zipCode?.city?.country.ddi as any
-        p.customer.phones[0].area = person?.phone.slice(0, -9) as any
+        p.customer.phones[0].country = person?.address.zipCode?.city?.country.ddi.toString() as any
+        p.customer.phones[0].area = person?.phone.slice(0, -9).toString() as any
         p.customer.phones[0].type = "MOBILE"
-        p.shipping.address.street = person?.address.street as any
-        p.shipping.address.number = parseInt(person?.address.number as any)
+        p.shipping.address.street = person?.address.street.toString() as any
+        p.shipping.address.number = person?.address.number.toString() as any
         p.shipping.address.complement = person?.address.complement.toString() as any
-        p.shipping.address.locality = person?.address.neighborhood as any
-        p.shipping.address.city = person?.address.zipCode?.city?.name as any
-        p.shipping.address.region_code = person?.address.zipCode?.city?.state.acronym as any
-        p.shipping.address.country = person?.address.zipCode?.city?.country.acronym as any
+        p.shipping.address.locality = person?.address.neighborhood.toString() as any
+        p.shipping.address.city = person?.address.zipCode?.city?.name.toString() as any
+        p.shipping.address.region_code = person?.address.zipCode?.city?.state.acronym.toString() as any
+        p.shipping.address.country = person?.address.zipCode?.city?.country.acronym.toString() as any
         p.shipping.address.postal_code = person?.address.zipCode?.code.replace(/[..-]/g, '') as any
         p.charges[0].reference_id = sale.user.id?.toString() as any
-        p.charges[0].description = operationSale.description
+        p.charges[0].description = operationSale.description.toString() as any
         p.charges[0].payment_method.installments = creditCard.installments
-        p.charges[0].payment_method.holder.tax_id = person?.cpf || person?.cnpj as any
+        p.charges[0].payment_method.holder.tax_id = person?.cpf.toString() as any
+        p.charges[0].payment_method.holder.name = person?.name.toString() as any
         const valorReais = creditCard?.payment; // transforma string em número
         const valorCentavos = Math.round(valorReais * 100); // transforma em centavos e arredonda
         p.charges[0].amount.value = valorCentavos
@@ -206,34 +198,57 @@ export default function Sales() {
                 reference_id: i.item.id.toString(),
                 name: i.item.name.toString(),
                 quantity: i.amount,
-                unit_amount: i.item.priceMax.toString().replace(/[.]/g, '')
+                unit_amount: parseFloat(i.item.priceMax.toString().replace(/[.]/g, ''))
             }
             p.items.push(newItem)
         }
     };
 
+
     async function registerPagSeguroCard() {
-        const response = await fetch("/api/paymentcard", {
-            method: "POST",
-            body: JSON.stringify(pagSeguroCard),
-        });
-        const data: TPagSeguroResponse = await response.json();
-
-        if (!data.charges || data.charges.length === 0) {
-            console.error("Erro PagSeguro:", data);
-            setMsgCreditCard(`Erro ao processar pagamento: ${JSON.stringify(data)}`);
-            return;
-        }
-
-        if (data.charges[0].status === "PAID") {
-            const resp: TResponseMessage = data.charges[0] as any
-            setMsgCreditCard(`Mensagem: ${resp.data.message}, ID Pagamento:${resp.data.id}, Pagamento OK:${resp.success}`)
-            console.log(data);
-                saveSale(sale) // Salva a venda somente após confirmação do pagamento
-        }
-
-        if (data.charges[0].status === "DECLINED") {
-            setMsgCreditCard(`Pagamento Recusado: ${data.charges[0].status}`)
+        try {
+            const response = await fetch("/api/paymentcard", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(pagSeguroCard),
+            });
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+            const data: TPagSeguroResponse = await response.json();
+            const charge = data?.charges?.[0];
+            if (!charge) {
+                throw new Error("Resposta inválida do PagSeguro");
+            }
+            switch (charge.status) {
+                case "PAID":
+                    const resp: TResponseMessage = charge as any;
+                    setMsgCreditCard(
+                        `Pagamento aprovado! ID: ${resp.data.id}`
+                    );
+                    handlesaveSale();
+                    // setStatusSaveSale(true); // Evita que a venda seja salva novamente, pois o pagamento já foi aprovado
+                    break;
+                case "DECLINED":
+                    setMsgCreditCard("Pagamento recusado. Verifique os dados do cartão.");
+                    break;
+                case "CANCELED":
+                    setMsgCreditCard("Pagamento cancelado.");
+                    break;
+                case "AUTHORIZED":
+                    setMsgCreditCard("Pagamento autorizado, aguardando captura.");
+                    break;
+                default:
+                    setMsgCreditCard("Status desconhecido do pagamento.");
+                    console.warn("Status inesperado:", charge.status, data);
+            }
+        } catch (error: any) {
+            console.error("Erro geral:", error);
+            setMsgCreditCard(
+                "Erro ao processar pagamento. Tente novamente mais tarde."
+            );
         }
     }
 
@@ -251,13 +266,11 @@ export default function Sales() {
                 expYear: creditCard.ex_year,
                 securityCode: creditCard.secure_code,
             });
-
             if (encrypted) {
                 pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
                 mapFieldsPagSeguro(pagSeguroCard)
                 registerPagSeguroCard()
             }
-
             if (encrypted.hasErrors === true) {
                 setMsgCreditCard(JSON.stringify(encrypted.errors[0].code))
             }
@@ -272,7 +285,7 @@ export default function Sales() {
     }
 
     return <>
-        {/* <p>{JSON.stringify(creditCard.installments)}</p> */}
+        <p>{JSON.stringify(sale.user.role)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

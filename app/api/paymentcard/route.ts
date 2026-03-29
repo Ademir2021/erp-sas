@@ -3,10 +3,12 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
 
   const pagSeguroCard = await req.json();
+  // console.log(pagSeguroCard)
 
   const url_pagSeguro = 'https://api.pagseguro.com/orders'
   // const url_pagSeguro_ = 'https://api.pagseguro.com/charges' 
-// console.log("Dados recebidos para pagamento:", pagSeguroCard);
+  // const url_sandbox = "https://sandbox.api.pagseguro.com/orders"
+ 
   try {
     const response = await fetch(url_pagSeguro, {
       method: "POST",
