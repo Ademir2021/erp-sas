@@ -11,7 +11,7 @@ import { TResponseMessage } from "@/app/models/TMessage"
 import { TPerson } from "@/app/models/TPerson"
 import { loadHandle } from "@/app/lib/handleApi"
 import pagSeguroCardJSON from "./JSON/pagSeguroCard.json"
-import { TPagSeguroCard, TPagSeguroItems, TPublicKey } from "@/app/models/TPagSeguroCard"
+import { TPagSeguroCard, TPagSeguroItems, TPagSeguroResponse, TPublicKey } from "@/app/models/TPagSeguroCard"
 
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
@@ -21,6 +21,8 @@ declare global {
 }
 
 export default function Sales() {
+
+    // res.charges[0].amount.summary.paid
 
     const router = useRouter()
 
@@ -33,12 +35,13 @@ export default function Sales() {
     const [creditCard, setCreditCard] = useState<TCreditCart>({
         public_key: "", holder: "", number: "",
         ex_month: "", ex_year: "", secure_code: "", encrypted: "",
-        installments:1, payment:0
+        installments: 1, payment: 0
     });
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
     const [statusSaveSale, setStatusSaveSale] = useState(false)
     const [msg, setMsg] = useState('')
+    const [msgCreditCard, setMsgCreditCard] = useState('')
     const [searchItemName, setSearchITemName] = useState('!')
     const [user, setUser] = useState<TUser>()
     const [items, setItems] = useState<TItem[]>([])
@@ -49,7 +52,7 @@ export default function Sales() {
             id: 0,
             login: '',
             password: '',
-            roles: UserRole.ADMIN,
+            role: UserRole.ADMIN,
             token: ''
         },
         person: { id: 0 },
@@ -81,7 +84,7 @@ export default function Sales() {
                 const userSale: TUser = {
                     id: user.id,
                     login: user.login,
-                    roles: user.roles,
+                    role: user.role,
                     token: user.token
                 }
                 sale.user = userSale
@@ -127,7 +130,6 @@ export default function Sales() {
     }, [user, searchItemName])
 
     function loadItemsSale(sale: TSale | any) {
-
         if (itemsSale.length > 0) {
             sale.itemsSale = itemsSale.map(i => ({
                 item: { id: i.item.id },
@@ -136,8 +138,6 @@ export default function Sales() {
                 tItem: i.amount * i.price
             }))
         };
-
-
     }
 
     async function saveSale(sale: TSale) {
@@ -170,35 +170,37 @@ export default function Sales() {
         }
     }
 
-    const mapPargSeguroCard = (pagSeguroCard: TPagSeguroCard) => {
-        pagSeguroCard.reference_id = sale.user.id?.toString() as any
-        pagSeguroCard.description = operationSale.description
-        pagSeguroCard.customer.name = person?.name.toString() as any
-        pagSeguroCard.customer.email = sale.user.login
-        pagSeguroCard.customer.tax_id = persons[0].cpf
-        pagSeguroCard.customer.phones[0].number = person?.phone.substring(2) as any
-        pagSeguroCard.customer.phones[0].country = person?.address.zipCode?.city?.country.ddi as any
-        pagSeguroCard.customer.phones[0].area = person?.phone.slice(0, -9) as any
-        pagSeguroCard.customer.phones[0].type = "MOBILE"
-        pagSeguroCard.shipping.address.street = person?.address.street as any
-        pagSeguroCard.shipping.address.number = parseInt(person?.address.number as any)
-        pagSeguroCard.shipping.address.complement = person?.address.complement.toString() as any
-        pagSeguroCard.shipping.address.locality = person?.address.neighborhood as any
-        pagSeguroCard.shipping.address.city = person?.address.zipCode?.city?.name as any
-        pagSeguroCard.shipping.address.region_code = person?.address.zipCode?.city?.state.acronym as any
-        pagSeguroCard.shipping.address.country = person?.address.zipCode?.city?.country.acronym as any
-        pagSeguroCard.shipping.address.postal_code = person?.address.zipCode?.code.replace(/[..-]/g, '') as any
-        pagSeguroCard.charges[0].reference_id = sale.user.id?.toString() as any
-        pagSeguroCard.charges[0].description = operationSale.description
-        pagSeguroCard.charges[0].payment_method.installments = creditCard.installments
-        pagSeguroCard.charges[0].payment_method.holder.tax_id = person?.cpf || person?.cnpj as any
-        pagSeguroCard.charges[0].amount.value = creditCard.payment
+    const mapFieldsPagSeguro = (p: TPagSeguroCard) => {
+        p.reference_id = sale.user.id?.toString() as any
+        p.description = operationSale.description
+        p.customer.name = person?.name.toString() as any
+        p.customer.email = sale.user.login
+        p.customer.tax_id = persons[0].cpf
+        p.customer.phones[0].number = person?.phone.substring(2) as any
+        p.customer.phones[0].country = person?.address.zipCode?.city?.country.ddi as any
+        p.customer.phones[0].area = person?.phone.slice(0, -9) as any
+        p.customer.phones[0].type = "MOBILE"
+        p.shipping.address.street = person?.address.street as any
+        p.shipping.address.number = parseInt(person?.address.number as any)
+        p.shipping.address.complement = person?.address.complement.toString() as any
+        p.shipping.address.locality = person?.address.neighborhood as any
+        p.shipping.address.city = person?.address.zipCode?.city?.name as any
+        p.shipping.address.region_code = person?.address.zipCode?.city?.state.acronym as any
+        p.shipping.address.country = person?.address.zipCode?.city?.country.acronym as any
+        p.shipping.address.postal_code = person?.address.zipCode?.code.replace(/[..-]/g, '') as any
+        p.charges[0].reference_id = sale.user.id?.toString() as any
+        p.charges[0].description = operationSale.description
+        p.charges[0].payment_method.installments = creditCard.installments
+        p.charges[0].payment_method.holder.tax_id = person?.cpf || person?.cnpj as any
+        const valorReais = creditCard?.payment; // transforma string em número
+        const valorCentavos = Math.round(valorReais * 100); // transforma em centavos e arredonda
+        p.charges[0].amount.value = valorCentavos
         pagSeguroItens(pagSeguroCard, itemsSale)
         setPagSeguroCard(pagSeguroCard)
     };
 
-    function pagSeguroItens(pagSeguroCard: TPagSeguroCard, saleItens: TItemsSale[]) {
-        pagSeguroCard.items = []
+    function pagSeguroItens(p: TPagSeguroCard, saleItens: TItemsSale[]) {
+        p.items = []
         for (let i of saleItens) {
             const newItem: TPagSeguroItems = {
                 reference_id: i.item.id.toString(),
@@ -206,19 +208,38 @@ export default function Sales() {
                 quantity: i.amount,
                 unit_amount: i.item.priceMax.toString().replace(/[.]/g, '')
             }
-            pagSeguroCard.items.push(newItem)
+            p.items.push(newItem)
         }
     };
 
-    async function registerPagSeguroCard (){
-        // aguardadno logica 
-        console.log(pagSeguroCard)
-        return
+    async function registerPagSeguroCard() {
+        const response = await fetch("/api/paymentcard", {
+            method: "POST",
+            body: JSON.stringify(pagSeguroCard),
+        });
+        const data: TPagSeguroResponse = await response.json();
+
+        if (!data.charges || data.charges.length === 0) {
+            console.error("Erro PagSeguro:", data);
+            setMsgCreditCard(`Erro ao processar pagamento: ${JSON.stringify(data)}`);
+            return;
+        }
+
+        if (data.charges[0].status === "PAID") {
+            const resp: TResponseMessage = data.charges[0] as any
+            setMsgCreditCard(`Mensagem: ${resp.data.message}, ID Pagamento:${resp.data.id}, Pagamento OK:${resp.success}`)
+            console.log(data);
+                saveSale(sale) // Salva a venda somente após confirmação do pagamento
+        }
+
+        if (data.charges[0].status === "DECLINED") {
+            setMsgCreditCard(`Pagamento Recusado: ${data.charges[0].status}`)
+        }
     }
 
     const sdkPagSeguro = async () => {
         if (!window.PagSeguro || !publicKey) {
-            setMsg("SDK não carregado corretamente.");
+            setMsgCreditCard("SDK não carregado corretamente.");
             return;
         }
         try {
@@ -233,15 +254,15 @@ export default function Sales() {
 
             if (encrypted) {
                 pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
-                mapPargSeguroCard(pagSeguroCard) // seta os dados da Venda
-                registerPagSeguroCard() // efetua o pagamento  
+                mapFieldsPagSeguro(pagSeguroCard)
+                registerPagSeguroCard()
             }
 
             if (encrypted.hasErrors === true) {
-                setMsg(JSON.stringify(encrypted.errors[0].code))
+                setMsgCreditCard(JSON.stringify(encrypted.errors[0].code))
             }
         } catch (err: unknown) {
-            setMsg('ErroEncryptCard: ' + err)
+            setMsgCreditCard('ErroEncryptCard: ' + err)
         }
     };
 
@@ -251,7 +272,7 @@ export default function Sales() {
     }
 
     return <>
-        <p>{JSON.stringify(creditCard.installments)}</p>
+        {/* <p>{JSON.stringify(creditCard.installments)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
@@ -269,6 +290,7 @@ export default function Sales() {
             handleSubmitCreditCard={handleSubmitCreditCard}
             person={person as any}
             setPerson={setPerson}
+            msgCreditCard={msgCreditCard}
         >
             {sale}
         </SaleForm>

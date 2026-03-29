@@ -27,6 +27,7 @@ type Props = {
     handleSubmitCreditCard: any
     person: TPerson
     setPerson: Function
+    msgCreditCard:string
 }
 
 export default function SaleForm({
@@ -34,7 +35,8 @@ export default function SaleForm({
     items, itemsSale, setItemsSale,
     handleSubmit, msg, setChildren, persons,
     operationsSale, setOperationSale, operationSale,
-    creditCard, setCreditCard, handleSubmitCreditCard, person, setPerson }: Props) {
+    creditCard, setCreditCard, handleSubmitCreditCard, person
+    , setPerson, msgCreditCard }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -142,6 +144,7 @@ export default function SaleForm({
                             creditCard={creditCard}
                             setCreditCard={setCreditCard}
                             handleSubmitCreditCard={handleSubmitCreditCard}
+                            msgCreditCard={msgCreditCard}
                         />}
 
                     {/**Compradores */}

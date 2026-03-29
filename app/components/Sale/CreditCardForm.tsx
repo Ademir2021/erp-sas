@@ -4,10 +4,11 @@ type Props = {
     creditCard: TCreditCart
     setCreditCard: Function
     handleSubmitCreditCard: any
+    msgCreditCard:string
 }
 
 export default function CreditCardForm({
-    creditCard, setCreditCard, handleSubmitCreditCard
+    creditCard, setCreditCard, handleSubmitCreditCard, msgCreditCard
 }: Props) {
 
     const styles_input = "w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -113,6 +114,7 @@ export default function CreditCardForm({
             <button type="submit"
                 className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-200"
             >Pagar</button>
+            {msgCreditCard && <p className="text-red-600 text-center">{msgCreditCard}</p>}
         </form>
     </>
 }
