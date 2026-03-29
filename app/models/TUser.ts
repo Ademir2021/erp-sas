@@ -2,13 +2,13 @@ export type TUser = {
     id?:number
     login:string | any
     password?:string
-    roles:UserRole
-    token:string
+    role:UserRole
+    token?:string
 }
 
 export enum UserRole  {
-    ADMIN = "ROLE_ADMIN",
-    USER ="ROLE_USER"
+    ADMIN = "ADMIN",
+    USER ="USER"
  }
 
 export type TUserGithub = {

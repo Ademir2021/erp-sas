@@ -163,8 +163,8 @@ export default function Sales() {
         e.preventDefault()
         if (statusSaveSale === false) {
             loadItemsSale(sale)
-            // saveSale(sale)
-            // setStatusSaveSale(true)
+            saveSale(sale)
+            setStatusSaveSale(true)
         } else {
             setMsg("Esta venda já foi gravada")
         }

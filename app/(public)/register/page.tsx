@@ -36,6 +36,7 @@ export default function Register() {
     }
 
     return <>
+    {/* <p>{JSON.stringify(user)}</p> */}
         <RegisterLoginForm
             handleChange={handleChange}
             handleSubmit={handleSubmit}
