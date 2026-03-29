@@ -190,9 +190,9 @@ export default function Sales() {
         pagSeguroCard.shipping.address.postal_code = person?.address.zipCode?.code.replace(/[..-]/g, '') as any
         pagSeguroCard.charges[0].reference_id = sale.user.id?.toString() as any
         pagSeguroCard.charges[0].description = operationSale.description
-        pagSeguroCard.charges[0].payment_method.installments = 1 //informar parcelas
+        pagSeguroCard.charges[0].payment_method.installments = creditCard.installments
         pagSeguroCard.charges[0].payment_method.holder.tax_id = person?.cpf || person?.cnpj as any
-        pagSeguroCard.charges[0].amount.value = 10
+        pagSeguroCard.charges[0].amount.value = creditCard.payment
         pagSeguroItens(pagSeguroCard, itemsSale)
         setPagSeguroCard(pagSeguroCard)
     };
@@ -250,10 +250,8 @@ export default function Sales() {
         sdkPagSeguro()
     }
 
-    console.log(creditCard.payment)
-
     return <>
-        <p>{JSON.stringify(creditCard.payment)}</p>
+        <p>{JSON.stringify(creditCard.installments)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
