@@ -89,7 +89,7 @@ export default function CreditCardForm({
             <input type="hidden" name="encrypted" disabled />
             {/**Parcelas */}
             <div className="flex items-center justify-between bg-gray-600 p-3 rounded-lg">
-                <span className="text-gray-300 font-bold">Parcelas</span>
+                <span className="text-gray-300 font-bold">{creditCard.installments === 1 ? "À vista" : "Parcelas"}</span>
 
                 <div className="flex items-center gap-3">
                     <button
@@ -99,7 +99,7 @@ export default function CreditCardForm({
                     >-</button>
 
                     <span className="font-semibold bg-gray-600 text-white px-3 py-1 rounded">
-                        {creditCard.installments === 1 ? "À vista" : `${creditCard.installments} x ${((creditCard.payment / creditCard.installments).toFixed(2))}`}
+                        {creditCard.installments === 1 ? creditCard.payment.toFixed(2) : `${creditCard.installments} x ${((creditCard.payment / creditCard.installments).toFixed(2))}`}
                     </span>
 
                     <button

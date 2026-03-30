@@ -9,6 +9,7 @@ export type TSale = {
     discount: number
     itemsSale: TItemsSale[]
     operationSale:TOperationSale
+    tSale?: number
 }
 
 export type TItemsSale = {

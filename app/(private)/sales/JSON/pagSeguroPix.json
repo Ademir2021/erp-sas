@@ -1,0 +1,46 @@
+{
+    "reference_id": "",
+    "description":"",
+    "customer": {
+        "name": "",
+        "email": "",
+        "tax_id": "",
+        "phones": [
+            {
+                "country": "",
+                "area": "",
+                "number": "",
+                "type": "MOBILE"
+            }
+        ]
+    },
+    "items": [],
+    "qr_codes": [
+        {
+            "amount": {
+                "value": 0
+            },
+            "expiration_date": "",
+            "links": [
+                {
+                    "href": ""
+                }
+            ]
+        }
+    ],
+    "shipping": {
+        "address": {
+            "street": "",
+            "number": "1241",
+            "complement": "",
+            "locality": "",
+            "city": "",
+            "region_code": "",
+            "country": "",
+            "postal_code": ""
+        }
+    },
+    "notification_urls": [
+        ""
+    ]
+}

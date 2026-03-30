@@ -27,7 +27,10 @@ type Props = {
     handleSubmitCreditCard: any
     person: TPerson
     setPerson: Function
-    msgCreditCard:string
+    msgCreditCard: string
+    responseIdSale: number
+    handleSubmitPix: any
+    qrcode: any
 }
 
 export default function SaleForm({
@@ -36,7 +39,7 @@ export default function SaleForm({
     handleSubmit, msg, setChildren, persons,
     operationsSale, setOperationSale, operationSale,
     creditCard, setCreditCard, handleSubmitCreditCard, person
-    , setPerson, msgCreditCard }: Props) {
+    , setPerson, msgCreditCard, responseIdSale, handleSubmitPix, qrcode }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -44,6 +47,13 @@ export default function SaleForm({
         (total, i) => total + i.amount * i.price,
         0
     );
+
+    useEffect(() => {
+        setChildren((prev: TSale) => ({
+            ...prev,
+            tSale: totalSale - prev.discount
+        }));
+    }, [totalSale]);
 
     useEffect(() => {
         setCreditCard((prev: TCreditCart) => ({
@@ -54,18 +64,15 @@ export default function SaleForm({
 
     return <>
         <div id="up-sale" className="max-w-7xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
-
             <div>
                 <h1 className="font-bold">Console de Vendas</h1>
                 {<p className="mt-1"><b>Total da Compra </b>{totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
                 <hr />
             </div>
-
             <ItemsSaleList
                 itemsSale={itemsSale}
                 setItemsSale={setItemsSale}
             />
-
             <form>
                 <label className="font-black p-2">Pesquisar Items ...</label>
                 <input
@@ -74,14 +81,12 @@ export default function SaleForm({
                     onChange={(e) => setSearchITemName(e.target.value.toString())}
                 />
             </form>
-
             {/**Step Toggle */}
             <button onClick={() => setStep(!step)}>
                 {step ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 {step ? " Ocultar Operações" : " Ir para Operações"}
             </button>
             {step === true && <> <div className="mb-2">
-
                 <>
                     {/**Operações de Venda */}
                     <label>Operações de vendas</label>
@@ -90,20 +95,16 @@ export default function SaleForm({
                         value={children.operationSale?.id || ''}
                         onChange={(e) => {
                             const selectedId = Number(e.target.value);
-
                             children.operationSale.id = selectedId // para o id da operação para venda
-
                             const selectedOperation = operationsSale.find(
                                 (op) => op.id === selectedId
                             );
-
                             setOperationSale(selectedOperation);
                         }}
                     >
                         <option disabled value="">
                             Selecione uma Operação de Venda ...
                         </option>
-
                         {operationsSale.map((operationSale) => (
                             <option
                                 key={operationSale.id}
@@ -113,7 +114,6 @@ export default function SaleForm({
                             </option>
                         ))}
                     </select>
-
                     <label>Selecionar o nome do Comprador</label>
                     <select
                         className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -121,13 +121,10 @@ export default function SaleForm({
                         name="id"
                         onChange={(e) => {
                             const selectedId = Number(e.target.value);
-
                             children.person.id = selectedId // para o id da Pessoa da venda
-
                             const selectedOperation = persons.find(
                                 (per) => per.id === selectedId
                             );
-
                             setPerson(selectedOperation);
                         }}>
                         <option disabled value="">
@@ -139,23 +136,45 @@ export default function SaleForm({
                         ))}
                     </select>
                     {/**Dados do cartão */}
-                    {operationSale.id === 2 &&
+                    {operationSale.id === 2 && itemsSale.length > 0 && person &&
                         <CreditCardForm
                             creditCard={creditCard}
                             setCreditCard={setCreditCard}
                             handleSubmitCreditCard={handleSubmitCreditCard}
                             msgCreditCard={msgCreditCard}
                         />}
-
-                    {/**Compradores */}
                 </>
             </div>
-                {operationSale.id === 1 && <form className="flex justify-end">
-                    <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
-                        onClick={handleSubmit}
-                    >Finalizar Compra</a>
-                </form>} </>}
-            <p className="text-gray-300 ">{msg && msg}</p>
+                {/**Venda a Vista */}
+                {operationSale.id === 1 && itemsSale.length > 0 && person &&
+                    <div className="flex justify-center gap-2.5 mt-4">
+                        <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
+                            onClick={handleSubmitPix}
+                        >Gerar PIX</a>
+                        <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
+                            onClick={handleSubmit}
+                        >Finalizar Compra</a>
+                        <a />
+                    </div>} </>}
+            {/**Mensagens*/}
+            {msg && <p className=" flex justify-center mt-3 text-green-300 ">{msg}</p>}
+            {responseIdSale > 0 && <a
+                href={`${process.env.NEXT_PUBLIC_API_NOTA}/${responseIdSale}/pdf`}
+                className="flex justify-center text-green-500"
+                target="_blank"
+                rel="noopener noreferrer">Imprimir Venda</a>}
+            <div className='flex justify-center mt-4 mb-3'>
+                {qrcode && <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrcode.qr_codes[0].text)}`}
+                    alt="QR Code PIX"
+                />}
+            </div>
+            {/**PIX */}
+            {qrcode?.qr_codes?.[0]?.amount?.value && (
+                <div className="flex justify-center text-blue-100 mt-2">
+                    {`Valor do PIX: R$ ${Number(qrcode.qr_codes[0].amount.value)}`}
+                </div>
+            )}
             <ITemsSaleForm
                 items={items}
                 setItemsSale={setItemsSale}

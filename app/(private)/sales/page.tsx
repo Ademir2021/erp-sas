@@ -11,7 +11,10 @@ import { TResponseMessage } from "@/app/models/TMessage"
 import { TPerson } from "@/app/models/TPerson"
 import { loadHandle } from "@/app/lib/handleApi"
 import pagSeguroCardJSON from "./JSON/pagSeguroCard.json"
+import pagSeguroPixJSON from "./JSON/pagSeguroPix.json"
 import { TPagSeguroCard, TPagSeguroItems, TPagSeguroResponse, TPublicKey } from "@/app/models/TPagSeguroCard"
+import { PixQRCodeResponse, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
+
 
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
@@ -33,9 +36,14 @@ export default function Sales() {
         ex_month: "", ex_year: "", secure_code: "", encrypted: "",
         installments: 1, payment: 0
     });
+
+    const pagSeguroPix_: any = pagSeguroPixJSON
+    const [pagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPix_);
+    const [qrcodePagSeguro, setQrcode] = useState<PixQRCodeResponse | any | null>(null)
+
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
-    const [statusSaveSale, setStatusSaveSale] = useState(false)
+    const [responseIdSale, setResponseIdSale] = useState(0)
     const [msg, setMsg] = useState('')
     const [msgCreditCard, setMsgCreditCard] = useState('')
     const [searchItemName, setSearchITemName] = useState('!')
@@ -66,8 +74,7 @@ export default function Sales() {
 
     useEffect(() => {
         const script = document.createElement("script");
-        script.src =
-            "https://assets.pagseguro.com.br/checkout-sdk-js/rc/dist/browser/pagseguro.min.js";
+        script.src = process.env.NEXT_PUBLIC_SDK_PAGSEGURO as string;
         script.async = true;
         document.body.appendChild(script);
     }, []);
@@ -83,7 +90,7 @@ export default function Sales() {
                     role: "USER" as UserRole,
                     token: user.token
                 }
-                sale.user = userSale
+                setSale({ ...sale, user: userSale })
             }
         }
         loadUser()
@@ -123,44 +130,7 @@ export default function Sales() {
         searchItemsByName()
     }, [user, searchItemName])
 
-    function loadItemsSale(sale: TSale | any) {
-        if (itemsSale.length > 0) {
-            sale.itemsSale = itemsSale.map(i => ({
-                item: { id: i.item.id },
-                amount: i.amount,
-                price: i.price,
-                tItem: i.amount * i.price
-            }))
-        };
-    }
-
-    async function saveSale(sale: TSale) {
-        const res = await fetch('/api/sale', {
-            method: 'POST',
-            body: JSON.stringify(sale),
-        })
-        const resp: TResponseMessage = await res.json()
-        if (!res.ok) {
-            setMsg(`Erro ao registrar Venda: ${JSON.stringify(resp)}`)
-            return
-        }
-        router.push('/sales')
-        setMsg(`Mensagems: ${resp.data.message}, ID Venda:${resp.data.id}, Venda OK:${resp.success}`)
-        router.refresh()
-    }
-    function handlesaveSale() {
-        if (statusSaveSale === false) {
-            loadItemsSale(sale)
-            saveSale(sale)
-        } else {
-            setMsg("Esta venda já foi gravada")
-        };
-    }
-    function hanldeSubmit(e: Event) {
-        e.preventDefault()
-        handlesaveSale()
-    }
-
+    /**PagSeguro Card */
     const mapFieldsPagSeguro = (p: TPagSeguroCard) => {
         p.reference_id = sale.user.id?.toString() as any
         p.description = operationSale.description.toString()
@@ -187,11 +157,22 @@ export default function Sales() {
         const valorReais = creditCard?.payment; // transforma string em número
         const valorCentavos = Math.round(valorReais * 100); // transforma em centavos e arredonda
         p.charges[0].amount.value = valorCentavos
-        pagSeguroItens(pagSeguroCard, itemsSale)
+        mapFieldsPagSeguroArrayItens(pagSeguroCard, itemsSale)
         setPagSeguroCard(pagSeguroCard)
     };
 
-    function pagSeguroItens(p: TPagSeguroCard, saleItens: TItemsSale[]) {
+    function loadItemsSale(sale: TSale | any) {
+        if (itemsSale.length > 0) {
+            sale.itemsSale = itemsSale.map(i => ({
+                item: { id: i.item.id },
+                amount: i.amount,
+                price: i.price,
+                tItem: i.amount * i.price
+            }))
+        };
+    }
+
+    function mapFieldsPagSeguroArrayItens(p: TPagSeguroCard, saleItens: TItemsSale[]) {
         p.items = []
         for (let i of saleItens) {
             const newItem: TPagSeguroItems = {
@@ -204,8 +185,8 @@ export default function Sales() {
         }
     };
 
-
     async function registerPagSeguroCard() {
+
         try {
             const response = await fetch("/api/paymentcard", {
                 method: "POST",
@@ -228,8 +209,7 @@ export default function Sales() {
                     setMsgCreditCard(
                         `Pagamento aprovado! ID: ${resp.data.id}`
                     );
-                    handlesaveSale();
-                    // setStatusSaveSale(true); // Evita que a venda seja salva novamente, pois o pagamento já foi aprovado
+                    handleSaveSale();
                     break;
                 case "DECLINED":
                     setMsgCreditCard("Pagamento recusado. Verifique os dados do cartão.");
@@ -278,14 +258,109 @@ export default function Sales() {
             setMsgCreditCard('ErroEncryptCard: ' + err)
         }
     };
+    /**Fim PagSeguro Card */
+    /**PagSeguro PIX */
+    const getPagSeguro = (p: TPagSeguroPix | any) => {
+        const phone = person?.phone?.replace(/\D/g, '') || '';
+        p.customer = p.customer || {};
+        p.customer.phones = p.customer.phones || [{}];
+        p.shipping = p.shipping || {};
+        p.shipping.address = p.shipping.address || {};
+        p.reference_id = user?.id;
+        p.description = "Compras On-line";
+        p.customer.name = person?.name;
+        p.customer.email = user?.login;
+        p.customer.tax_id = person?.cpf;
+        p.customer.phones[0].country = '55';
+        p.customer.phones[0].area = phone.substring(0, 2);
+        p.customer.phones[0].number = phone.substring(2);
+        p.customer.phones[0].type = "MOBILE";
+        p.shipping.address.street = person?.address.street;
+        p.shipping.address.number = person?.address.number || '0';
+        p.shipping.address.complement = person?.address.complement;
+        p.shipping.address.locality = person?.address.neighborhood;
+        p.shipping.address.city = person?.address.zipCode?.city?.name;
+        p.shipping.address.region_code = person?.address.zipCode?.city?.state?.acronym;
+        p.shipping.address.country = person?.address.zipCode?.city?.country?.acronym;
+        p.shipping.address.postal_code = person?.address.zipCode?.code?.replace(/\D/g, '');
+        mapFieldsPagSeguroArrayItens(pagSeguroPix as any, itemsSale);
+    };
+
+    const createpagSeguroPix = () => {
+        let time = new Date();
+        let expiration_date_qrcode = new Date();
+        expiration_date_qrcode.setHours(time.getHours() + 48);
+        getPagSeguro(pagSeguroPix)
+        pagSeguroPix.qr_codes[0].amount.value = sale.tSale?.toFixed(2).replace(/[.]/g, '') as any
+        pagSeguroPix.qr_codes[0].expiration_date = expiration_date_qrcode
+        pagSeguroPix.notification_urls = ["https://meusite.com/notificacoes"]
+    };
+
+    async function registerPagSeguroPIX() {
+        try {
+            const response = await fetch("/api/paymentpix", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(pagSeguroPix),
+            });
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+            const data = await response.json() as { qrCodes: PixQRCodeResponse }
+            console.log("Resposta do PagSeguro PIX:", data);
+            setQrcode(data)
+        }
+        catch (error: any) {
+            console.error("Erro geral:", error);
+        }
+    }
+
+    async function saveSale(sale: TSale) {
+        const res = await fetch('/api/sale', {
+            method: 'POST',
+            body: JSON.stringify(sale),
+        })
+        const resp: TResponseMessage = await res.json()
+        if (!res.ok) {
+            setMsg(`Erro ao registrar Venda: ${JSON.stringify(resp)}`)
+            return
+        }
+        router.push('/sales')
+        setMsg(`Mensagems: ${resp.data.message}, ID Venda:${resp.data.id}, Venda OK:${resp.success}`)
+        const idSale = resp.data.id as number
+        setResponseIdSale(idSale)
+        router.refresh()
+    }
+
+    function handleSaveSale() {
+        if (responseIdSale === 0) {
+            loadItemsSale(sale)
+            saveSale(sale)
+        } else {
+            setMsg("Esta venda já foi gravada")
+        };
+    }
+
+    function hanldeSubmit(e: Event) {
+        e.preventDefault()
+        handleSaveSale()
+    }
 
     function handleSubmitCreditCard(e: Event) {
         e.preventDefault()
         sdkPagSeguro()
     }
 
+    function handleSubmitPix(e: Event) {
+        e.preventDefault()
+        loadItemsSale(sale)
+        createpagSeguroPix()
+        registerPagSeguroPIX()
+    }
+
     return <>
-        <p>{JSON.stringify(sale.user.role)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
@@ -304,6 +379,9 @@ export default function Sales() {
             person={person as any}
             setPerson={setPerson}
             msgCreditCard={msgCreditCard}
+            responseIdSale={responseIdSale}
+            handleSubmitPix={handleSubmitPix}
+            qrcode={qrcodePagSeguro || null}
         >
             {sale}
         </SaleForm>

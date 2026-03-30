@@ -1,58 +1,61 @@
 export type TPagSeguroCard = {
-    reference_id: string,
-    description: string,
-    customer: {
-        name: string,
-        email: string,
-        tax_id: string,
-        phones: [
-            {
-                country: string,
-                area: string,
-                number: string,
-                type: string
-            }
-        ]
-    },
-    items:TPagSeguroItems [],
-    shipping: {
-        address: {
-            street: string,
-            number: string | number,
-            complement: string | null,
-            locality: string,
-            city: string,
-            region_code: string,
-            country: string,
-            postal_code: string
-        }
-    },
-    notification_urls: [
-        "https://meusite.com/notificacoes" | string
-    ],
-    charges: [
-        {
-            reference_id: string,
-            description: string,
-            amount: {
-                value: 0 | number | string,
-                currency: string
-            },
-            payment_method: {
-                type: "CREDIT_CARD" | string,
-                installments: 1 | number,
-                capture: true,
-                card: {
-                    encrypted: string,
-                    store: false
-                },
-                holder: {
-                    name: string,
-                    tax_id: string
-                }
-            }
-        }
-    ]
+  reference_id: string
+  description: string
+
+  customer: {
+    name: string
+    email: string
+    tax_id: string
+    phones: {
+      country: string
+      area: string
+      number: string
+      type: "MOBILE" | "HOME" | "WORK"
+    }[]
+  }
+
+  items: TPagSeguroItems[]
+
+  shipping: {
+    address: {
+      street: string
+      number: string | number
+      complement?: string | null
+      locality: string
+      city: string
+      region_code: string
+      country: string
+      postal_code: string
+    }
+  }
+
+  notification_urls: string[]
+
+  charges: {
+    reference_id: string
+    description: string
+
+    amount: {
+      value: number // centavos
+      currency: "BRL"
+    }
+
+    payment_method: {
+      type: "CREDIT_CARD"
+      installments: number
+      capture: boolean
+
+      card: {
+        encrypted: string
+        store: boolean
+      }
+
+      holder: {
+        name: string
+        tax_id: string
+      }
+    }
+  }[]
 }
 
 export type TPagSeguroItems = {
@@ -66,22 +69,6 @@ export type TPublicKey = {
     public_key: string
     created_at: string
 }
-
-/** charges: [
-    {
-      id: 'CHAR_01CE36A0-6BE1-4BCF-93AB-4DC96ABF9570',
-      reference_id: '4',
-      status: 'PAID',
-      created_at: '2026-03-29T14:21:29.533-03:00',
-      paid_at: '2026-03-29T14:21:30.000-03:00',
-      description: 'Venda com Cartão de Crédito',
-      amount: [Object],
-      payment_response: [Object],
-      payment_method: [Object],
-      metadata: [Object],
-      links: [Array]
-    }
-  ],*/
 
   export type TPagSeguroResponse = {
   charges: TChargeResponse[];

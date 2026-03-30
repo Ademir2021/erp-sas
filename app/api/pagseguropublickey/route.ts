@@ -2,11 +2,11 @@ import { NextResponse } from "next/server"
 
 export async function GET(request: Request) {
 
-    const urlPublicKey = "https://api.pagseguro.com/public-keys";
-    const token = process.env.AUTH_PAGSEGURO;
+    const URL = process.env.URL_PUBLICKEY_PAGSEGURO as string
+    const token = process.env.TOKEN_PAGSEGURO;
 
     try {
-        const reqs = await fetch(urlPublicKey, {
+        const reqs = await fetch(URL, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
