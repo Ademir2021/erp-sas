@@ -9,6 +9,7 @@ import { TPerson } from "@/app/models/TPerson"
 import { useEffect, useState } from "react"
 import CreditCardForm from "./CreditCardForm"
 import { TResponsePixQRCode } from '@/app/models/TPAgSeguroPix';
+import { globalStylesTitle, globalStylesToggle } from '../GlobalStyles';
 
 type Props = {
     children: TSale
@@ -66,7 +67,7 @@ export default function SaleForm({
     return <>
         <div id="up-sale" className="max-w-7xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
             <div>
-                <h1 className="flex justify-center font-bold text-1xl">Orçamentos - Pedidos e Vendas</h1>
+                <h1 className={`${globalStylesTitle} justify-center`}>Orçamentos - Pedidos e Vendas</h1>
                 {<p className="flex justify-center font-sans text-green-100 bg-gray-800 mb-2 p-2 text-center rounded-b-none shadow-md">
                     Total da Compra {totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
             </div>
@@ -75,7 +76,7 @@ export default function SaleForm({
                 setItemsSale={setItemsSale}
             />
             <form>
-                <label className="font-black p-2">Pesquisar Items ...</label>
+                <label className={`${globalStylesTitle}`}>Pesquisar Items ...</label>
                 <input
                     className="mb-3 w-full p-3 border rounded-lg"
                     placeholder="Buscar Item ..."
@@ -83,14 +84,14 @@ export default function SaleForm({
                 />
             </form>
             {/**Step Toggle */}
-            <button onClick={() => setStep(!step)}>
+            <button className={`${globalStylesToggle}`} onClick={() => setStep(!step)}>
                 {step ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 {step ? " Ocultar Operações" : " Ir para Operações"}
             </button>
             {step === true && <> <div className="mb-2">
                 <>
                     {/**Operações de Venda */}
-                    <label>Operações de vendas</label>
+                    <label className={`${globalStylesTitle}`}>Operações de Vendas</label>
                     <select
                         className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                         value={children.operationSale?.id || ''}
@@ -115,7 +116,7 @@ export default function SaleForm({
                             </option>
                         ))}
                     </select>
-                    <label>Selecionar o nome do Comprador</label>
+                    <label className={`${globalStylesTitle}`}>Selecionar o Comprador</label>
                     <select
                         className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                         value={children.person.id || ''}

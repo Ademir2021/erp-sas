@@ -43,7 +43,8 @@ export default function Sales() {
     const pagSeguroPix_: any = pagSeguroPixJSON
     const [pagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPix_);
     const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
-        qr_codes: [{ text: "", amount: { value: 0 } }]
+        qr_codes: [{ text: "", amount: { value: 0 } }],
+        error_messages: [{ code: "", description: "", parameter_name: "" }]
     });
 
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
@@ -315,7 +316,7 @@ export default function Sales() {
             }
             const data: TResponsePixQRCode = await response.json()
             if (!data.qr_codes) {
-                setMsg("Erro ao gerar QR Code PIX")
+                setMsg(`Erro ao gerar QRCode: ${data.error_messages?.[0]?.description || 'Erro desconhecido'}`)
             } else {
                 setQrcode(data)
             }

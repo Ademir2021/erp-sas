@@ -55,5 +55,10 @@ export type TResponsePixQRCode = {
             value: number
         }
     }
-    ]
+    ],
+    error_messages:[{
+        code: string
+        description: string
+        parameter_name: string
+    }]
 }

@@ -11,7 +11,6 @@ import { loadHandle } from "@/app/lib/handleApi";
 import { TResponseMessage } from "@/app/models/TMessage";
 
 
-
 export default function Person() {
 
     const router = useRouter()

@@ -16,16 +16,6 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
         )
     }
 
-    //     const updateAmount = (id: number, newAmount: number) => {
-    //   setItemsSale((prev:TItemsSale[]) =>
-    //     prev.map((item) =>
-    //       item.item.id === id
-    //         ? { ...item, amount: newAmount }
-    //         : item
-    //     )
-    //   );
-    // };
-
     const updateAmount = (id: number, newAmount: number) => {
         if (newAmount <= 0) return;
         setItemsSale((prev: TItemsSale[]) =>

@@ -42,7 +42,7 @@ export default function ITemsSaleForm({
                     <tr>
                         <th className={`${styles_th} text-center`}>ID</th>
                         <th className={`${styles_th} text-left`}>Descrição</th>
-                        <th className={`${styles_th} text-center`}>+</th>
+                        <th className={`${styles_th} text-center`}>Inserir</th>
                         <th className={`${styles_th} text-left`}>Preço min</th>
                         <th className={`${styles_th} text-left`}>Preço max</th>
                         <th className={`${styles_th} text-left`}>Código de barras</th>
