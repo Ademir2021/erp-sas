@@ -2,7 +2,7 @@ import { TPagSeguroItems } from "./TPagSeguroCard"
 
 export type TPagSeguroPix = {
     reference_id: string
-    description:string
+    description: string
     customer: {
         name: string
         email: string
@@ -16,7 +16,7 @@ export type TPagSeguroPix = {
             }
         ]
     },
-    items:TPagSeguroItems []
+    items: TPagSeguroItems[]
     qr_codes: [
         {
             amount: {
@@ -46,27 +46,14 @@ export type TPagSeguroPix = {
         string]
 }
 
-/**QR Code */
+/**QR Code Response */
 
-type PixArrangement = "PIX";
-
-type LinkRel = "QRCODE.PNG" | "QRCODE.BASE64";
-type HttpMethod = "GET";
-
-interface PixQRCode {
-  id: string;
-  expiration_date: string;
-  amount: {
-    value: number;
-  };
-  text: string;
-  arrangements: PixArrangement[];
-  links: {
-    rel: LinkRel;
-    href: string;
-    media: string;
-    type: HttpMethod;
-  }[];
+export type TResponsePixQRCode = {
+    qr_codes: [{
+        text: string
+        amount: {
+            value: number
+        }
+    }
+    ]
 }
-
-export type PixQRCodeResponse = PixQRCode[];

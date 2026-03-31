@@ -13,7 +13,8 @@ import { loadHandle } from "@/app/lib/handleApi"
 import pagSeguroCardJSON from "./JSON/pagSeguroCard.json"
 import pagSeguroPixJSON from "./JSON/pagSeguroPix.json"
 import { TPagSeguroCard, TPagSeguroItems, TPagSeguroResponse, TPublicKey } from "@/app/models/TPagSeguroCard"
-import { PixQRCodeResponse, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
+import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
+import { set } from "zod"
 
 
 // Adiciona a definição de PagSeguro ao tipo Window
@@ -22,6 +23,8 @@ declare global {
         PagSeguro?: any;
     }
 }
+
+
 
 export default function Sales() {
 
@@ -39,7 +42,9 @@ export default function Sales() {
 
     const pagSeguroPix_: any = pagSeguroPixJSON
     const [pagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPix_);
-    const [qrcodePagSeguro, setQrcode] = useState<PixQRCodeResponse | any | null>(null)
+    const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
+        qr_codes: [{ text: "", amount: { value: 0 } }]
+    });
 
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
@@ -308,9 +313,12 @@ export default function Sales() {
             if (!response.ok) {
                 throw new Error(`Erro HTTP: ${response.status}`);
             }
-            const data = await response.json() as { qrCodes: PixQRCodeResponse }
-            console.log("Resposta do PagSeguro PIX:", data);
-            setQrcode(data)
+            const data: TResponsePixQRCode = await response.json()
+            if (!data.qr_codes) {
+                setMsg("Erro ao gerar QR Code PIX")
+            } else {
+                setQrcode(data)
+            }
         }
         catch (error: any) {
             console.error("Erro geral:", error);

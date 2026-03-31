@@ -8,6 +8,7 @@ import { ItemsSaleList } from "./ItemsSaleList"
 import { TPerson } from "@/app/models/TPerson"
 import { useEffect, useState } from "react"
 import CreditCardForm from "./CreditCardForm"
+import { TResponsePixQRCode } from '@/app/models/TPAgSeguroPix';
 
 type Props = {
     children: TSale
@@ -30,7 +31,7 @@ type Props = {
     msgCreditCard: string
     responseIdSale: number
     handleSubmitPix: any
-    qrcode: any
+    qrcode: TResponsePixQRCode
 }
 
 export default function SaleForm({
@@ -38,8 +39,8 @@ export default function SaleForm({
     items, itemsSale, setItemsSale,
     handleSubmit, msg, setChildren, persons,
     operationsSale, setOperationSale, operationSale,
-    creditCard, setCreditCard, handleSubmitCreditCard, person
-    , setPerson, msgCreditCard, responseIdSale, handleSubmitPix, qrcode }: Props) {
+    creditCard, setCreditCard, handleSubmitCreditCard, person,
+    setPerson, msgCreditCard, responseIdSale, handleSubmitPix, qrcode }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -65,9 +66,9 @@ export default function SaleForm({
     return <>
         <div id="up-sale" className="max-w-7xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
             <div>
-                <h1 className="font-bold">Console de Vendas</h1>
-                {<p className="mt-1"><b>Total da Compra </b>{totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
-                <hr />
+                <h1 className="flex justify-center font-bold text-1xl">Orçamentos - Pedidos e Vendas</h1>
+                {<p className="flex justify-center font-sans text-green-100 bg-gray-800 mb-2 p-2 text-center rounded-b-none shadow-md">
+                    Total da Compra {totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
             </div>
             <ItemsSaleList
                 itemsSale={itemsSale}
@@ -164,13 +165,14 @@ export default function SaleForm({
                 target="_blank"
                 rel="noopener noreferrer">Imprimir Venda</a>}
             <div className='flex justify-center mt-4 mb-3'>
-                {qrcode && <img
+                {qrcode.qr_codes[0].text ? <img
                     src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrcode.qr_codes[0].text)}`}
                     alt="QR Code PIX"
-                />}
+                /> : itemsSale.length > 0 && person && operationSale.id === 1 &&
+                <p className="text-red-500">Gere o PIX para visualizar o QR Code</p>}
             </div>
             {/**PIX */}
-            {qrcode?.qr_codes?.[0]?.amount?.value && (
+            {qrcode.qr_codes[0].amount.value > 0 && (
                 <div className="flex justify-center text-blue-100 mt-2">
                     {`Valor do PIX: R$ ${Number(qrcode.qr_codes[0].amount.value)}`}
                 </div>

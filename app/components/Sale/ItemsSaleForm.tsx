@@ -11,8 +11,8 @@ export default function ITemsSaleForm({
     items, setItemsSale, msg
 }: Props) {
 
-    const styles_th = "px-4 py-2 text-[11px] font-semibold text-gray-700"
-    const styles_td = "px-4 py-2 text-[11px]"
+    const styles_th = "px-1 py-1 text-[11px] font-semibold text-gray-200"
+    const styles_td = "px-1 py-1 text-[11px]"
 
     function insertItem(item: TItem) {
 
@@ -37,17 +37,17 @@ export default function ITemsSaleForm({
     }
     return <>
         <div className="mt-2 w-full overflow-x-auto">
-            <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                {items.length > 0 && <thead className="bg-gray-100">
+            <table className="min-w-full border border-gray-100 rounded-b-md overflow-hidden shadow-sm">
+                {items.length > 0 && <thead className="bg-gray-500">
                     <tr>
                         <th className={`${styles_th} text-center`}>ID</th>
                         <th className={`${styles_th} text-left`}>Descrição</th>
+                        <th className={`${styles_th} text-center`}>+</th>
                         <th className={`${styles_th} text-left`}>Preço min</th>
                         <th className={`${styles_th} text-left`}>Preço max</th>
                         <th className={`${styles_th} text-left`}>Código de barras</th>
                         <th className={`${styles_th} text-left`}>Sub grupo</th>
                         <th className={`${styles_th} text-left`}>Grupo</th>
-                        <th className={`${styles_th} text-center`}>Ações</th>
                     </tr>
                 </thead>}
 
@@ -56,16 +56,16 @@ export default function ITemsSaleForm({
                         <tr key={item.id} className="hover:bg-gray-600 transition text-sky-100 ">
                             <td className={`${styles_td} text-center`}>{item.id}</td>
                             <td className={`${styles_td} text-left`}>{item.name}</td>
-                            <td className={`${styles_td} text-left`}>{item.priceMin}</td>
-                            <td className={`${styles_td} text-left`}>{item.priceMax}</td>
-                            <td className={`${styles_td} text-left`}>{item.barCode}</td>
-                            <td className={`${styles_td} text-left`}>{item.subGroup.group.name}</td>
-                            <td className={`${styles_td} text-left`}>{item.subGroup.name}</td>
                             <td className={`${styles_td} text-center`}><a href="#up-item"
                                 onClick={() => insertItem(item)}
                                 className="px-3 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
                             >Inserir</a>
                             </td>
+                            <td className={`${styles_td} text-left`}>{item.priceMin}</td>
+                            <td className={`${styles_td} text-left`}>{item.priceMax}</td>
+                            <td className={`${styles_td} text-left`}>{item.barCode}</td>
+                            <td className={`${styles_td} text-left`}>{item.subGroup.group.name}</td>
+                            <td className={`${styles_td} text-left`}>{item.subGroup.name}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -7,8 +7,8 @@ type Props = {
 
 export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
 
-    const styles_th = "px-4 py-2 text-[11px] font-semibold text-gray-700"
-    const styles_td = "px-4 py-2 text-[11px]"
+    const styles_th = "px-2 py-1 text-[11px] font-semibold text-gray-300"
+    const styles_td = "px-2 py-1 text-[11px]"
 
     function removeItem(itemSale: TItemsSale) {
         setItemsSale((prev: any) =>
@@ -39,15 +39,15 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
 
     return <>
         <div className="w-full overflow-x-auto">
-            <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden shadow-sm">
-                {itemsSale.length > 0 && <thead className="bg-gray-100">
+            <table className="min-w-full border border-gray-100 rounded-lg overflow-hidden shadow-sm">
+                {itemsSale.length > 0 && <thead className="bg-gray-700">
                     <tr>
                         <th className={`${styles_th} text-center`}>ID</th>
                         <th className={`${styles_th} text-left`}>Descrição</th>
                         <th className={`${styles_th} text-left`}>Quant</th>
                         <th className={`${styles_th} text-left`}>Preço</th>
                         <th className={`${styles_th} text-left`}>TItem</th>
-                        <th className={`${styles_th} text-center`}>Ações</th>
+                        <th className={`${styles_th} text-center`}>X</th>
                     </tr>
                 </thead>}
                 <tbody className="divide-y divide-gray-200">
