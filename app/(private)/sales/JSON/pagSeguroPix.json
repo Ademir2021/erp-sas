@@ -1,46 +1,52 @@
 {
-    "reference_id": "",
-    "description":"",
-    "customer": {
-        "name": "",
-        "email": "",
-        "tax_id": "",
-        "phones": [
-            {
-                "country": "",
-                "area": "",
-                "number": "",
-                "type": "MOBILE"
-            }
-        ]
-    },
-    "items": [],
-    "qr_codes": [
-        {
-            "amount": {
-                "value": 0
-            },
-            "expiration_date": "",
-            "links": [
-                {
-                    "href": ""
-                }
-            ]
-        }
-    ],
-    "shipping": {
-        "address": {
-            "street": "",
-            "number": "1241",
-            "complement": "",
-            "locality": "",
-            "city": "",
-            "region_code": "",
-            "country": "",
-            "postal_code": ""
-        }
-    },
-    "notification_urls": [
-        ""
+  "reference_id": "TESTE12345",
+  "description": "Pagamento teste Pix - homologação",
+  "customer": {
+    "name": "João da Silva",
+    "email": "teste@pagseguro.com.br",
+    "tax_id": "12345678909",
+    "phones": [
+      {
+        "country": "55",
+        "area": "11",
+        "number": "912345678",
+        "type": "MOBILE"
+      }
     ]
+  },
+  "items": [
+    {
+      "name": "Produto Teste",
+      "quantity": 1,
+      "unit_amount": 10050
+    }
+  ],
+  "qr_codes": [
+    {
+      "amount": {
+        "value": 10050
+      },
+      "expiration_date": "2026-04-02T14:30:00Z",
+      "links": [
+        {
+          "href": "https://sandbox.pagseguro.uol.com.br/pix/qr-code/TESTE12345"
+        }
+      ]
+    }
+  ],
+  "shipping": {
+    "address": {
+      "street": "Rua Exemplo",
+      "number": "1241",
+      "complement": "Apto 101",
+      "locality": "Bairro Teste",
+      "city": "São Paulo",
+      "region_code": "SP",
+      "country": "BRA",
+      "postal_code": "01001000"
+    }
+  },
+  "notification_urls": [
+    "https://meusite.com/notificacoes"
+  ]
 }

@@ -133,7 +133,7 @@ export default function Sales() {
     }, [user, searchItemName])
 
     /**PagSeguro Card */
-    const mapFieldsPagSeguro = (p: TPagSeguroCard) => {
+    const mapFieldsPagSeguroCard = (p: TPagSeguroCard) => {
         p.reference_id = sale.user.id?.toString() as any
         p.description = operationSale.description.toString()
         p.customer.name = person?.name.toString() as any
@@ -208,9 +208,7 @@ export default function Sales() {
             switch (charge.status) {
                 case "PAID":
                     const resp: TResponseMessage = charge as any;
-                    setMsgCreditCard(
-                        `Pagamento aprovado! ID: ${resp.data.id}`
-                    );
+                    setMsgCreditCard(`Pagamento aprovado! ID: ${resp.data.id || 'N/A'}`);
                     handleSaveSale();
                     break;
                 case "DECLINED":
@@ -250,7 +248,7 @@ export default function Sales() {
             });
             if (encrypted) {
                 pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
-                mapFieldsPagSeguro(pagSeguroCard)
+                mapFieldsPagSeguroCard(pagSeguroCard)
                 registerPagSeguroCard()
             }
             if (encrypted.hasErrors === true) {
@@ -262,18 +260,18 @@ export default function Sales() {
     };
     /**Fim PagSeguro Card */
     /**PagSeguro PIX */
-    const getPagSeguro = (p: TPagSeguroPix | any) => {
+    const mapFieldsPagSeguroPix = (p: TPagSeguroPix | any) => {
         const phone = person?.phone?.replace(/\D/g, '') || '';
         p.customer = p.customer || {};
         p.customer.phones = p.customer.phones || [{}];
         p.shipping = p.shipping || {};
         p.shipping.address = p.shipping.address || {};
         p.reference_id = user?.id;
-        p.description = "Compras On-line";
+        p.description = operationSale.description;
         p.customer.name = person?.name;
         p.customer.email = user?.login;
         p.customer.tax_id = person?.cpf;
-        p.customer.phones[0].country = '55';
+        p.customer.phones[0].country = person?.address.zipCode?.city?.country.ddi;
         p.customer.phones[0].area = phone.substring(0, 2);
         p.customer.phones[0].number = phone.substring(2);
         p.customer.phones[0].type = "MOBILE";
@@ -292,8 +290,9 @@ export default function Sales() {
         let time = new Date();
         let expiration_date_qrcode = new Date();
         expiration_date_qrcode.setHours(time.getHours() + 48);
-        getPagSeguro(pagSeguroPix)
-        pagSeguroPix.qr_codes[0].amount.value = sale.tSale?.toFixed(2).replace(/[.]/g, '') as any
+        mapFieldsPagSeguroPix(pagSeguroPix)
+        const tSale = Math.round(Number(sale.tSale) * 100);
+        pagSeguroPix.qr_codes[0].amount.value = tSale;
         pagSeguroPix.qr_codes[0].expiration_date = expiration_date_qrcode
         pagSeguroPix.notification_urls = ["https://meusite.com/notificacoes"]
     };
@@ -366,6 +365,7 @@ export default function Sales() {
     }
 
     return <>
+        {/* <p>{JSON.stringify(sale.tSale)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

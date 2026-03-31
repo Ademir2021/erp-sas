@@ -176,7 +176,7 @@ export default function SaleForm({
             {/**PIX */}
             {qrcode.qr_codes[0].amount.value > 0 && (
                 <div className="flex justify-center text-blue-100 mt-2">
-                    {`Valor do PIX: R$ ${Number(qrcode.qr_codes[0].amount.value)}`}
+                    Valor do PIX: R$ ${(qrcode.qr_codes[0].amount.value / 100).toFixed(2)}
                 </div>
             )}
             <ITemsSaleForm
