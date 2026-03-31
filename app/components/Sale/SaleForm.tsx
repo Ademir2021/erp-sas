@@ -1,5 +1,6 @@
 'use client'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
@@ -85,7 +86,7 @@ export default function SaleForm({
             </form>
             {/**Step Toggle */}
             <button className={`${globalStylesToggle}`} onClick={() => setStep(!step)}>
-                {step ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                {step ? <ExpandLessIcon fontSize="large" /> : <ArrowForwardIosIcon fontSize='small' />}
                 {step ? " Ocultar Operações" : " Ir para Operações"}
             </button>
             {step === true && <> <div className="mb-2">

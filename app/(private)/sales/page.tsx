@@ -14,8 +14,6 @@ import pagSeguroCardJSON from "./JSON/pagSeguroCard.json"
 import pagSeguroPixJSON from "./JSON/pagSeguroPix.json"
 import { TPagSeguroCard, TPagSeguroItems, TPagSeguroResponse, TPublicKey } from "@/app/models/TPagSeguroCard"
 import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
-import { set } from "zod"
-
 
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
@@ -23,8 +21,6 @@ declare global {
         PagSeguro?: any;
     }
 }
-
-
 
 export default function Sales() {
 
@@ -185,7 +181,7 @@ export default function Sales() {
                 reference_id: i.item.id.toString(),
                 name: i.item.name.toString(),
                 quantity: i.amount,
-                unit_amount: parseFloat(i.item.priceMax.toString().replace(/[.]/g, ''))
+                unit_amount: Math.round(Number(i.price) * 100)
             }
             p.items.push(newItem)
         }
@@ -292,7 +288,7 @@ export default function Sales() {
         mapFieldsPagSeguroArrayItens(pagSeguroPix as any, itemsSale);
     };
 
-    const createpagSeguroPix = () => {
+    const createPagSeguroPix = () => {
         let time = new Date();
         let expiration_date_qrcode = new Date();
         expiration_date_qrcode.setHours(time.getHours() + 48);
@@ -365,7 +361,7 @@ export default function Sales() {
     function handleSubmitPix(e: Event) {
         e.preventDefault()
         loadItemsSale(sale)
-        createpagSeguroPix()
+        createPagSeguroPix()
         registerPagSeguroPIX()
     }
 

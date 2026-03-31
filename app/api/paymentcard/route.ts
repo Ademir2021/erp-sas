@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
 
   const pagSeguroCard = await req.json();
-  console.log(pagSeguroCard)
 
   const URL = process.env.URL_PAGSEGURO_ORDERS as string
   
@@ -18,7 +17,6 @@ export async function POST(req: Request) {
     });
 
     const data = await response.json();
-    console.log("Resposta do PagSeguro:", data);
 
     return NextResponse.json(data);
   } catch (error) {

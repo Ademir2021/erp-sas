@@ -6,7 +6,7 @@ export async function GET(request: Request) {
     const token = process.env.TOKEN_PAGSEGURO;
 
     try {
-        const reqs = await fetch(URL, {
+        const response = await fetch(URL, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -15,9 +15,9 @@ export async function GET(request: Request) {
             body: JSON.stringify({ type: "card" }),
         });
 
-        const public_key = await reqs.json();
+        const data = await response.json();
 
-        return NextResponse.json(public_key);
+        return NextResponse.json(data);
     } catch (err) {
         console.log("Error Occurred!", err);
 
