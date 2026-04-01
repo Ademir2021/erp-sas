@@ -6,10 +6,10 @@ export type TAccountsReceivable = { // Contas a Receber
     id: number
     createdAt: Date
     updatedAt: Date | null// ultimo registro de atualização do Titulo
-    idBranch: Pick<TBranch, 'id'>
-    idUser: Pick<TUser, 'id'>
-    idPayer: Pick<TPerson, 'id'> // pagador
-    idSale: Pick<TSale, 'id'> // id da venda relacionada ao Titulo   
+    branch: Pick<TBranch, 'id'>
+    user: Pick<TUser, 'id'>
+    payer: Pick<TPerson, 'id'> // pagador
+    sale: Pick<TSale, 'id'> // id da venda relacionada ao Titulo   
     value: number // valor do Titulo
     receivedValue: number // valor recebido do Titulo
     balance: number // saldo do Titulo 
@@ -21,8 +21,8 @@ export type TAccountsReceivable = { // Contas a Receber
     interest: number // juros por atraso
     discount: number // desconto
     type: TPaymentAccountsReceivable
-    idTypeOperation: number // id do tipo de operação
-    DescriptionTypeOperation: string // descrição do tipo de operação
+    idTypeOperation: string // id do tipo de operação
+    descriptionTypeOperation:string // descrição do tipo de operação
 }
 
 export type TSituationAccountsReceivable = 'OPEN' | 'PAID' | 'PENDING' | 'CANCELED'

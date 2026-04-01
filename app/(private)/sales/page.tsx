@@ -77,30 +77,8 @@ export default function Sales() {
     const [operationSale, setOperationSale] = useState<TOperationSale>(sale.operationSale)
     const [person, setPerson] = useState<TPerson | null>()
 
-    const [installmentAccount, setInstallmentAccount] = useState(3)
-    const [saleAccountsReceivables, setSaleAccountsReceivables] = useState<TAccountsReceivable[]>([])
-    const [accountsReceivable, setAccountsReceivable] = useState<TAccountsReceivable>({
-        id: 0,
-        createdAt: new Date(),
-        updatedAt: null,
-        idBranch: { id: 1 },
-        idUser: { id: 0 },
-        idPayer: { id: 0 },
-        idSale: { id: 0 },
-        value: 0,
-        receivedValue: 0,
-        balance: 0,
-        dueDate: new Date(),
-        description: '',
-        situation: 'OPEN',
-        observations: '',
-        lateFee: 0,
-        interest: 0,
-        discount: 0,
-        type: 'CASH',
-        idTypeOperation: 0,
-        DescriptionTypeOperation: ''
-    })
+    const [installmentAccount, setInstallmentAccount] = useState(0)
+    const [, setSaleAccountsReceivables] = useState<TAccountsReceivable[]>([])
 
     useEffect(() => {
         if (!installmentAccount || installmentAccount <= 0) {
@@ -112,17 +90,18 @@ export default function Sales() {
             { length: installmentAccount },
             (_, i) => {
                 const installmentNumber = i + 1;
+                const VALUE = Number((sale.tSale / installmentAccount).toFixed(2))
                 return {
                     id: 0,
                     createdAt: new Date(),
                     updatedAt: null,
-                    idBranch: { id: 1 },
-                    idUser: { id: user?.id },
-                    idPayer: { id: person?.id || 0 },
-                    idSale: { id: 0 },
-                    value: Number((sale.tSale / installmentAccount).toFixed(2)),
+                    branch: { id: 1 },
+                    user: { id: user?.id },
+                    payer: { id: person?.id || 0 },
+                    sale: { id: 0 },
+                    value: VALUE,
                     receivedValue: 0,
-                    balance: 0,
+                    balance: VALUE,
                     dueDate: new Date(),
                     description: '',
                     situation: 'OPEN',
@@ -131,8 +110,8 @@ export default function Sales() {
                     interest: 0,
                     discount: 0,
                     type: 'CASH',
-                    idTypeOperation: 0,
-                    DescriptionTypeOperation: `Parcela ${installmentNumber} de ${installmentAccount}`,
+                    idTypeOperation: `ID:${operationSale.id.toString()} - ${operationSale.description}`,
+                    descriptionTypeOperation: `Parcela ${installmentNumber} de ${installmentAccount}`,
                 };
             }
         );
@@ -142,7 +121,17 @@ export default function Sales() {
         sale.accountsReceivable = newAccountsReceivable;
     }, [sale.tSale, installmentAccount, user?.id, person?.id]);
 
-
+    useEffect(() => { // Se não for parcelado zera o array
+        if (operationSale.id === 3) {
+            setInstallmentAccount(1);
+        } else {
+            setSaleAccountsReceivables([]);
+            setSale(prev => ({
+                ...prev,
+                accountsReceivable: []
+            }));
+        }
+    }, [operationSale.id]);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -457,6 +446,7 @@ export default function Sales() {
             responseIdSale={responseIdSale}
             handleSubmitPix={handleSubmitPix}
             qrcode={qrcodePagSeguro || null}
+            setInstallmentAccount={setInstallmentAccount}
         >
             {sale}
         </SaleForm>

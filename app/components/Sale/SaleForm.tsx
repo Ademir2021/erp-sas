@@ -34,6 +34,7 @@ type Props = {
     responseIdSale: number
     handleSubmitPix: any
     qrcode: TResponsePixQRCode
+    setInstallmentAccount: Function
 }
 
 export default function SaleForm({
@@ -42,7 +43,8 @@ export default function SaleForm({
     handleSubmit, msg, setChildren, persons,
     operationsSale, setOperationSale, operationSale,
     creditCard, setCreditCard, handleSubmitCreditCard, person,
-    setPerson, msgCreditCard, responseIdSale, handleSubmitPix, qrcode }: Props) {
+    setPerson, msgCreditCard, responseIdSale, handleSubmitPix,
+    qrcode, setInstallmentAccount }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -138,6 +140,7 @@ export default function SaleForm({
                                 value={person.id}>{person.name}</option>
                         ))}
                     </select>
+
                     {/**Dados do cartão */}
                     {operationSale.id === 2 && itemsSale.length > 0 && person &&
                         <CreditCardForm
@@ -146,8 +149,35 @@ export default function SaleForm({
                             handleSubmitCreditCard={handleSubmitCreditCard}
                             msgCreditCard={msgCreditCard}
                         />}
+
+                    {/**Venda a prazo */}
+                    {operationSale.id === 3 && person && itemsSale.length > 0 &&
+                        <><label className={`${globalStylesTitle}`}>Seleciona a Quantidade de Parcelas</label>
+                            <select
+                                className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                onChange={(e) => setInstallmentAccount(Number(e.target.value))}
+                                defaultValue=""
+                            >
+                                <option disabled value="">
+                                    Parcelamento até em 6 vezes ...
+                                </option>
+                                <option value="1">1x - Sem Juros</option>
+                                <option value="2">2x - Juros de 5%</option>
+                                <option value="3">3x - Juros de 10%</option>
+                                <option value="4">4x - Juros de 15%</option>
+                                <option value="5">5x - Juros de 20%</option>
+                                <option value="6">6x - Juros de 25%</option>
+                            </select>
+                            {children.accountsReceivable?.length as any > 0 ? <div className="flex justify-center gap-2.5 mt-4">
+                                <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
+                                    onClick={handleSubmit}
+                                >Finalizar Compra a Prazo</a>
+                                <a />
+                            </div> : <p className='text-center p-2 text-red-400'>Informe a Quantidade de Parcelas</p>}
+                        </>}
                 </>
             </div>
+
                 {/**Venda a Vista */}
                 {operationSale.id === 1 && itemsSale.length > 0 && person &&
                     <div className="flex justify-center gap-2.5 mt-4">
@@ -159,6 +189,7 @@ export default function SaleForm({
                         >Finalizar Compra</a>
                         <a />
                     </div>} </>}
+
             {/**Mensagens*/}
             {msg && <p className=" flex justify-center mt-3 text-green-300 ">{msg}</p>}
             {responseIdSale > 0 && <a
@@ -173,6 +204,7 @@ export default function SaleForm({
                 /> : itemsSale.length > 0 && person && operationSale.id === 1 &&
                 <p className="text-red-500">Gere o PIX para visualizar o QR Code</p>}
             </div>
+            
             {/**PIX */}
             {qrcode.qr_codes[0].amount.value > 0 && (
                 <div className="flex justify-center text-blue-100 mt-2">
