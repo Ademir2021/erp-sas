@@ -1,15 +1,18 @@
+import { TAccountsReceivable } from "./TAccountsReceivable"
 import { TItem } from "./TITem"
 import { TBranch, TPerson } from "./TPerson"
 import { TUser } from "./TUser"
 
 export type TSale = {
+    id?: number
     branch: TBranch
     user: TUser
     person: Pick<TPerson, 'id'>
     discount: number
     itemsSale: TItemsSale[]
     operationSale:TOperationSale
-    tSale?: number
+    tSale: number
+    accountsReceivable?: TAccountsReceivable[] //Contas a Receber geradas pela venda
 }
 
 export type TItemsSale = {

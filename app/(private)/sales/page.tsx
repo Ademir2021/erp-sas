@@ -14,6 +14,7 @@ import pagSeguroCardJSON from "./JSON/pagSeguroCard.json"
 import pagSeguroPixJSON from "./JSON/pagSeguroPix.json"
 import { TPagSeguroCard, TPagSeguroItems, TPagSeguroResponse, TPublicKey } from "@/app/models/TPagSeguroCard"
 import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
+import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
@@ -62,6 +63,7 @@ export default function Sales() {
             token: ''
         },
         person: { id: 0 },
+        tSale: 0,
         discount: 0,
         itemsSale: [],
         operationSale: {
@@ -69,10 +71,78 @@ export default function Sales() {
             generateFinancial: false, allowDiscount: false, updateCost: false,
             requiresInvoice: false, isReturn: false, cfop: '', defaultNature: '',
             active: true
-        }
+        },
+        accountsReceivable: []
     })
     const [operationSale, setOperationSale] = useState<TOperationSale>(sale.operationSale)
     const [person, setPerson] = useState<TPerson | null>()
+
+    const [installmentAccount, setInstallmentAccount] = useState(3)
+    const [saleAccountsReceivables, setSaleAccountsReceivables] = useState<TAccountsReceivable[]>([])
+    const [accountsReceivable, setAccountsReceivable] = useState<TAccountsReceivable>({
+        id: 0,
+        createdAt: new Date(),
+        updatedAt: null,
+        idBranch: { id: 1 },
+        idUser: { id: 0 },
+        idPayer: { id: 0 },
+        idSale: { id: 0 },
+        value: 0,
+        receivedValue: 0,
+        balance: 0,
+        dueDate: new Date(),
+        description: '',
+        situation: 'OPEN',
+        observations: '',
+        lateFee: 0,
+        interest: 0,
+        discount: 0,
+        type: 'CASH',
+        idTypeOperation: 0,
+        DescriptionTypeOperation: ''
+    })
+
+    useEffect(() => {
+        if (!installmentAccount || installmentAccount <= 0) {
+            setSaleAccountsReceivables([]);
+            return;
+        }
+
+        const newAccountsReceivable: TAccountsReceivable[] = Array.from(
+            { length: installmentAccount },
+            (_, i) => {
+                const installmentNumber = i + 1;
+                return {
+                    id: 0,
+                    createdAt: new Date(),
+                    updatedAt: null,
+                    idBranch: { id: 1 },
+                    idUser: { id: user?.id },
+                    idPayer: { id: person?.id || 0 },
+                    idSale: { id: 0 },
+                    value: Number((sale.tSale / installmentAccount).toFixed(2)),
+                    receivedValue: 0,
+                    balance: 0,
+                    dueDate: new Date(),
+                    description: '',
+                    situation: 'OPEN',
+                    observations: '',
+                    lateFee: 0,
+                    interest: 0,
+                    discount: 0,
+                    type: 'CASH',
+                    idTypeOperation: 0,
+                    DescriptionTypeOperation: `Parcela ${installmentNumber} de ${installmentAccount}`,
+                };
+            }
+        );
+
+        setSaleAccountsReceivables(newAccountsReceivable);
+        // Se quiser atualizar o objeto sale diretamente, faça isso com cuidado
+        sale.accountsReceivable = newAccountsReceivable;
+    }, [sale.tSale, installmentAccount, user?.id, person?.id]);
+
+
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -365,7 +435,7 @@ export default function Sales() {
     }
 
     return <>
-        {/* <p>{JSON.stringify(sale.tSale)}</p> */}
+        {/* <p>{JSON.stringify(sale.accountsReceivable)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

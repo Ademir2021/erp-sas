@@ -85,7 +85,7 @@ export default function SaleForm({
                 />
             </form>
             {/**Step Toggle */}
-            <button className={`${globalStylesToggle}`} onClick={() => setStep(!step)}>
+            <button className={`${globalStylesToggle} cursor-pointer`} onClick={() => setStep(!step)}>
                 {step ? <ExpandLessIcon fontSize="large" /> : <ArrowForwardIosIcon fontSize='small' />}
                 {step ? " Ocultar Operações" : " Ir para Operações"}
             </button>
