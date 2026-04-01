@@ -15,6 +15,7 @@ import pagSeguroPixJSON from "./JSON/pagSeguroPix.json"
 import { TPagSeguroCard, TPagSeguroItems, TPagSeguroResponse, TPublicKey } from "@/app/models/TPagSeguroCard"
 import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
+import { setDays } from "@/app/lib/momentDays"
 
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
@@ -26,6 +27,7 @@ declare global {
 export default function Sales() {
 
     const router = useRouter()
+    
     const pagSeguroCard_: any = pagSeguroCardJSON
     const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCard_);
     const [publicKey, setPublicKey] = useState<TPublicKey>({
@@ -102,7 +104,7 @@ export default function Sales() {
                     value: VALUE,
                     receivedValue: 0,
                     balance: VALUE,
-                    dueDate: new Date(),
+                    dueDate: setDays(i) as any,
                     description: '',
                     situation: 'OPEN',
                     observations: '',

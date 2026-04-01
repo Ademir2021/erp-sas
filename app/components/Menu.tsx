@@ -48,6 +48,13 @@ export default function Menu() {
           >Console de Venda</Link>
         </li>
         <hr />
+         <li>
+          <Link
+            href="/accountsreceivable"
+            className={styles_links}
+          >Contas a Receber</Link>
+        </li>
+        <hr />
         <li>
           <Link
             href="/perfil"
