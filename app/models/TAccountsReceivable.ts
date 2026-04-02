@@ -25,5 +25,5 @@ export type TAccountsReceivable = { // Contas a Receber
     descriptionTypeOperation:string // descrição do tipo de operação
 }
 
-export type TSituationAccountsReceivable = 'OPEN' | 'PAID' | 'PENDING' | 'CANCELED'
+export type TSituationAccountsReceivable = 'OPEN' | 'PAID' | 'PENDING' | 'CANCELED' | 'CHARGE'
 export type TPaymentAccountsReceivable = 'CASH' | 'CREDIT' | 'DEBIT' | 'PIX' | 'OTHER' | 'TICKET' | "DUPLICATE" | 'BANKTRANSFER'

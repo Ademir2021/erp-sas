@@ -29,6 +29,7 @@ export function AccountsReceivableList({
                         <th className={`${styles_th} text-center`}>IDSale</th>
                         <th className={`${styles_th} text-left`}>Valor</th>
                         <th className={`${styles_th} text-center`}>VRecebido</th>
+                        <th className={`${styles_th} text-center`}>Situação</th>
                         <th className={`${styles_th} text-left`}>Saldo</th>
                         <th className={`${styles_th} text-center`}>DRecebimento</th>
                         <th className={`${styles_th} text-left`}>Descrição</th>
@@ -56,12 +57,13 @@ export function AccountsReceivableList({
                             <td className={`${styles_td} text-center`}>{ar.sale.id}</td>
                             <td className={`${styles_td} text-left`}>{ar.value}</td>
                             <td className={`${styles_td} text-left`}>{ar.receivedValue}</td>
+                            <td className={`${styles_td} text-left`}>{ar.situation}</td>
                             <td className={`${styles_td} text-left`}>{ar.balance}</td>
                             <td className={`${styles_td} text-left`}>{ar.dueDate as any}</td>
                             <td className={`${styles_td} text-left`}>{ar.description}</td>
                             <td className={`${styles_td} text-left`}>{ar.observations}</td>
-                            <td className={`${styles_td} text-left`}>{ar.lateFee}</td>
-                            <td className={`${styles_td} text-left`}>{ar.interest}</td>
+                            <td className={`${styles_td} text-left`}>{ar.lateFee.toFixed(2)}</td>
+                            <td className={`${styles_td} text-left`}>{ar.interest.toFixed(2)}</td>
                             <td className={`${styles_td} text-left`}>{ar.discount}</td>
                             <td className={`${styles_td} text-left`}>{ar.type}</td>
                             <td className={`${styles_td} text-left`}>{ar.descriptionTypeOperation}</td>
