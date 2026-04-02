@@ -1,3 +1,4 @@
+import { DateFns } from "@/app/lib/dateFns"
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 
 
@@ -8,6 +9,7 @@ type Props = {
 export function AccountsReceivableList({
     accountsReceivable }: Props) {
 
+    const dateFns = new DateFns()
     const styles_th = "px-1 py-1 text-[11px] font-semibold text-gray-200"
     const styles_td = "px-1 py-1 text-[11px]"
 
@@ -31,7 +33,7 @@ export function AccountsReceivableList({
                         <th className={`${styles_th} text-center`}>VRecebido</th>
                         <th className={`${styles_th} text-center`}>Situação</th>
                         <th className={`${styles_th} text-left`}>Saldo</th>
-                        <th className={`${styles_th} text-center`}>DRecebimento</th>
+                        <th className={`${styles_th} text-left`}>DRecebimento</th>
                         <th className={`${styles_th} text-left`}>Descrição</th>
                         <th className={`${styles_th} text-left`}>Observação</th>
                         <th className={`${styles_th} text-left`}>Juros</th>
@@ -41,7 +43,7 @@ export function AccountsReceivableList({
                         <th className={`${styles_th} text-left`}>TPayRecebido</th>
                         <th className={`${styles_th} text-left`}>IDTipoOper</th>
                         <th className={`${styles_th} text-left`}>DescrTipoOper</th>
-                        <th className={`${styles_th} text-left`}>Ações</th>
+                        <th className={`${styles_th} text-center`}>Receber</th>
                     </tr>
                 </thead>}
 
@@ -49,8 +51,8 @@ export function AccountsReceivableList({
                     {accountsReceivable.map((ar: TAccountsReceivable) => (
                         <tr key={ar.id} className="hover:bg-gray-600 transition text-sky-100 ">
                             <td className={`${styles_td} text-center`}>{ar.id}</td>
-                            <td className={`${styles_td} text-left`}>{ar.createdAt as any}</td>
-                            <td className={`${styles_td} text-left`}>{ar.updatedAt as any || "Em Aberto"}</td>
+                            <td className={`${styles_td} text-left`}>{dateFns.formatDate(ar.createdAt as any)}</td>
+                            <td className={`${styles_td} text-left`}>{ar.updatedAt as any || "Aberto"}</td>
                             <td className={`${styles_td} text-center`}>{ar.branch.id}</td>
                             <td className={`${styles_td} text-center`}>{ar.user.id}</td>
                             <td className={`${styles_td} text-center`}>{ar.payer.id}</td>

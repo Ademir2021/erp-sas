@@ -8,7 +8,6 @@ import { getUser } from "@/app/lib/auth";
 import { loadHandle } from "@/app/lib/handleApi";
 import { differenceInDays, isValid } from "date-fns";
 
-
 export default function AccountsReceivable() {
 
     const [isInterestFine, setIsInterestFine] = useState(true)
@@ -16,11 +15,8 @@ export default function AccountsReceivable() {
     const [accountsReceivables, setAccountsReceivable] = useState<TAccountsReceivable[]>([])
     const [openAccounts, setOpenAccounts] = useState<TAccountsReceivable[]>([])
 
-
     const processAccounts = (accounts: TAccountsReceivable[]) => {
-
         const today = new Date();
-
         return accounts
             .map((conta) => {
                 const maturity = new Date(conta.dueDate);
