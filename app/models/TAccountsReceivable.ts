@@ -27,3 +27,8 @@ export type TAccountsReceivable = { // Contas a Receber
 
 export type TSituationAccountsReceivable = 'OPEN' | 'PAID' | 'PENDING' | 'CANCELED' | 'CHARGE'
 export type TPaymentAccountsReceivable = 'CASH' | 'CREDIT' | 'DEBIT' | 'PIX' | 'OTHER' | 'TICKET' | "DUPLICATE" | 'BANKTRANSFER'
+
+export type TReceipt = {
+    receipt:number
+    discount:number
+}

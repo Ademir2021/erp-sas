@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
 
   const sale: TSale = await request.json()
-// console.log('Received sale data:', sale)
+console.log('Received sale data:', sale)
 
     if (sale.person.id === 0) {
     return NextResponse.json(

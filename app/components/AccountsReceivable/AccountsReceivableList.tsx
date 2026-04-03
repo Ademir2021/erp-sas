@@ -1,20 +1,23 @@
 import { DateFns } from "@/app/lib/dateFns"
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 
-
 type Props = {
     accountsReceivable: TAccountsReceivable[]
+    setOpenAccount:Function
+    handleSubmit:any
 }
 
 export function AccountsReceivableList({
-    accountsReceivable }: Props) {
+    accountsReceivable,setOpenAccount, handleSubmit }: Props) {
 
     const dateFns = new DateFns()
     const styles_th = "px-1 py-1 text-[11px] font-semibold text-gray-200"
     const styles_td = "px-1 py-1 text-[11px]"
 
     function updateAccountsReceivable(ar: TAccountsReceivable) {
-        console.log(ar)
+        if(ar)
+        setOpenAccount(ar)
+       handleSubmit();
     }
 
     return <>

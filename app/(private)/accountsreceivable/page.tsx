@@ -2,18 +2,24 @@
 
 import { useEffect, useState } from "react";
 import AccountsReceivableForm from "@/app/components/AccountsReceivable/AccountsReceivableForm";
-import { TAccountsReceivable } from "@/app/models/TAccountsReceivable";
+import { TAccountsReceivable, TReceipt } from "@/app/models/TAccountsReceivable";
 import { TUser } from "@/app/models/TUser";
 import { getUser } from "@/app/lib/auth";
 import { loadHandle } from "@/app/lib/handleApi";
 import { differenceInDays, isValid } from "date-fns";
+import { useRouter } from 'next/navigation'
+import { TResponseMessage } from "@/app/models/TMessage";
 
 export default function AccountsReceivable() {
 
+    const router = useRouter()
+    const [msg, setMsg] = useState('')
     const [isInterestFine, setIsInterestFine] = useState(true)
     const [user, setUser] = useState<TUser>()
-    const [accountsReceivables, setAccountsReceivable] = useState<TAccountsReceivable[]>([])
+    const [accountsReceivables, setAccountsReceivables] = useState<TAccountsReceivable[]>([])
     const [openAccounts, setOpenAccounts] = useState<TAccountsReceivable[]>([])
+    const [openAccount, setOpenAccount] = useState<TAccountsReceivable | null>(null)
+    const [receipt, setReceipt] = useState<TReceipt>({ receipt: 0, discount: 0 })
 
     const processAccounts = (accounts: TAccountsReceivable[]) => {
         const today = new Date();
@@ -28,7 +34,7 @@ export default function AccountsReceivable() {
                 let lateFee = 0; //juros
                 let interest = 0; //multa
                 if (isInterestFine && daysOfDelay > 0 && daysOfDelay < 500) {
-                     // Juros de 0,1% ao dia
+                    // Juros de 0,1% ao dia
                     lateFee = value * daysOfDelay * 0.001;
                     // Multa de  3% fixo após 5 dias corridos
                     interest = daysOfDelay > 5 ? value * 0.03 : 0;
@@ -60,13 +66,76 @@ export default function AccountsReceivable() {
 
     useEffect(() => {
         const token = user?.token as string
-        loadHandle(token, setAccountsReceivable, 'accountsreceivable')
+        loadHandle(token, setAccountsReceivables, 'accountsreceivable')
     }, [user]);
 
+
+    async function updateAccountsReceivable(ar: TAccountsReceivable) {
+
+        const AR_USER = [ar, user]
+
+        const res = await fetch('/api/accountsreceivable', {
+            method: 'PUT',
+            body: JSON.stringify(AR_USER),
+        })
+
+        const resp: TResponseMessage = await res.json()
+
+        if (!res.ok) {
+            setMsg(`Erro ao atualizar Titulo: ${resp.error}`)
+            return
+        }
+        router.push('/accountsreceivable')
+        setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
+        router.refresh()
+    }
+
+    function prepareUpdate() {
+        if (!openAccount) return;
+        const up = {
+            ...openAccount,
+            ...(receipt.discount > 0 && { discount: receipt.discount }),
+            ...(receipt.receipt > 0 && { receivedValue: receipt.receipt })
+        };
+
+        const UPDATE_AR: any = {
+            id: up.id,
+            value: up.value,
+            receivedValue: up.receivedValue,
+            balance: up.balance,
+            dueDate: up.dueDate,
+            description: up.description,
+            situation: up.situation,
+            observations: up.observations,
+            lateFee: up.lateFee,
+            interest: up.interest,
+            discount: up.discount,
+            type: up.type,
+            idTypeOperation: up.idTypeOperation,
+            descriptionTypeOperation: up.descriptionTypeOperation
+        }
+        updateAccountsReceivable(UPDATE_AR as any);
+    }
+
+    useEffect(() => {
+        if (openAccount !== null) {
+            handleSubmit();
+        }
+    }, [openAccount]);
+
+    function handleSubmit() {
+        prepareUpdate()
+    }
+
     return <>
-        {/* <p>{JSON.stringify(openAccounts)}</p> */}
+        <p>{JSON.stringify(openAccount)}</p>
         <AccountsReceivableForm
             accountsReceivable={openAccounts}
+            msg={msg}
+            setOpenAccount={setOpenAccount}
+            handleSubmit={handleSubmit}
+            setReceipt={setReceipt}
+            receipt={receipt}
         />
     </>
 }
