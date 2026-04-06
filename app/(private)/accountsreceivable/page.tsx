@@ -29,22 +29,20 @@ export default function AccountsReceivable() {
                 if (!isValid(maturity)) return conta;
                 const daysOfDelay = differenceInDays(today, maturity);
                 const value = Number(conta.value) || 0;
-                const received = Number(conta.receivedValue) || 0;
-                const discount = Number(conta.discount) || 0
                 let lateFee = 0; //juros
                 let interest = 0; //multa
                 if (isInterestFine && daysOfDelay > 0 && daysOfDelay < 500) {
-                    // Juros de 0,1% ao dia
-                    lateFee = value * daysOfDelay * 0.001;
+                    // Juros ao dia
+                    const monthlyRate = 0.10;
+                    const dailyRate = monthlyRate / 30;
+                    lateFee = value * daysOfDelay * dailyRate;
                     // Multa de  3% fixo após 5 dias corridos
                     interest = daysOfDelay > 5 ? value * 0.03 : 0;
                 }
-                const balance = value - received - discount + lateFee + interest
                 return {
                     ...conta,
                     lateFee,
-                    interest,
-                    balance: Number(balance.toFixed(2))
+                    interest
                 };
             })
             .filter((c) => c.situation !== "CHARGE" && c.balance > 0);
@@ -97,9 +95,12 @@ export default function AccountsReceivable() {
             ...(receipt.discount > 0 && { discount: receipt.discount }),
             ...(receipt.receipt > 0 && { receivedValue: receipt.receipt })
         };
-
-        const UPDATE_AR: any = {
+        const UPDATE_AR = {
             id: up.id,
+            branch: { id: up.branch.id },
+            user: { id: user?.id || up.user.id },
+            payer: { id: up.payer.id },
+            sale: { id: up.sale.id },
             value: up.value,
             receivedValue: up.receivedValue,
             balance: up.balance,
@@ -124,11 +125,16 @@ export default function AccountsReceivable() {
     }, [openAccount]);
 
     function handleSubmit() {
-        prepareUpdate()
+        if (openAccount !== null && receipt.receipt !== 0) {
+            prepareUpdate()
+            setReceipt({ ...receipt, receipt: 0, discount: 0 })
+        } else {
+            setMsg("Informe um valor a Receber")
+        }
     }
 
     return <>
-        <p>{JSON.stringify(openAccount)}</p>
+        {/* <p>{JSON.stringify(openAccount)}</p> */}
         <AccountsReceivableForm
             accountsReceivable={openAccounts}
             msg={msg}

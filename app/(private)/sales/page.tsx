@@ -27,7 +27,7 @@ declare global {
 export default function Sales() {
 
     const router = useRouter()
-    
+
     const pagSeguroCard_: any = pagSeguroCardJSON
     const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCard_);
     const [publicKey, setPublicKey] = useState<TPublicKey>({
@@ -46,6 +46,7 @@ export default function Sales() {
         error_messages: [{ code: "", description: "", parameter_name: "" }]
     });
 
+    const [cash, setCash] = useState<number>(0.00)
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
     const [responseIdSale, setResponseIdSale] = useState(0)
@@ -92,7 +93,8 @@ export default function Sales() {
             { length: installmentAccount },
             (_, i) => {
                 const installmentNumber = i + 1;
-                const VALUE = Number((sale.tSale / installmentAccount).toFixed(2))
+                const remaining = sale.tSale - cash;
+                const VALUE = Number((remaining / installmentAccount).toFixed(2))
                 return {
                     id: 0,
                     createdAt: new Date(),
