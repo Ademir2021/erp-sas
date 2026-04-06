@@ -46,7 +46,7 @@ export default function Sales() {
         error_messages: [{ code: "", description: "", parameter_name: "" }]
     });
 
-    const [cash, setCash] = useState<number>(0.00)
+    const [cash, setCash] = useState(0)
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
     const [responseIdSale, setResponseIdSale] = useState(0)
@@ -123,7 +123,7 @@ export default function Sales() {
         setSaleAccountsReceivables(newAccountsReceivable);
         // Se quiser atualizar o objeto sale diretamente, faça isso com cuidado
         sale.accountsReceivable = newAccountsReceivable;
-    }, [sale.tSale, installmentAccount, user?.id, person?.id]);
+    }, [sale.tSale, installmentAccount, user?.id, person?.id, cash]);
 
     useEffect(() => { // Se não for parcelado zera o array
         if (operationSale.id === 3) {
@@ -428,7 +428,7 @@ export default function Sales() {
     }
 
     return <>
-        {/* <p>{JSON.stringify(sale.accountsReceivable)}</p> */}
+        <p>{JSON.stringify(cash)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
@@ -451,6 +451,9 @@ export default function Sales() {
             handleSubmitPix={handleSubmitPix}
             qrcode={qrcodePagSeguro || null}
             setInstallmentAccount={setInstallmentAccount}
+            cash={cash}
+            setCash={setCash}
+
         >
             {sale}
         </SaleForm>

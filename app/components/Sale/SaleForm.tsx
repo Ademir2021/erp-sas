@@ -35,6 +35,8 @@ type Props = {
     handleSubmitPix: any
     qrcode: TResponsePixQRCode
     setInstallmentAccount: Function
+    cash: number
+    setCash: Function
 }
 
 export default function SaleForm({
@@ -44,7 +46,7 @@ export default function SaleForm({
     operationsSale, setOperationSale, operationSale,
     creditCard, setCreditCard, handleSubmitCreditCard, person,
     setPerson, msgCreditCard, responseIdSale, handleSubmitPix,
-    qrcode, setInstallmentAccount }: Props) {
+    qrcode, setInstallmentAccount, cash, setCash }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -168,12 +170,27 @@ export default function SaleForm({
                                 <option value="5">5x - Juros de 20%</option>
                                 <option value="6">6x - Juros de 25%</option>
                             </select>
-                            {children.accountsReceivable?.length as any > 0 ? <div className="flex justify-center gap-2.5 mt-4">
-                                <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
-                                    onClick={handleSubmit}
-                                >Finalizar Compra a Prazo</a>
-                                <a />
-                            </div> : <p className='text-center p-2 text-red-400'>Informe a Quantidade de Parcelas</p>}
+                            {children.accountsReceivable?.length as any > 0 ? <>
+                                <form className="flex justify-center mt-2">
+                                    <input
+                                        type="number"
+                                        className="w-min p-2 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        value={cash || ''}
+                                        placeholder='Em Dinheiro, Ex:100.00'
+                                        onChange={(e) => {
+                                            const value = e.target.value;
+                                            setCash(parseFloat(value) || 0);
+                                        }}
+                                    />
+                                </form>
+                                <div className="flex justify-center gap-2.5 mt-4">
+                                    <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
+                                        onClick={handleSubmit}
+                                    >Finalizar Compra a Prazo</a>
+                                    <a />
+
+                                </div>
+                            </> : <p className='text-center p-2 text-red-400'>Informe a Quantidade de Parcelas</p>}
                         </>}
                 </>
             </div>
@@ -204,7 +221,7 @@ export default function SaleForm({
                 /> : itemsSale.length > 0 && person && operationSale.id === 1 &&
                 <p className="text-red-500">Gere o PIX para visualizar o QR Code</p>}
             </div>
-            
+
             {/**PIX */}
             {qrcode.qr_codes[0].amount.value > 0 && (
                 <div className="flex justify-center text-blue-100 mt-2">
