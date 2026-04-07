@@ -106,7 +106,6 @@ export default function Sales() {
                 const remaining = sale.tSale - cash;
                 const installmentNumber = i + 1;
                 const VALUE = Number((remaining / installmentAccount).toFixed(2));
-                const observations = qrcodePagSeguro?.qr_codes[0]?.text ? "PIX" : 'N/A';
                 return {
                     id: 0,
                     createdAt: new Date(),
@@ -263,7 +262,6 @@ export default function Sales() {
     };
 
     async function registerPagSeguroCard() {
-
         try {
             const response = await fetch("/api/paymentcard", {
                 method: "POST",
@@ -284,6 +282,7 @@ export default function Sales() {
                 case "PAID":
                     const resp: TResponseMessage = charge as any;
                     setMsgCreditCard(`Pagamento aprovado! ID: ${resp.data.id || 'N/A'}`);
+                    setInstallmentAccount(creditCard.installments);
                     handleSaveSale();
                     break;
                 case "DECLINED":

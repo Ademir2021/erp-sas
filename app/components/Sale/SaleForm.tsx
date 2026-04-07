@@ -66,13 +66,13 @@ export default function SaleForm({
     useEffect(() => {
         setCreditCard((prev: TCreditCart) => ({
             ...prev,
-            payment: totalSale
+            payment: totalSale - cash
         }));
-    }, [totalSale]);
+    }, [totalSale, cash]);
 
     const cashForm = <CashForm cash={cash} setCash={setCash} sale={children} setSale={setChildren} />
 
-    const vallorCash = Number(cash - children.tSale - qrcode.qr_codes[0].amount.value + children.discount).toFixed(2) as any
+    const vallorCash = cash - totalSale
     return <>
         <div id="up-sale" className="max-w-7xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
             <div>
@@ -149,12 +149,13 @@ export default function SaleForm({
 
                     {/**Dados do cartão */}
                     {operationSale.id === 2 && itemsSale.length > 0 && person &&
-                        <CreditCardForm
-                            creditCard={creditCard}
-                            setCreditCard={setCreditCard}
-                            handleSubmitCreditCard={handleSubmitCreditCard}
-                            msgCreditCard={msgCreditCard}
-                        />}
+                        <> {cashForm}
+                            <CreditCardForm
+                                creditCard={creditCard}
+                                setCreditCard={setCreditCard}
+                                handleSubmitCreditCard={handleSubmitCreditCard}
+                                msgCreditCard={msgCreditCard}
+                            /></>}
 
                     {/**Venda a prazo */}
                     {operationSale.id === 3 && person && itemsSale.length > 0 &&
@@ -191,7 +192,7 @@ export default function SaleForm({
                 {operationSale.id === 1 && itemsSale.length > 0 && person && <>
                     {cashForm}
                     <p className='flex justify-center p-1 text-green-500 '>
-                        {vallorCash > 0 ? "Troco :" : "Receber no PIX: "} {cash > 0 ? vallorCash : '0.00'}</p>
+                        {vallorCash < 0 ? "Receber no PIX:" : "Troco :"} {cash > 0 ? vallorCash : '0.00'}</p>
                     <div className="flex justify-center gap-2.5 mt-4">
                         <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
                             onClick={handleSubmitPix}
