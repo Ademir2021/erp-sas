@@ -17,6 +17,7 @@ import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 import { setDays } from "@/app/lib/momentDays"
 
+
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
     interface Window {
@@ -46,7 +47,7 @@ export default function Sales() {
         error_messages: [{ code: "", description: "", parameter_name: "" }]
     });
 
-    const [cash, setCash] = useState(0)
+    const [cash, setCash] = useState(0);
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
     const [responseIdSale, setResponseIdSale] = useState(0)
@@ -89,12 +90,23 @@ export default function Sales() {
             return;
         }
 
+        function setObservationsAccounts() {
+            if (qrcodePagSeguro?.qr_codes[0]?.amount?.value > 0) {
+                return "PIX"
+            }
+            if (operationSale.id === 2) {
+                return "CARTÃO DE CRÉDITO"
+            }
+            return "CREDIÁRIO LOJA"
+        }
+
         const newAccountsReceivable: TAccountsReceivable[] = Array.from(
             { length: installmentAccount },
             (_, i) => {
-                const installmentNumber = i + 1;
                 const remaining = sale.tSale - cash;
-                const VALUE = Number((remaining / installmentAccount).toFixed(2))
+                const installmentNumber = i + 1;
+                const VALUE = Number((remaining / installmentAccount).toFixed(2));
+                const observations = qrcodePagSeguro?.qr_codes[0]?.text ? "PIX" : 'N/A';
                 return {
                     id: 0,
                     createdAt: new Date(),
@@ -109,7 +121,7 @@ export default function Sales() {
                     dueDate: setDays(i) as any,
                     description: '',
                     situation: 'OPEN',
-                    observations: '',
+                    observations: setObservationsAccounts(),
                     lateFee: 0,
                     interest: 0,
                     discount: 0,
@@ -123,7 +135,7 @@ export default function Sales() {
         setSaleAccountsReceivables(newAccountsReceivable);
         // Se quiser atualizar o objeto sale diretamente, faça isso com cuidado
         sale.accountsReceivable = newAccountsReceivable;
-    }, [sale.tSale, installmentAccount, user?.id, person?.id, cash]);
+    }, [sale.tSale, installmentAccount, user?.id, person?.id, cash, sale.discount, qrcodePagSeguro]);
 
     useEffect(() => { // Se não for parcelado zera o array
         if (operationSale.id === 3) {
@@ -354,7 +366,7 @@ export default function Sales() {
         let expiration_date_qrcode = new Date();
         expiration_date_qrcode.setHours(time.getHours() + 48);
         mapFieldsPagSeguroPix(pagSeguroPix)
-        const tSale = Math.round(Number(sale.tSale) * 100);
+        const tSale = Math.round(Number(sale.tSale - cash) * 100);
         pagSeguroPix.qr_codes[0].amount.value = tSale;
         pagSeguroPix.qr_codes[0].expiration_date = expiration_date_qrcode
         pagSeguroPix.notification_urls = ["https://meusite.com/notificacoes"]
@@ -377,6 +389,9 @@ export default function Sales() {
                 setMsg(`Erro ao gerar QRCode: ${data.error_messages?.[0]?.description || 'Erro desconhecido'}`)
             } else {
                 setQrcode(data)
+                if (data.qr_codes[0].amount.value > 0) {
+                    setInstallmentAccount(1) // Gera apenas 1 parcela do PIX
+                }
             }
         }
         catch (error: any) {
@@ -428,7 +443,7 @@ export default function Sales() {
     }
 
     return <>
-        <p>{JSON.stringify(cash)}</p>
+        {/* <p>{JSON.stringify(cash)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
