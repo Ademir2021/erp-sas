@@ -192,7 +192,7 @@ export default function SaleForm({
                 {operationSale.id === 1 && itemsSale.length > 0 && person && <>
                     {cashForm}
                     <p className='flex justify-center p-1 text-green-500 '>
-                        {vallorCash < 0 ? "Receber no PIX:" : "Troco :"} {cash > 0 ? vallorCash : '0.00'}</p>
+                        {vallorCash < 0 ? "Receber no PIX : " : "Troco : "} {cash > 0 ? Number(vallorCash).toFixed(2) : '0.00'}</p>
                     <div className="flex justify-center gap-2.5 mt-4">
                         <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
                             onClick={handleSubmitPix}
@@ -210,14 +210,38 @@ export default function SaleForm({
                 className="flex justify-center text-green-500"
                 target="_blank"
                 rel="noopener noreferrer">Imprimir Venda</a>}
-            <div className='flex justify-center mt-4 mb-3'>
-                {qrcode.qr_codes[0].text ? <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrcode.qr_codes[0].text)}`}
-                    alt="QR Code PIX"
-                /> : itemsSale.length > 0 && person && operationSale.id === 1 &&
-                <p className="text-red-500">Gere o PIX para visualizar o QR Code</p>}
+            <div className="flex justify-center mt-6 mb-4">
+                {qrcode.qr_codes[0].text ? (
+                    <div className="bg-gray-800 p-4 rounded-2xl shadow-lg w-full max-w-md text-center">
+                        {/* Título */}
+                        <h2 className="text-white text-lg font-semibold mb-3">
+                            Pagamento via PIX
+                        </h2>
+                        {/* QR Code */}
+                        <div className="flex justify-center mb-4">
+                            <img
+                                className="rounded-lg border border-gray-600"
+                                src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(qrcode.qr_codes[0].text)}`}
+                                alt="QR Code PIX"
+                            />
+                        </div>
+                        {/* Código copia e cola */}
+                        <div className="bg-gray-900 p-2 rounded-lg text-xs text-gray-300 break-all mb-3 max-h-24 overflow-y-auto">
+                            {qrcode.qr_codes[0].text}
+                        </div>
+                        {/* Botão copiar */}
+                        <button
+                            onClick={() => navigator.clipboard.writeText(qrcode.qr_codes[0].text)}
+                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
+                        >Copiar código PIX
+                        </button>
+                    </div>) : (
+                    itemsSale.length > 0 &&
+                    person &&
+                    operationSale.id === 1 && (
+                        <p className="text-red-500 text-center">
+                            Gere o PIX para visualizar o QR Code</p>))}
             </div>
-
             {/**PIX */}
             {qrcode.qr_codes[0].amount.value > 0 && (
                 <div className="flex justify-center text-blue-100 mt-2">

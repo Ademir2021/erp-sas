@@ -43,7 +43,8 @@ export default function Sales() {
     const pagSeguroPix_: any = pagSeguroPixJSON
     const [pagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPix_);
     const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
-        qr_codes: [{ text: "", amount: { value: 0 } }],
+        id: "",
+        qr_codes: [{ id: "", text: "", amount: { value: 0 } }],
         error_messages: [{ code: "", description: "", parameter_name: "" }]
     });
 
@@ -93,17 +94,29 @@ export default function Sales() {
         function setObservationsAccounts() {
             if (qrcodePagSeguro?.qr_codes[0]?.amount?.value > 0) {
                 return "PIX"
-            }
+            };
             if (operationSale.id === 2) {
                 return "CARTÃO DE CRÉDITO"
-            }
+            };
             return "CREDIÁRIO LOJA"
+        }
+
+        function idTypeOperationAccounts() {
+            if (qrcodePagSeguro?.id !== "") {
+                return qrcodePagSeguro.id
+            };
+            if (operationSale.id === 2) {
+                return "CARTÃO DE CRÉDITO ID: ...."
+            };
+            return `ID:${operationSale.id.toString()} - ${operationSale.description}`
         }
 
         const newAccountsReceivable: TAccountsReceivable[] = Array.from(
             { length: installmentAccount },
             (_, i) => {
-                const remaining = sale.tSale - cash;
+                // const remaining = sale.tSale - cash - sale.discount;
+                const remaining = ((Number(sale.tSale) || 0) -
+                    (Number(cash) || 0)).toFixed(2) as any;
                 const installmentNumber = i + 1;
                 const VALUE = Number((remaining / installmentAccount).toFixed(2));
                 return {
@@ -125,7 +138,7 @@ export default function Sales() {
                     interest: 0,
                     discount: 0,
                     type: 'CASH',
-                    idTypeOperation: `ID:${operationSale.id.toString()} - ${operationSale.description}`,
+                    idTypeOperation: idTypeOperationAccounts(),
                     descriptionTypeOperation: `Parcela ${installmentNumber} de ${installmentAccount}`,
                 };
             }

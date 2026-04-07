@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-
   const pagSeguroCard = await req.json();
   // console.log(pagSeguroCard)
-
   /* produção: URL_PAGSEGURO_ORDERS || homologação: URL_PAGSEGURO_SANDBOX_ORDERS
   producao: TOKEN_PAGSEGURO || homologação: TOKEN_PAGSEGURO_SANDBOX */
-
   const URL = process.env.URL_PAGSEGURO_ORDERS as string
-
   try {
     const response = await fetch(URL, {
       method: "POST",
@@ -19,10 +15,8 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify(pagSeguroCard)
     });
-
     const data = await response.json();
     // console.log(data)
-
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(

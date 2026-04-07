@@ -46,10 +46,10 @@ export type TPagSeguroPix = {
         string]
 }
 
-/**QR Code Response */
-
 export type TResponsePixQRCode = {
+    id: string
     qr_codes: [{
+        id: string
         text: string
         amount: {
             value: number
