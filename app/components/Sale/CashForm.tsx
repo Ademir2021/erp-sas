@@ -16,12 +16,12 @@ export default function CashForm({ cash, setCash, sale, setSale }: Props) {
     return (
         <form className="flex-col justify-center mt-1 space-y-2">
             <label className={`${globalStylesTitle} mb-0`} >
-                Receber em Dinheiro - {"(Cash)"}</label>
+                Receber R$ {`${sale?.tSale ? Number(sale.tSale).toFixed(2) : '0.00'}`}</label>
             <input className={`${styles_input}`}
                 type="number"
                 value={cash || ''}
                 max={sale?.tSale ? Number(sale.tSale) : undefined}
-                placeholder='Em Dinheiro, Ex:100.00'
+                placeholder={`Em Dinheiro, ex: ${sale?.tSale ? Number(sale.tSale).toFixed(2) : '0.00'}`}
                 onChange={(e) => {
                     let value = parseFloat(e.target.value) || 0;
                     if (value > Number(sale.tSale)) {

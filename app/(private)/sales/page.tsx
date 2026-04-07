@@ -17,7 +17,6 @@ import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 import { setDays } from "@/app/lib/momentDays"
 
-
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
     interface Window {
@@ -101,7 +100,7 @@ export default function Sales() {
             return "CREDIÁRIO LOJA"
         }
 
-        function idTypeOperationAccounts() {
+        function setIdTypeOperationAccounts() {
             if (qrcodePagSeguro?.id !== "") {
                 return qrcodePagSeguro.id
             };
@@ -114,7 +113,6 @@ export default function Sales() {
         const newAccountsReceivable: TAccountsReceivable[] = Array.from(
             { length: installmentAccount },
             (_, i) => {
-                // const remaining = sale.tSale - cash - sale.discount;
                 const remaining = ((Number(sale.tSale) || 0) -
                     (Number(cash) || 0)).toFixed(2) as any;
                 const installmentNumber = i + 1;
@@ -138,7 +136,7 @@ export default function Sales() {
                     interest: 0,
                     discount: 0,
                     type: 'CASH',
-                    idTypeOperation: idTypeOperationAccounts(),
+                    idTypeOperation: setIdTypeOperationAccounts(),
                     descriptionTypeOperation: `Parcela ${installmentNumber} de ${installmentAccount}`,
                 };
             }
@@ -422,7 +420,7 @@ export default function Sales() {
             return
         }
         router.push('/sales')
-        setMsg(`Mensagems: ${resp.data.message}, ID Venda:${resp.data.id}, Venda OK:${resp.success}`)
+        setMsg(`${resp.data.message} ID ${String(resp.data.id).padStart(6, '0')}`)
         const idSale = resp.data.id as number
         setResponseIdSale(idSale)
         router.refresh()

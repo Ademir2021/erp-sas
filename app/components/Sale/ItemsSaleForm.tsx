@@ -42,30 +42,34 @@ export default function ITemsSaleForm({
                     <tr>
                         <th className={`${styles_th} text-center`}>ID</th>
                         <th className={`${styles_th} text-left`}>Descrição</th>
-                        <th className={`${styles_th} text-center`}>Inserir</th>
-                        <th className={`${styles_th} text-left`}>Preço min</th>
-                        <th className={`${styles_th} text-left`}>Preço max</th>
+                        {/* <th className={`${styles_th} text-center`}>Inserir</th> */}
+                        {/* <th className={`${styles_th} text-left`}>Preço min</th> */}
+                        <th className={`${styles_th} text-left`}>Valor</th>
                         <th className={`${styles_th} text-left`}>Código de barras</th>
                         <th className={`${styles_th} text-left`}>Sub grupo</th>
-                        <th className={`${styles_th} text-left`}>Grupo</th>
+                        {/* <th className={`${styles_th} text-left`}>Grupo</th> */}
                     </tr>
                 </thead>}
 
                 <tbody className="divide-y divide-gray-200">
-                    {items.map((item: TItem) => (
+                    {items.map((item: TItem) => ( 
                         <tr key={item.id} className="hover:bg-gray-600 transition text-sky-100 ">
+                            
                             <td className={`${styles_td} text-center`}>{item.id}</td>
-                            <td className={`${styles_td} text-left`}>{item.name}</td>
-                            <td className={`${styles_td} text-center`}><a href="#up-item"
+                            <td className={`${styles_td} text-left`}><a className="font-bold text-blue-500 hover:underline"
+                            href="##" onClick={() => insertItem(item)}
+                            >{item.name}</a></td>
+                            {/* <td className={`${styles_td} text-center`}><a href="#up-item"
                                 onClick={() => insertItem(item)}
                                 className="px-3 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
                             >Inserir</a>
-                            </td>
-                            <td className={`${styles_td} text-left`}>{item.priceMin}</td>
-                            <td className={`${styles_td} text-left`}>{item.priceMax}</td>
+                            </td> */}
+                            {/* <td className={`${styles_td} text-left`}>{item.priceMin}</td> */}
+                            <td className={`${styles_td} text-left text-lg text-gray-300`}>{item.priceMax.toFixed(2)}</td>
                             <td className={`${styles_td} text-left`}>{item.barCode}</td>
-                            <td className={`${styles_td} text-left`}>{item.subGroup.group.name}</td>
+                            {/* <td className={`${styles_td} text-left`}>{item.subGroup.group.name}</td> */}
                             <td className={`${styles_td} text-left`}>{item.subGroup.name}</td>
+                            
                         </tr>
                     ))}
                 </tbody>
