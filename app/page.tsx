@@ -40,31 +40,31 @@ export default async function RootLayout() {
             Soluções e Segurança para sua ( Empresa ou Negôcio ).
           </h1>
           <p className="text-gray-300 text-lg">
-            Soluções apropriadas para o seu negócio
+            Mais segurança, mais eficiência e mais produtividade para o seu negócio. Conheça nossas soluções e serviços personalizados para atender às suas necessidades específicas.
           </p>
         </div>
         {/* Cards 1 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
           {/* Cards 1 */}
             {cards_1(
-              "Sistema ERP para Gestão Empresarial",
-              "Controle das Vendas e estoque, Fluxos de caixa e Contas a pagar e receber. | R$360.00",
+              "Controle das Vendas, Pedidos e Oraçamentos",
+              "Sistema WEB SAS para controle de vendas, pedidos e orçamentos, com gestão de clientes, produtos, estoque, relatórios e análises para otimizar o desempenho do seu negócio.",
               "Saiba Mais")}
             {cards_2(
-              "Sistema para Automação de vendas On-line",
-              "Sistema WEB SAS com cards dos produtos á venda, carrinho de compras, ChecKout para pagamentos com PIX/Cartão, Gestão de Acompanameto e de entregas dos Produtos com segurança.",
+              "Checkout para Pagamentos com PIX/Cartão/Credito Loja",
+              "Sistema WEB SAS com checkout para pagamentos com PIX, crédito Loja e cartão de crédito, garantindo segurança e conveniência para seus clientes.",
               "Saiba Mais")}
           <br />
           {/**Cards 2 */}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
           {cards_1(
-            "Redes de Fibra Optica",
-            "Projetos e Execução de redes com Fibra Òptica para Residências. Industria e na Agro-Pecuária.",
+            "Gestão Integrada no Cadastro de Clientes",
+            "Sistema WEB SAS para gestão integrada do cadastro de clientes, com funcionalidades de atualização, consulta e análise de dados para melhorar o atendimento e a satisfação do cliente.",
             "Saiba Mais")}
           {cards_2(
-            "Redes Ponto a Ponto via Rádio para longas distâncias 5.8Ghz",
-            "Projeto e execução de rede PPP com Rádios 5.8Ghz inteligando escritórios á pontos distantes e de difícil acesso, com velociadades superiores á 300Mbps.",
+            "Controle de Acesso e Segurança para sua Empresa",
+            "Gestão de controle de acesso e segurança para sua empresa, garantindo a proteção dos dados e a integridade dos sistemas.",
             "Saiba Mais")}
         </div>
         <p className="text-gray-300 mt-4 text-lg">Comece agora mesmo</p>
