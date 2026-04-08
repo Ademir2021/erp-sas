@@ -3,23 +3,19 @@ import { TPerson } from '@/app/models/TPerson'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
-
   const person: TPerson = await request.json()
-
   if (!person.name) {
     return NextResponse.json(
       { error: 'Favor preencher todos os campos' },
       { status: 400 }
     )
   }
-
   if (!person.user?.token) {
     return NextResponse.json(
       { error: 'Token não encontrado' },
       { status: 401 }
     )
   }
-
   const apiResponse = await fetch(`${API_URL}/person`, {
     method: "POST",
     headers: {
@@ -28,41 +24,34 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify(person)
   })
-
   const data = await apiResponse.json()
-
   if (!apiResponse.ok) {
     return NextResponse.json(data, { status: apiResponse.status })
   }
-
   return NextResponse.json({ success: true })
 };
 
 export async function PUT(request: Request) {
-
   const person: TPerson = await request.json()
-console.log(person)
+  // console.log(person)
   if (!person.id) {
     return NextResponse.json(
       { error: 'ID é obrigatório para atualização' },
       { status: 400 }
     )
   }
-
   if (!person.name) {
     return NextResponse.json(
       { error: 'Favor preencher todos os campos' },
       { status: 400 }
     )
   }
-
   if (!person.user.token) {
     return NextResponse.json(
       { error: 'Token não encontrado' },
       { status: 401 }
     )
   }
-
   const apiResponse = await fetch(`${API_URL}/person/${person.id}`, {
     method: "PUT",
     headers: {
@@ -71,13 +60,10 @@ console.log(person)
     },
     body: JSON.stringify(person)
   })
-
   const data = await apiResponse.json()
-
   if (!apiResponse.ok) {
     return NextResponse.json(data, { status: apiResponse.status })
   }
-
   return NextResponse.json({ success: true, data })
 };
 
@@ -106,7 +92,6 @@ export async function GET(request: Request) {
     }
     const data = await response.json()
     return NextResponse.json(data)
-
   } catch (error) {
     console.error("Erro na API /persons:", error)
     return NextResponse.json(
