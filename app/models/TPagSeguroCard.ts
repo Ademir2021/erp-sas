@@ -59,58 +59,27 @@ export type TPagSeguroCard = {
 }
 
 export type TPagSeguroItems = {
-    reference_id: string,
-    name: string,
-    quantity: string | number,
-    unit_amount: string | number
+  reference_id: string,
+  name: string,
+  quantity: string | number,
+  unit_amount: string | number
 }
 
 export type TPublicKey = {
-    public_key: string
-    created_at: string
+  public_key: string
+  created_at: string
 }
 
-  export type TPagSeguroResponse = {
-  charges: TChargeResponse[];
-  [key: string]: any; // caso o PagSeguro retorne outros campos
-};
-
-export type TChargeResponse = {
-  id: string;
-  reference_id: string;
-  status: 'PENDING' | 'AUTHORIZED' | 'PAID' | 'FAILED' | 'CANCELED' |'DECLINED';
-  created_at: string; // ISO 8601
-  paid_at?: string;   // ISO 8601, pode ser undefined se não pago
-  description: string;
-  amount: {
-    value: number;      // em centavos
-    currency: string;   // ex: "BRL"
-  };
-  payment_response?: {
-    code?: string;
-    message?: string;
-    [key: string]: any; // qualquer outro campo retornado
-  };
-  payment_method: {
-    type: 'CREDIT_CARD' | 'BOLETO' | 'PIX' | string;
-    installments?: number;
-    capture?: boolean;
-    card?: {
-      holder: {
-        name: string;
-      };
-      brand?: string;
-      last_digits?: string;
-      first_digits?: string;
-      encrypted?: string;
-    };
-    [key: string]: any;
-  };
-  metadata?: Record<string, any>;
-  links?: Array<{
-    href: string;
-    rel: string;
-    media_type?: string;
-  }>;
-};
-
+export type TPagSeguroResponseCard = {
+  id: string
+  charges: [
+    {
+      id: string
+      reference_id: string
+      status: 'PAID' | 'PENDING' | 'REFUSED' | 'CANCELED' | 'AUTHORIZED' | 'AUTHORIZED' | 'DECLINED'
+      created_at: string
+      paid_at: string
+      description: string
+    }
+  ]
+}
