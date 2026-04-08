@@ -149,7 +149,16 @@ export default function Sales() {
         setSaleAccountsReceivables(newAccountsReceivable);
         // Se quiser atualizar o objeto sale diretamente, faça isso com cuidado
         sale.accountsReceivable = newAccountsReceivable;
-    }, [sale.tSale, installmentAccount, user?.id, person?.id, cash, sale.discount, qrcodePagSeguro]);
+    }, [
+        sale.tSale,
+        installmentAccount,
+        user?.id,
+        person?.id,
+        cash,
+        sale.discount,
+        qrcodePagSeguro,
+        responsePagSeguroCard.id
+    ]);
 
     useEffect(() => { // Se não for parcelado zera o array
         if (operationSale.id === 3) {
