@@ -175,7 +175,7 @@ export default function Sales() {
     useEffect(()=>{ // Se for cartão de crédito, seta o número de parcelas selecionado
         if(operationSale.id === 2)
         setInstallmentAccount(creditCard.installments)
-    },[creditCard.installments])
+    },[creditCard, operationSale])
 
     useEffect(() => {
         const script = document.createElement("script");
