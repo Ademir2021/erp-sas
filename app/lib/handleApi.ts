@@ -1,4 +1,8 @@
-export async function loadHandle(token: string, setHandle: Function, url: string) {
+export async function loadHandle(
+    token: string,
+    setHandle: Function,
+    url: string,
+    router: any) {
     try {
         if (!token) return
         const response = await fetch(`/api/${url}`, {
@@ -7,6 +11,10 @@ export async function loadHandle(token: string, setHandle: Function, url: string
                 Authorization: `Bearer ${token}`
             }
         })
+        if (!response.ok) {
+            router.push('/login')
+            return
+        }
         if (!response.ok) {
             throw new Error(`Erro: ${response.status}`)
         }

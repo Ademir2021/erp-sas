@@ -77,9 +77,9 @@ export default function Person() {
 
     useEffect(() => {
         const token = user?.token as string
-        loadHandle(token, setZipcodes, 'zipcodes')
-        loadHandle(token, setGroupPersons, 'grouppersons')
-        loadHandle(token, setPersons, 'person')
+        loadHandle(token, setZipcodes, 'zipcodes', router)
+        loadHandle(token, setGroupPersons, 'grouppersons', router)
+        loadHandle(token, setPersons, 'person', router)
     }, [user]);
 
     async function updatePerson(person: TPerson) {

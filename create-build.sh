@@ -1,6 +1,7 @@
 #!/bin/bash
 
 echo "Criando build for ERP-SAS"
+rm -rf .next
 npm run build
 
 echo "Removendo build for ERP-SAS"

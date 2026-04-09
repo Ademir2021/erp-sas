@@ -51,13 +51,13 @@ export default function Items() {
 
     useEffect(() => {
         const token = user?.token as string
-        loadHandle(token, setBrands, 'brands')
-        loadHandle(token, setSubGroups, 'subgroups')
-        loadHandle(token, setTaxGroups, 'taxgroups')
-        loadHandle(token, setTypeItems, 'typeitems')
-        loadHandle(token, setItemsClasses, 'itemsclasses')
-        loadHandle(token, setUnitMeasures, 'unitmeasures')
-        loadHandle(token, setItems, 'item')
+        loadHandle(token, setBrands, 'brands',router)
+        loadHandle(token, setSubGroups, 'subgroups', router)
+        loadHandle(token, setTaxGroups, 'taxgroups', router)
+        loadHandle(token, setTypeItems, 'typeitems', router)
+        loadHandle(token, setItemsClasses, 'itemsclasses', router)
+        loadHandle(token, setUnitMeasures, 'unitmeasures', router)
+        loadHandle(token, setItems, 'item', router)
     }, [user]);
 
      async function updateItem(item: TItem) {

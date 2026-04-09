@@ -64,7 +64,7 @@ export default function AccountsReceivable() {
 
     useEffect(() => {
         const token = user?.token as string
-        loadHandle(token, setAccountsReceivables, 'accountsreceivable')
+        loadHandle(token, setAccountsReceivables, 'accountsreceivable', router)
     }, [user]);
 
 

@@ -47,11 +47,11 @@ export default async function RootLayout() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
           {/* Cards 1 */}
             {cards_1(
-              "Controle das Vendas, Pedidos e Oraçamentos",
+              "Controle das Vendas de Items ou Serviços, Pedidos e Orçamentos",
               "Sistema WEB SAS para controle de vendas, pedidos e orçamentos, com gestão de clientes, produtos, estoque, relatórios e análises para otimizar o desempenho do seu negócio.",
               "Saiba Mais")}
             {cards_2(
-              "Checkout para Pagamentos com PIX/Cartão/Credito Loja",
+              "Checkout para Pagamentos com PIX/Cartão/Crédito Loja",
               "Sistema WEB SAS com checkout para pagamentos com PIX, crédito Loja e cartão de crédito, garantindo segurança e conveniência para seus clientes.",
               "Saiba Mais")}
           <br />

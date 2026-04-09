@@ -17,8 +17,6 @@ import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPAgSeguroPix"
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 import { setDays } from "@/app/lib/momentDays"
 import { mapFieldsPagSeguroCard, mapFieldsPagSeguroPix } from "./handlePagSeguro"
-import { se } from "date-fns/locale"
-
 
 // Adiciona a definição de PagSeguro ao tipo Window
 declare global {
@@ -157,11 +155,13 @@ export default function Sales() {
         cash,
         sale.discount,
         qrcodePagSeguro,
-        responsePagSeguroCard.id
+        responsePagSeguroCard,
+        operationSale,
+        creditCard
     ]);
 
-    useEffect(() => { // Se não for parcelado zera o array
-        if (operationSale.id === 3) {
+    useEffect(() => { // Se não for parcelado zera o Array
+        if (operationSale.id === 3 || operationSale.id === 2) {
             setInstallmentAccount(1);
         } else {
             setSaleAccountsReceivables([]);
@@ -171,6 +171,11 @@ export default function Sales() {
             }));
         }
     }, [operationSale.id]);
+
+    useEffect(()=>{ // Se for cartão de crédito, seta o número de parcelas selecionado
+        if(operationSale.id === 2)
+        setInstallmentAccount(creditCard.installments)
+    },[creditCard.installments])
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -198,9 +203,9 @@ export default function Sales() {
 
     useEffect(() => {
         const token = user?.token as string
-        loadHandle(token, setPersons, 'person')
-        loadHandle(token, setOperationsSale, 'operationsale')
-        loadHandle(token, setPublicKey, 'pagseguropublickey')
+        loadHandle(token, setPersons, 'person', router)
+        loadHandle(token, setOperationsSale, 'operationsale', router)
+        loadHandle(token, setPublicKey, 'pagseguropublickey', router)
     }, [user]);
 
     useEffect(() => {
@@ -405,7 +410,7 @@ export default function Sales() {
     }
 
     return <>
-        {/* <p>{JSON.stringify(cash)}</p> */}
+        <p>{JSON.stringify(sale.accountsReceivable)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
