@@ -1,4 +1,4 @@
-import { TItem } from "@/app/models/TITem";
+import { TItem } from "@/app/models/TItem";
 import { TItemsSale } from "@/app/models/TSale";
 
 type Props = {

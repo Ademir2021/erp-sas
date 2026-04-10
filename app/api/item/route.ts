@@ -1,5 +1,5 @@
 import { API_URL } from '@/app/lib/auth'
-import { TItem } from '@/app/models/TITem'
+import { TItem } from '@/app/models/TItem'
 import { TUser } from '@/app/models/TUser'
 import { NextResponse } from 'next/server'
 

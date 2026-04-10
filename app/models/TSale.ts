@@ -1,5 +1,5 @@
 import { TAccountsReceivable } from "./TAccountsReceivable"
-import { TItem } from "./TITem"
+import { TItem } from "./TItem"
 import { TBranch, TPerson } from "./TPerson"
 import { TUser } from "./TUser"
 

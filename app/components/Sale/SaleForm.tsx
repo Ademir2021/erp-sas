@@ -4,12 +4,12 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
-import { TItem } from "@/app/models/TITem"
+import { TItem } from "@/app/models/TItem"
 import { ItemsSaleList } from "./ItemsSaleList"
 import { TPerson } from "@/app/models/TPerson"
 import { useEffect, useState } from "react"
 import CreditCardForm from "./CreditCardForm"
-import { TResponsePixQRCode } from '@/app/models/TPAgSeguroPix';
+import { TResponsePixQRCode } from '@/app/models/TPagSeguroPix';
 import { globalStylesTitle, globalStylesToggle } from '../GlobalStyles';
 import CashForm from './CashForm';
 

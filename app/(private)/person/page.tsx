@@ -82,16 +82,36 @@ export default function Person() {
         loadHandle(token, setPersons, 'person', router)
     }, [user]);
 
+    function loadReplaceCPF(person: TPerson): void {
+        if (!person?.cpf) return;
+        person.cpf = person?.cpf.replace(/\D/g, '');
+    };
+    function loadReplaceCNPJ(person: TPerson): void {
+        if (!person?.cnpj) return;
+        person.cnpj = person?.cnpj.replace(/[../-]/g, '');
+    };
+    function loadReplacePhone(person: TPerson): void {
+        if (!person?.phone) return;
+        person.phone = person?.phone.replace(/[()-]/g, '');
+    };
+      function loadReplaceRG(person: TPerson): void {
+        if (!person?.rg) return;
+        person.rg = person?.rg.replace(/[..-]/g, '');
+    };
+
     async function updatePerson(person: TPerson) {
         if (user) {
             person.user.token = user.token
             person.user.role = "USER" as UserRole
         }
+        loadReplaceCPF(person)
+        loadReplaceCNPJ(person)
+        loadReplacePhone(person)
+        loadReplaceRG(person)
         const res = await fetch('/api/person', {
             method: 'PUT',
             body: JSON.stringify(person),
         })
-
         const resp: TResponseMessage = await res.json()
 
         if (!res.ok) {
@@ -112,7 +132,10 @@ export default function Person() {
         person.rg = person.rg || null as any
         person.cnpj = person.cnpj || null as any
         person.inscricState = person.inscricState || null as any
-
+        loadReplaceCPF(person);
+        loadReplaceCNPJ(person);
+        loadReplacePhone(person);
+        loadReplaceRG(person);
         const res = await fetch('/api/person', {
             method: 'POST',
             body: JSON.stringify(person),

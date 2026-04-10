@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ItemsForm from "@/app/components/Items/ItemsForm";
-import { TBrand, TItem, TItemClass, TsubGroup, TTaxGroup, TTypeItem, TUnitMeasure } from "@/app/models/TITem";
+import { TBrand, TItem, TItemClass, TsubGroup, TTaxGroup, TTypeItem, TUnitMeasure } from "@/app/models/TItem";
 import { TUser } from "@/app/models/TUser";
 import { useRouter } from 'next/navigation'
 import { getUser } from "@/app/lib/auth";

@@ -128,7 +128,8 @@ ${step === index + 1 ? "text-blue-600" : "text-gray-400"}`}>
           </div>
         ))}
       </div>
-      {children.id != 0 ? <> <b>Atualizar Registro</b> <div>{"ID:" + String(children.id).padStart(9, '0') + " - " + children.name} </div> </> :
+      {children.id != 0 ? <> <b>Atualizar Registro</b>
+        <div>{"ID:" + String(children.id).padStart(9, '0') + " - " + children.name} </div> </> :
         <p className=" font-bold">Novo Registro</p>}
 
       {step === 1 && <>  <label>Grupo da Pessoa</label>
@@ -195,7 +196,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             <input {...register("cpf")}
               type="text"
               name="cpf"
-              defaultValue={formatCPF(children.cpf) || ''}
+              value={formatCPF(children.cpf || '')}
               placeholder="Digite seu CPF"
               onChange={handleChange}
               className="w-full p-3 border rounded-lg"
@@ -236,7 +237,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             <input
               {...register("cnpj")}
               name='cnpj'
-              value={formatCNPJ(children.cnpj)}
+              value={formatCNPJ(children.cnpj || "")}
               onChange={handleChange}
               placeholder="00.000.000/0000-00"
               className="w-full p-3 border rounded-lg"
@@ -254,7 +255,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             <input {...register("razaoSocial")}
               type="text"
               name="name"
-              value={children.name || ''}
+              value={children.name || ""}
               onChange={handleChange}
               placeholder="Razão Social"
               className="w-full p-3 border rounded-lg" />
@@ -269,7 +270,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             <input
               type="text"
               name="inscricState"
-              value={children.inscricState}
+              value={children.inscricState || ""}
               onChange={handleChange}
               placeholder="Inscrição Estadual"
               className="w-full p-3 border rounded-b-lg" />
@@ -284,7 +285,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             <input {...register("email")}
               type="email"
               name='email'
-              defaultValue={children.email || ""}
+              value={children.email || ""}
               onChange={handleChange}
               placeholder="Email"
               className="w-full p-3 border rounded-lg" />
@@ -293,7 +294,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
               {...register("phone")}
               type="text"
               name="phone"
-              defaultValue={formatPhone(children.phone) || ''}
+              value={formatPhone(children.phone || "")}
               onChange={handleChange}
               placeholder="Telefone"
               maxLength={15}
@@ -305,6 +306,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
 
         {step === 4 && <>
           {children.id != 0 && <input
+            type="hidden"
             name="id"
             value={children.address.id}
             onChange={(e) =>
@@ -320,6 +322,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             className="w-full p-3 border rounded-lg"
           />}
           <input
+            type="text"
             name="street"
             value={children.address.street}
             onChange={(e) =>
@@ -335,6 +338,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             className="w-full p-3 border rounded-lg"
           />
           <input
+            type="text"
             name="number"
             value={children.address.number}
             onChange={(e) =>
@@ -350,6 +354,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             className="w-full p-3 border rounded-lg"
           />
           <input
+            type="text"
             name="neighborhood"
             value={children.address.neighborhood}
             onChange={(e) =>
@@ -365,6 +370,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             className="w-full p-3 border rounded-lg"
           />
           <input
+            type="text"
             name="complement"
             value={children.address.complement}
             onChange={(e) =>

@@ -1,4 +1,4 @@
-import { TItem, TBrand, TsubGroup, TTaxGroup, TTypeItem, TItemClass, TUnitMeasure } from "@/app/models/TITem"
+import { TItem, TBrand, TsubGroup, TTaxGroup, TTypeItem, TItemClass, TUnitMeasure } from "@/app/models/TItem"
 import ItemsList from "./ItemsList"
 
 type Props = {

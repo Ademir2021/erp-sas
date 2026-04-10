@@ -1,5 +1,5 @@
 import { TPagSeguroCard, TPagSeguroItems } from "@/app/models/TPagSeguroCard";
-import { TPagSeguroPix } from "@/app/models/TPAgSeguroPix";
+import { TPagSeguroPix } from "@/app/models/TPagSeguroPix";
 import { TPerson } from "@/app/models/TPerson";
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale";
 import { TUser } from "@/app/models/TUser";

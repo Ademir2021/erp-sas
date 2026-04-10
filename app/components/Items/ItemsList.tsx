@@ -1,4 +1,4 @@
-import { TItem } from "@/app/models/TITem"
+import { TItem } from "@/app/models/TItem"
 import { globalStyles_td, globalStyles_th } from "../GlobalStyles"
 
 type Props = {
