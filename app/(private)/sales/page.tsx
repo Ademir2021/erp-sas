@@ -112,7 +112,7 @@ export default function Sales() {
             return `ID:${operationSale.id.toString()} - ${operationSale.description}`
         }
 
-        const newAccountsReceivable: TAccountsReceivable[] = Array.from(
+        const newAccountsReceivable: TAccountsReceivable[]  = Array.from(
             { length: installmentAccount },
             (_, i) => {
                 const remaining = ((Number(sale.tSale) || 0) -

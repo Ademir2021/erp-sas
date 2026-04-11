@@ -1,22 +1,25 @@
 import { DateFns } from "@/app/lib/dateFns"
-import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
+import { TAccountsReceivable, TReceipt } from "@/app/models/TAccountsReceivable"
 import { globalStyles_td, globalStyles_th } from "../GlobalStyles"
+import { txtValueReceived } from "@/app/(private)/accountsreceivable/fileTXT"
 
 type Props = {
     accountsReceivable: TAccountsReceivable[]
-    setOpenAccount:Function
-    handleSubmit:any
+    setOpenAccount: Function
+    handleSubmit: any
+    receipt: TReceipt
 }
 
 export function AccountsReceivableList({
-    accountsReceivable,setOpenAccount, handleSubmit }: Props) {
+    accountsReceivable, setOpenAccount, handleSubmit, receipt }: Props) {
 
     const dateFns = new DateFns()
 
     function updateAccountsReceivable(ar: TAccountsReceivable) {
-        if(ar)
-        setOpenAccount(ar)
-       handleSubmit();
+        if (ar)
+            setOpenAccount(ar)
+        handleSubmit();
+        receipt.receipt > 0 && txtValueReceived(ar, `recibo_${ar.id}".txt`, receipt)
     }
 
     return <>

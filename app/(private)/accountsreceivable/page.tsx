@@ -142,6 +142,7 @@ export default function AccountsReceivable() {
             handleSubmit={handleSubmit}
             setReceipt={setReceipt}
             receipt={receipt}
+        
         />
     </>
 }

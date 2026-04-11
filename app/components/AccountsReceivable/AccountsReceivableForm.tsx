@@ -8,6 +8,7 @@ type Props = {
     handleSubmit?: any
     setReceipt: Function
     receipt: TReceipt
+  
 }
 
 export default function AccountsReceivableForm({
@@ -51,6 +52,7 @@ export default function AccountsReceivableForm({
             accountsReceivable={accountsReceivable}
             setOpenAccount={setOpenAccount}
             handleSubmit={handleSubmit}
+            receipt={receipt}
         />
     </>
 }

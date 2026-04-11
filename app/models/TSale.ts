@@ -10,7 +10,7 @@ export type TSale = {
     person: Pick<TPerson, 'id'>
     discount: number
     itemsSale: TItemsSale[]
-    operationSale:TOperationSale
+    operationSale: TOperationSale
     tSale: number
     accountsReceivable?: TAccountsReceivable[] //Contas a Receber geradas pela venda
 }
@@ -25,16 +25,16 @@ export type TItemsSale = {
 export type TOperationSale = {
     id: number
     description: string
-    type:string
-    controlsStock:boolean
-    generateFinancial:boolean
-    allowDiscount:boolean
-    updateCost:boolean
-    requiresInvoice:boolean
-    isReturn:boolean
-    cfop:string
-    defaultNature:string
-    active:boolean
+    type: string
+    controlsStock: boolean
+    generateFinancial: boolean
+    allowDiscount: boolean
+    updateCost: boolean
+    requiresInvoice: boolean
+    isReturn: boolean
+    cfop: string
+    defaultNature: string
+    active: boolean
 }
 
 export type TCreditCart = {
@@ -45,6 +45,19 @@ export type TCreditCart = {
     ex_year: string
     secure_code: string
     encrypted: string
-    installments:number
-    payment:number 
+    installments: number
+    payment: number
+}
+
+export type TSaleResponse = {
+    saleId: 1
+    issueDate: Date
+    branchName: string
+    userName: string
+    personName: string
+    street: string
+    items: TItem[]
+    totalSale: number
+    discount: number
+    totalNote: number
 }
