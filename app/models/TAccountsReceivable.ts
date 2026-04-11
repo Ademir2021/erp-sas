@@ -32,27 +32,3 @@ export type TReceipt = {
     receipt:number
     discount:number
 }
-
-export type TValsRecebidos = { // fazer mudança
-    id: number
-    AccountsReceivable:TAccountsReceivable
-    sale:TSale
-    user: TUser
-    person:TPerson
-    value: number
-    dateReceipt: Date
-    description: string
-}
-
-export type TReciboValRec = {
-    id: number
-    conta: TAccountsReceivable
-    venda: TSale
-    user: TUser
-    valor: number
-    data_rec: Date | string
-    descricao: string
-    id_cliente:TPerson
-    nome_cliente: TPerson
-    cpf_cliente:TPerson
-}
