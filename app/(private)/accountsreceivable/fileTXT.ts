@@ -35,7 +35,6 @@ ${line}
           Obrigado pela preferência!
 ${line}
 `;
-
     return receiptTXT.trim();
 }
 

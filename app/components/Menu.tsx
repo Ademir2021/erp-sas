@@ -26,7 +26,7 @@ export default function Menu() {
             className={styles_links}
           >DashBoard</Link>
         </li>
-        <hr/>
+        <hr />
         <li>
           <Link
             href="/person"
@@ -41,14 +41,21 @@ export default function Menu() {
           >Dados dos Items</Link>
         </li>
         <hr />
-         <li>
+        <li>
           <Link
-            href="/sales"
+            href="/sale"
             className={styles_links}
           >Console de Venda</Link>
         </li>
         <hr />
-         <li>
+        <li>
+          <Link
+            href="/sales"
+            className={styles_links}
+          >Vendas</Link>
+        </li>
+        <hr />
+        <li>
           <Link
             href="/accountsreceivable"
             className={styles_links}

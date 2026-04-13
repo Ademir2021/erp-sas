@@ -5,7 +5,7 @@ import { TUser } from "@/app/models/TUser"
 
 export async function GET() {
 
-  const cookieStore = await cookies() as any
+  const cookieStore = await cookies()
 
   const token = cookieStore.get("token")?.value
 

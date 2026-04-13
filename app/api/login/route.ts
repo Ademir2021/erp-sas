@@ -1,14 +1,14 @@
 import { TUser, UserRole } from '@/app/models/TUser'
 import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
-import { API_URL }  from '@/app/lib/auth'
+import { API_URL } from '@/app/lib/auth'
 
 type TapiUSer = {
-  id:number
-  login:string
-  password:string
-  token:string
-  roles:UserRole
+  id: number
+  login: string
+  password: string
+  token: string
+  roles: UserRole
 }
 
 export async function POST(request: Request) {
@@ -31,23 +31,39 @@ export async function POST(request: Request) {
     )
   }
 
-  const apiUser:TapiUSer = await apiResponse.json()
-  
+  const apiUser: TapiUSer = await apiResponse.json();
+
   // dados que irão no token
   const payload: TUser = {
     id: apiUser.id,
     login: apiUser.login,
     role: apiUser.roles,
-    token: apiUser.token
-  }
-
+    token: apiUser.token // ero aqui
+  };
   const token = jwt.sign(payload, process.env.JWT_SECRET!, {
     expiresIn: "1d"
   })
 
+  // Dados do User
+  const payLoadUser: TUser = {
+    id: apiUser.id,
+    login: apiUser.login,
+    role: apiUser.roles
+  };
+  const user_ = jwt.sign(payLoadUser, process.env.JWT_SECRET!, {
+    expiresIn: "1d"
+  })
+
+
   const response = NextResponse.json({ success: true })
 
   response.cookies.set("token", token, {
+    httpOnly: true,
+    path: "/",
+    maxAge: 60 * 60 * 24
+  })
+
+  response.cookies.set("user", user_, {
     httpOnly: true,
     path: "/",
     maxAge: 60 * 60 * 24

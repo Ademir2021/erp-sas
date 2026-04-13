@@ -11,10 +11,10 @@ export async function loadHandle(
                 Authorization: `Bearer ${token}`
             }
         })
-        if (!response.ok) {
-            router.push('/login')
-            return
-        }
+        // if (!response.ok) {
+        //     router.push('/login')
+        //     return
+        // }
         if (!response.ok) {
             throw new Error(`Erro: ${response.status}`)
         }
