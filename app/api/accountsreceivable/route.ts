@@ -1,6 +1,6 @@
 
 import { API_URL } from '@/app/lib/auth'
-import { loadToken } from '@/app/lib/endPoint'
+import { endPoint, loadToken } from '@/app/lib/endPoint'
 import { TAccountsReceivable } from '@/app/models/TAccountsReceivable'
 import { NextResponse } from 'next/server'
 
@@ -52,7 +52,8 @@ export async function GET(request: Request) {
       )
     }
     const token = authHeader.replace("Bearer ", "")
-    const response = await fetch(`${API_URL}/accounts_receivable`, {
+    const endpoint = await endPoint()
+    const response = await fetch(`${API_URL}/accounts_receivable${endpoint}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`

@@ -62,6 +62,13 @@ export default function Menu() {
           >Contas a Receber</Link>
         </li>
         <hr />
+           <li>
+          <Link
+            href="/cashmovement"
+            className={styles_links}
+          >Caixa Movimento</Link>
+        </li>
+        <hr />
         <li>
           <Link
             href="/perfil"

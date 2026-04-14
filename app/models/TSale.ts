@@ -49,14 +49,30 @@ export type TCreditCart = {
     payment: number
 }
 
+// export type TSaleResponse = {
+//     id?:number
+//     saleId: 1
+//     issueDate: Date
+//     branchName: string
+//     userName: string
+//     personName: string
+//     street: string
+//     items: TItem[]
+//     totalSale: number
+//     discount: number
+//     totalNote: number
+// }
+
 export type TSaleResponse = {
-    saleId: 1
-    issueDate: Date
-    branchName: string
-    userName: string
-    personName: string
-    street: string
-    items: TItem[]
+    id: string
+    issueDate: Date,
+    branch: { id: number, name: string }
+    user: { id: number, login: string }
+    person: { id: number, name: string }
+    operationSale: {
+        id: number, description: string
+        cfop: string
+    }
     totalSale: number
     discount: number
     totalNote: number
