@@ -49,20 +49,6 @@ export type TCreditCart = {
     payment: number
 }
 
-// export type TSaleResponse = {
-//     id?:number
-//     saleId: 1
-//     issueDate: Date
-//     branchName: string
-//     userName: string
-//     personName: string
-//     street: string
-//     items: TItem[]
-//     totalSale: number
-//     discount: number
-//     totalNote: number
-// }
-
 export type TSaleResponse = {
     id: string
     issueDate: Date,

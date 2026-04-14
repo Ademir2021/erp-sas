@@ -2,7 +2,6 @@ import { DateFns } from "@/app/lib/dateFns"
 import { TCashMovement } from "@/app/models/TCashMovement"
 import { globalStyles_td, globalStyles_th } from "../GlobalStyles"
 
-
 type Props = {
     cashmovements: TCashMovement[]
 }
@@ -29,12 +28,12 @@ export default function CashmovementList({ cashmovements }: Props) {
                     {cashmovements.map((cash: TCashMovement) => (
                         <tr key={cash.id} className="hover:bg-gray-600 transition text-sky-100 ">
                             <td className={`${globalStyles_td} text-center`}>{cash.id}</td>
-                            <td className={`${globalStyles_td} text-left`}>{`R$ ${parseFloat(cash.amount).toFixed(2)}`}</td>
+                            <td className={`${globalStyles_td} text-left`}>{`R$ ${cash.amount.toFixed(2)}`}</td>
                             <td className={`${globalStyles_td} text-left`}>{cash.description}</td>
                             <td className={`${globalStyles_td} text-left`}>{dateFns.formatDate(cash.movementDate as any)}</td>
                             <td className={`${globalStyles_td} text-center`}>{cash.movementType}</td>
                             <td className={`${globalStyles_td} text-center`}>{cash.balanceAfter}</td>
-                            <td className={`${globalStyles_td} text-center`}>{String(cash.accountsReceivable || 0).padStart(6, '0')}</td>
+                            <td className={`${globalStyles_td} text-center`}>{String(cash.accountsReceivable?.id || 0).padStart(6, '0')}</td>
                         </tr>
                     ))}
                 </tbody>
