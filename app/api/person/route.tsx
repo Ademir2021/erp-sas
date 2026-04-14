@@ -1,16 +1,19 @@
 import { API_URL } from '@/app/lib/auth'
+import { endPoint, loadToken } from '@/app/lib/endPoint'
 import { TPerson } from '@/app/models/TPerson'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
+  const token = await loadToken()
   const person: TPerson = await request.json()
+  console.log(person)
   if (!person.name) {
     return NextResponse.json(
       { error: 'Favor preencher todos os campos' },
       { status: 400 }
     )
   }
-  if (!person.user?.token) {
+  if (!token.token) {
     return NextResponse.json(
       { error: 'Token não encontrado' },
       { status: 401 }
@@ -20,7 +23,7 @@ export async function POST(request: Request) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${person.user.token}`
+      Authorization: `Bearer ${token.token}`
     },
     body: JSON.stringify(person)
   })
@@ -32,6 +35,7 @@ export async function POST(request: Request) {
 };
 
 export async function PUT(request: Request) {
+   const token = await loadToken()
   const person: TPerson = await request.json()
   // console.log(person)
   if (!person.id) {
@@ -46,7 +50,7 @@ export async function PUT(request: Request) {
       { status: 400 }
     )
   }
-  if (!person.user.token) {
+  if (!token.token) {
     return NextResponse.json(
       { error: 'Token não encontrado' },
       { status: 401 }
@@ -56,7 +60,7 @@ export async function PUT(request: Request) {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${person.user.token}`
+      Authorization: `Bearer ${token.token}`
     },
     body: JSON.stringify(person)
   })
@@ -77,7 +81,10 @@ export async function GET(request: Request) {
       )
     }
     const token = authHeader.replace("Bearer ", "")
-    const response = await fetch(`${API_URL}/persons`, {
+
+    const endpoint = await endPoint();
+    
+    const response = await fetch(`${API_URL}/persons${endpoint}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`

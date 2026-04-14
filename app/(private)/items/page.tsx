@@ -11,7 +11,7 @@ import { TResponseMessage } from "@/app/models/TMessage";
 
 export default function Items() {
 
-     const router = useRouter()
+    const router = useRouter()
     const [user, setUser] = useState<TUser | null>(null)
     const [msg, setMsg] = useState('')
     const [items, setItems] = useState<TItem[]>([])
@@ -51,7 +51,7 @@ export default function Items() {
 
     useEffect(() => {
         const token = user?.token as string
-        loadHandle(token, setBrands, 'brands',router)
+        loadHandle(token, setBrands, 'brands', router)
         loadHandle(token, setSubGroups, 'subgroups', router)
         loadHandle(token, setTaxGroups, 'taxgroups', router)
         loadHandle(token, setTypeItems, 'typeitems', router)
@@ -60,54 +60,49 @@ export default function Items() {
         loadHandle(token, setItems, 'item', router)
     }, [user]);
 
-     async function updateItem(item: TItem) {
-       
-        const ITEM_USER = [item, user]
+    async function updateItem(item: TItem) {
 
-            const res = await fetch('/api/item', {
-                method: 'PUT',
-                body: JSON.stringify(ITEM_USER),
-            })
-    
-            const resp: TResponseMessage = await res.json()
-    
-            if (!res.ok) {
-                setMsg(`Erro ao atualizar Item: ${resp.error}`)
-                return
-            }
-            router.push('/items')
-            setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
-            router.refresh()
+        const res = await fetch('/api/item', {
+            method: 'PUT',
+            body: JSON.stringify(item),
+        })
+
+        const resp: TResponseMessage = await res.json()
+
+        if (!res.ok) {
+            setMsg(`Erro ao atualizar Item: ${resp.error}`)
+            return
+        }
+        router.push('/items')
+        setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
+        router.refresh()
+    }
+
+    async function saveItem(item: TItem) {
+
+        const res = await fetch('/api/item', {
+            method: 'POST',
+            body: JSON.stringify(item),
+        })
+
+        const resp: TResponseMessage = await res.json()
+
+        if (!res.ok) {
+            setMsg(`Erro ao registrar Item: ${resp?.details}`)
+            return
         }
 
-     async function saveItem(item: TItem) {
+        router.push('/items')
+        setMsg(`${resp.data.message} Name: ${resp.data.name} : ${resp.success}`)
+        router.refresh()
+    }
 
-           const ITEM_USER = [item, user]
-        
-            const res = await fetch('/api/item', {
-                method: 'POST',
-                body: JSON.stringify(ITEM_USER),
-            })
-
-              const resp: TResponseMessage = await res.json()
-    
-            if (!res.ok) {
-                setMsg(`Erro ao registrar Item: ${resp?.details}`)
-                return
-            }
-    
-            router.push('/items')
-              setMsg(`${resp.data.message} Name: ${resp.data.name} : ${resp.success}`)
-            router.refresh()
-        }
-
-    function handleSubmit(e:Event){
+    function handleSubmit(e: Event) {
         e.preventDefault()
         item.id === 0 ? saveItem(item) : updateItem(item)
     }
 
     return <>
-    {/* <div>{JSON.stringify(item)}</div> */}
         <ItemsForm
             handleChange={handleChange}
             setChildren={setItem}

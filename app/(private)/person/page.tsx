@@ -10,7 +10,6 @@ import { TZipCode } from "@/app/models/TAddress";
 import { loadHandle } from "@/app/lib/handleApi";
 import { TResponseMessage } from "@/app/models/TMessage";
 
-
 export default function Person() {
 
     const router = useRouter()
@@ -67,10 +66,6 @@ export default function Person() {
         async function loadUser() {
             const user = await getUser()
             setUser(user)
-            if (user) {
-                person.user.role = user.roles
-                person.user.token = user.token
-            }
         }
         loadUser()
     }, [])
@@ -100,10 +95,6 @@ export default function Person() {
     };
 
     async function updatePerson(person: TPerson) {
-        if (user) {
-            person.user.token = user.token
-            person.user.role = "USER" as UserRole
-        }
         loadReplaceCPF(person)
         loadReplaceCNPJ(person)
         loadReplacePhone(person)
@@ -126,8 +117,6 @@ export default function Person() {
     async function savePerson(person: TPerson) {
         if (person)
             person.user.id = user?.id || 0
-        person.user.login = user?.login || ""
-        person.user.role = "USER" as UserRole
         person.cpf = person.cpf || null as any
         person.rg = person.rg || null as any
         person.cnpj = person.cnpj || null as any

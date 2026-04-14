@@ -1,13 +1,12 @@
 import { API_URL } from '@/app/lib/auth'
+import { loadToken } from '@/app/lib/endPoint'
 import { TItem } from '@/app/models/TItem'
-import { TUser } from '@/app/models/TUser'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
 
-  const ITEM_USER: any = await request.json()
-  const item: TItem = ITEM_USER[0]
-  const user: TUser = ITEM_USER[1]
+  const item:TItem = await request.json()
+  const token = await loadToken();
 
   if (!item.name) {
     return NextResponse.json(
@@ -16,7 +15,7 @@ export async function POST(request: Request) {
     )
   }
 
-   if (!user.token) {
+   if (!token.token) {
    return NextResponse.json(
   { error: 'Token não encontrado' },
   { status: 401 }
@@ -27,7 +26,7 @@ export async function POST(request: Request) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`
+        Authorization: `Bearer ${token.token}`
     },
     body: JSON.stringify(item)
   })
@@ -44,9 +43,8 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
 
-  const ITEM_USER: any = await request.json()
-  const item: TItem = ITEM_USER[0]
-  const user: TUser = ITEM_USER[1]
+  const item: TItem = await request.json()
+  const token = await loadToken();
 
   if (!item.id) {
     return NextResponse.json(
@@ -62,7 +60,7 @@ export async function PUT(request: Request) {
     )
   }
 
-  if (!user.token) {
+  if (!token.token) {
     return NextResponse.json(
       { error: 'Token não encontrado' },
       { status: 401 }
@@ -73,7 +71,7 @@ export async function PUT(request: Request) {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${user.token}`
+      Authorization: `Bearer ${token.token}`
     },
     body: JSON.stringify(item)
   })

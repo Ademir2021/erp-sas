@@ -18,7 +18,6 @@ import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 import { setDays } from "@/app/lib/momentDays"
 import { mapFieldsPagSeguroCard, mapFieldsPagSeguroPix } from "./handlePagSeguro"
 
-// Adiciona a definição de PagSeguro ao tipo Window
 declare global {
     interface Window {
         PagSeguro?: any;
@@ -191,10 +190,7 @@ export default function Sales() {
             if (user) {
                 const userSale: TUser = {
                     id: user.id,
-                    login: user.login,
-                    role: "USER" as UserRole,
-                    token: user.token
-                }
+                } as any
                 setSale({ ...sale, user: userSale })
             }
         }
@@ -410,7 +406,6 @@ export default function Sales() {
     }
 
     return <>
-        <p>{JSON.stringify(sale.accountsReceivable)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

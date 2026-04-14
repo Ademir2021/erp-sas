@@ -1,39 +1,39 @@
 
 import { API_URL } from '@/app/lib/auth'
+import { loadToken } from '@/app/lib/endPoint'
 import { TAccountsReceivable } from '@/app/models/TAccountsReceivable'
-import { TUser } from '@/app/models/TUser'
 import { NextResponse } from 'next/server'
 
 export async function PUT(request: Request) {
-  const AR_USER: any = await request.json()
-  const accountsreceivable: TAccountsReceivable = AR_USER[0]
-  const user: TUser = AR_USER[1]
-  // console.log(accountsreceivable)
-  if (!accountsreceivable.id) {
+
+  const ar:TAccountsReceivable = await request.json()
+  const token = await loadToken()
+
+  if (!ar.id) {
     return NextResponse.json(
       { error: 'ID é obrigatório para atualização' },
       { status: 400 }
     )
   }
-  if (accountsreceivable.balance <= 0) {
+  if (ar.balance <= 0) {
     return NextResponse.json(
       { error: 'Titulo ja está Quitado' },
       { status: 400 }
     )
   }
-  if (!user.token) {
+  if (!token.token) {
     return NextResponse.json(
       { error: 'Token não encontrado' },
       { status: 401 }
     )
   }
-  const apiResponse = await fetch(`${API_URL}/account_receivable/${accountsreceivable.id}`, {
+  const apiResponse = await fetch(`${API_URL}/account_receivable/${ar.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${user.token}`
+      Authorization: `Bearer ${token.token}`
     },
-    body: JSON.stringify(accountsreceivable)
+    body: JSON.stringify(ar)
   })
   const data = await apiResponse.json()
   if (!apiResponse.ok) {

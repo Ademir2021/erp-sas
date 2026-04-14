@@ -58,7 +58,7 @@ export default function AccountsReceivable() {
         async function loadUser() {
             const user = await getUser()
             setUser(user)
-        }
+    }
         loadUser()
     }, [])
 
@@ -70,11 +70,9 @@ export default function AccountsReceivable() {
 
     async function updateAccountsReceivable(ar: TAccountsReceivable) {
 
-        const AR_USER = [ar, user]
-
         const res = await fetch('/api/accountsreceivable', {
             method: 'PUT',
-            body: JSON.stringify(AR_USER),
+            body: JSON.stringify(ar),
         })
 
         const resp: TResponseMessage = await res.json()
@@ -98,7 +96,7 @@ export default function AccountsReceivable() {
         const UPDATE_AR = {
             id: up.id,
             branch: { id: up.branch.id },
-            user: { id: user?.id || up.user.id },
+            user: { id: user?.id || up.user?.id },
             payer: { id: up.payer.id },
             sale: { id: up.sale.id },
             value: up.value,
@@ -134,7 +132,6 @@ export default function AccountsReceivable() {
     }
 
     return <>
-        {/* <p>{JSON.stringify(openAccount)}</p> */}
         <AccountsReceivableForm
             accountsReceivable={openAccounts}
             msg={msg}

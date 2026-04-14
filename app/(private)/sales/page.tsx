@@ -13,7 +13,6 @@ export default function Sales() {
     const [user, setUser] = useState<TUser | null>(null)
     const [sales, setSales] = useState<TSale[]>([])
 
-
     useEffect(() => {
         async function loadUser() {
             const user = await getUser()

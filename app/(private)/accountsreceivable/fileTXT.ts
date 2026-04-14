@@ -19,7 +19,7 @@ ${line}
 Recibo.....: ${uuidv4()}
 Conta......: ${String(rec?.id ?? 0).padStart(6, '0')}
 Venda......: ${String(rec?.sale?.id ?? 0).padStart(6, '0')}
-Usuário....: ${safe(rec?.user?.name)}
+Usuário....: ${String(rec?.user?.id ?? 0).padStart(3, '0')}  ${safe(rec?.user?.login)}
 
 Data.......: ${new Date().toLocaleDateString('pt-BR')}
 Valor......: ${formatMoney(receipt?.receipt)}
