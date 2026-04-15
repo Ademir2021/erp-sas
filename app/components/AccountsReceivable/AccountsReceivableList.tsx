@@ -1,6 +1,6 @@
 import { DateFns } from "@/app/lib/dateFns"
 import { TAccountsReceivable, TReceipt } from "@/app/models/TAccountsReceivable"
-import { globalStyles_td, globalStyles_th } from "../GlobalStyles"
+import { globalStyles_overflow, globalStyles_table_list, globalStyles_td, globalStyles_th } from "../GlobalStyles"
 import { txtValueReceived } from "@/app/(private)/accountsreceivable/fileTXT"
 
 type Props = {
@@ -23,8 +23,8 @@ export function AccountsReceivableList({
     }
 
     return <>
-        <div className="mt-2 w-full overflow-x-auto">
-            <table className="min-w-full border border-gray-100 rounded-b-md overflow-hidden shadow-sm">
+        <div className={globalStyles_overflow}>
+            <table className={globalStyles_table_list}>
                 {accountsReceivable.length > 0 && <thead className="bg-gray-500">
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>

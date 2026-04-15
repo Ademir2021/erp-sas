@@ -3,16 +3,15 @@
 import { useEffect, useState } from "react";
 import ItemsForm from "@/app/components/Items/ItemsForm";
 import { TBrand, TItem, TItemClass, TsubGroup, TTaxGroup, TTypeItem, TUnitMeasure } from "@/app/models/TItem";
-import { TUser } from "@/app/models/TUser";
 import { useRouter } from 'next/navigation'
-import { getUser } from "@/app/lib/auth";
 import { loadHandle } from "@/app/lib/handleApi";
 import { TResponseMessage } from "@/app/models/TMessage";
+import { userAuth } from "@/app/lib/userAuth";
 
 export default function Items() {
 
     const router = useRouter()
-    const [user, setUser] = useState<TUser | null>(null)
+    const { user } = userAuth();
     const [msg, setMsg] = useState('')
     const [items, setItems] = useState<TItem[]>([])
     const [brands, setBrands] = useState<TBrand[]>([])
@@ -40,14 +39,6 @@ export default function Items() {
         const { name, value } = e.target
         setItem({ ...item, [name]: value })
     }
-
-    useEffect(() => {
-        async function loadUser() {
-            const user = await getUser()
-            setUser(user)
-        }
-        loadUser()
-    }, [])
 
     useEffect(() => {
         const token = user?.token as string

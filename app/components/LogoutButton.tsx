@@ -1,4 +1,5 @@
 'use client'
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useRouter } from 'next/navigation'
 
 export function LogoutButton() {
@@ -11,7 +12,8 @@ export function LogoutButton() {
   }
 
   return (
-    <button className="cursor-pointer" onClick={logout}>Sair</button>
+    <button className="font-semibold cursor-pointer"
+    onClick={logout}>{ <LogoutIcon titleAccess='Sair' />}{" Sair"}</button>
   )
 
 }

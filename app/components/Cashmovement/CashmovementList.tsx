@@ -1,6 +1,6 @@
 import { DateFns } from "@/app/lib/dateFns"
 import { TCashMovement } from "@/app/models/TCashMovement"
-import { globalStyles_td, globalStyles_th } from "../GlobalStyles"
+import { globalStyles_overflow, globalStyles_table_list, globalStyles_td, globalStyles_th } from "../GlobalStyles"
 
 type Props = {
     cashmovements: TCashMovement[]
@@ -11,8 +11,8 @@ export default function CashmovementList({ cashmovements }: Props) {
     const dateFns = new DateFns()
 
     return <>
-        <div className="mt-2 w-full overflow-x-auto">
-            <table className="min-w-full border border-gray-100 rounded-b-md overflow-hidden shadow-sm">
+        <div className={globalStyles_overflow}>
+            <table className={globalStyles_table_list}>
                 {cashmovements.length > 0 && <thead className="bg-gray-500">
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>

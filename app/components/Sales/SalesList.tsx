@@ -1,6 +1,6 @@
 import { DateFns } from "@/app/lib/dateFns"
 import { TSaleResponse } from "@/app/models/TSale"
-import { globalStyles_td, globalStyles_th } from "../GlobalStyles"
+import { globalStyles_overflow, globalStyles_table_list, globalStyles_td, globalStyles_th } from "../GlobalStyles"
 
 type Props = {
     sales: TSaleResponse[]
@@ -11,8 +11,8 @@ export default function SalesList({ sales }: Props) {
     const dateFns = new DateFns()
 
     return <>
-        <div className="mt-2 w-full overflow-x-auto">
-            <table className="min-w-full border border-gray-100 rounded-b-md overflow-hidden shadow-sm">
+        <div className={globalStyles_overflow}>
+            <table className={globalStyles_table_list}>
                 {sales.length > 0 && <thead className="bg-gray-500">
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>

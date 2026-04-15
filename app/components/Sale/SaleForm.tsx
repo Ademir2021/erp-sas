@@ -73,6 +73,13 @@ export default function SaleForm({
     const cashForm = <CashForm cash={cash} setCash={setCash} sale={children} setSale={setChildren} />
 
     const vallorCash = cash - totalSale
+
+    function finalizeOrder(title: string) {
+        return <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
+            onClick={handleSubmit}
+        >{title}</a>
+    }
+
     return <>
         <div id="up-sale" className="max-w-7xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
             <div>
@@ -197,11 +204,16 @@ export default function SaleForm({
                         <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
                             onClick={handleSubmitPix}
                         >Gerar PIX</a>
-                        <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
-                            onClick={handleSubmit}
-                        >Finalizar Compra</a>
+                        {finalizeOrder("Finalizar Compra")}
                         <a />
                     </div></>} </>}
+                    
+            {/**Orçamentos */}
+            {operationSale.id === 4 && itemsSale.length > 0 && person &&
+                <p className='flex justify-center p-1 text-green-500 '>
+                    {finalizeOrder("Gerar Orçamento")}
+                </p>
+            }
 
             {/**Mensagens*/}
             {msg && <p className=" flex justify-center mt-3 text-green-300 ">{msg}</p>}

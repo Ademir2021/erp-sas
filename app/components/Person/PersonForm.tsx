@@ -9,6 +9,7 @@ import { z } from "zod"
 import { TPerson, Gender, TypePerson, TGroupPerson } from "@/app/models/TPerson"
 import { TZipCode } from "@/app/models/TAddress"
 import { PersonList } from "./PersonList"
+import ShowForm from "../ShowForm"
 
 type FormData = z.infer<typeof cadastroSchema>
 
@@ -18,7 +19,7 @@ type Props = {
   handleChange: any
   handleSubmit_: Function | any
   msg: string
-  setChildren: Function
+  setChildren: React.Dispatch<React.SetStateAction<TPerson | any>>
   groupPersons: TGroupPerson[]
   persons: TPerson[]
 }
@@ -33,6 +34,7 @@ export default function PersonForm({
   groupPersons,
   persons }: Props) {
 
+  const [showForm, setShowForm] = useState(false)
   const [step, setStep] = useState(1)
 
   const genders = [
@@ -117,7 +119,11 @@ export default function PersonForm({
   }
 
   return <>
-    <div id="up-person" className="max-w-3xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
+    <ShowForm
+      showForm={showForm}
+      setShowForm={setShowForm}
+    />
+    {showForm && <div id="up-person" className="max-w-3xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
       {/* STEP INDICATOR */}
       <div className="flex justify-between mb-8">
         {["Tipo", "Dados", "Contato", "Endereço"].map((item, index) => (
@@ -131,7 +137,6 @@ ${step === index + 1 ? "text-blue-600" : "text-gray-400"}`}>
       {children.id != 0 ? <> <b>Atualizar Registro</b>
         <div>{"ID:" + String(children.id).padStart(9, '0') + " - " + children.name} </div> </> :
         <p className=" font-bold">Novo Registro</p>}
-
       {step === 1 && <>  <label>Grupo da Pessoa</label>
         <select className="w-full p-3 border mb-8 bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
           value={children.groupPerson.id || ''}
@@ -438,11 +443,11 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
         </div>
         <p className="text-gray-300 ">{msg && msg}</p>
       </form>
-    </div>
+    </div>}
     <PersonList
       persons={persons}
       setChildren={setChildren}
-      setStep={setStep}
+      setShowForm={setShowForm}
     />
   </>
 }

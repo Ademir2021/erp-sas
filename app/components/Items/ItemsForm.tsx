@@ -1,5 +1,7 @@
 import { TItem, TBrand, TsubGroup, TTaxGroup, TTypeItem, TItemClass, TUnitMeasure } from "@/app/models/TItem"
 import ItemsList from "./ItemsList"
+import { useState } from "react"
+import ShowForm from "../ShowForm"
 
 type Props = {
     children: TItem
@@ -30,9 +32,14 @@ export default function ItemsForm({
     handleSubmit,
     items
 }: Props) {
+      const [showForm, setShowForm] = useState(false)
 
     return <>
-        <div className="max-w-3xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
+    <ShowForm
+    showForm={showForm}
+    setShowForm={setShowForm}
+    />
+        {showForm && <div className="max-w-3xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
             <form id="up-item" className="space-y-6">
                 <p className="font-bold">{children.id === 0 ?
                 "Registar Item" :
@@ -212,7 +219,7 @@ export default function ItemsForm({
                     "Atualizar Item"}
                 </a>
             </form>
-        </div>
+        </div>}
         <ItemsList
             items={items}
             setChildren={setChildren}

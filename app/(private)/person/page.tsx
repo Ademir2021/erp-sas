@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import PersonForm from "@/app/components/Person/PersonForm";
 import { TPerson, TypePerson, Gender, TGroupPerson } from "@/app/models/TPerson";
-import { TUser, UserRole } from "@/app/models/TUser";
+import { UserRole } from "@/app/models/TUser";
 import { useRouter } from 'next/navigation'
 import { getUser } from "@/app/lib/auth";
 import { TZipCode } from "@/app/models/TAddress";
 import { loadHandle } from "@/app/lib/handleApi";
 import { TResponseMessage } from "@/app/models/TMessage";
+import { userAuth } from "@/app/lib/userAuth";
 
 export default function Person() {
 
@@ -17,7 +18,7 @@ export default function Person() {
     const [zipcodes, setZipcodes] = useState<TZipCode[]>([])
     const [groupPersons, setGroupPersons] = useState<TGroupPerson[]>([])
     const [persons, setPersons] = useState<any[]>([])
-    const [user, setUser] = useState<TUser | null>(null)
+    const { user } = userAuth();
     const [msg, setMsg] = useState('')
     const [person, setPerson] = useState<TPerson>({
         id: 0,
@@ -61,14 +62,6 @@ export default function Person() {
         const { name, value } = e.target
         setPerson({ ...person, [name]: value })
     }
-
-    useEffect(() => {
-        async function loadUser() {
-            const user = await getUser()
-            setUser(user)
-        }
-        loadUser()
-    }, [])
 
     useEffect(() => {
         const token = user?.token as string

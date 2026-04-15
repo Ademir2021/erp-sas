@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import Links from "./Menu";
-
-import { LogoutButton } from "./LogoutButton";
 import { LogoutButtonSocial } from "./LogoutButtonSocial";
 import Logo from "./Logo";
+import { userAuth } from "../lib/userAuth";
 
 export default function Sidebar() {
 
+  const {user} = userAuth()
   const [collapsed, setCollapsed] = useState(true);
 
   return <>
@@ -26,11 +26,8 @@ export default function Sidebar() {
       </div>
       {!collapsed && <Links />}
       {!collapsed && <div className="flex-3 p-6 ">
-        <LogoutButton />
-        <hr/>
-        <LogoutButtonSocial />
+        {user ? <LogoutButtonSocial /> : <a href="/login">Fazer Login</a>}
       </div>}
     </aside>
-    {/* </main> */}
   </>
 }

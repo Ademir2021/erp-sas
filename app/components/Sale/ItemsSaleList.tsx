@@ -1,4 +1,5 @@
 import { TItemsSale } from "@/app/models/TSale"
+import { globalStyles_overflow, globalStyles_table_list } from "../GlobalStyles"
 
 type Props = {
     itemsSale: TItemsSale[]
@@ -28,8 +29,8 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
     };
 
     return <>
-        <div className="w-full overflow-x-auto">
-            <table className="min-w-full border border-gray-100 rounded-lg overflow-hidden shadow-sm">
+        <div className={globalStyles_overflow}>
+            <table className={globalStyles_table_list}>
                 {itemsSale.length > 0 && <thead className="bg-gray-700">
                     <tr>
                         <th className={`${styles_th} text-center`}>ID</th>
@@ -49,7 +50,6 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
                                 <input
                                     type="number"
                                     min={1}
-                                    // step={1}
                                     value={item.amount}
                                     placeholder={item.amount > 0 ? "UN" : "KG"}
                                     onChange={(e) => updateAmount(item.item.id, Number(e.target.value))}

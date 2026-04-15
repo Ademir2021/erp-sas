@@ -6,7 +6,6 @@ import { TUser, UserRole } from "@/app/models/TUser"
 import { useRouter } from 'next/navigation'
 import SaleForm from "@/app/components/Sale/SaleForm"
 import { TItem } from "@/app/models/TItem"
-import { getUser } from "@/app/lib/auth"
 import { TResponseMessage } from "@/app/models/TMessage"
 import { TPerson } from "@/app/models/TPerson"
 import { loadHandle } from "@/app/lib/handleApi"
@@ -17,6 +16,7 @@ import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPagSeguroPix"
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 import { setDays } from "@/app/lib/momentDays"
 import { mapFieldsPagSeguroCard, mapFieldsPagSeguroPix } from "./handlePagSeguro"
+import { userAuth } from "@/app/lib/userAuth"
 
 declare global {
     interface Window {
@@ -56,7 +56,7 @@ export default function Sales() {
     const [msg, setMsg] = useState('')
     const [msgCreditCard, setMsgCreditCard] = useState('')
     const [searchItemName, setSearchITemName] = useState('!')
-    const [user, setUser] = useState<TUser>()
+    const { user } = userAuth();
     const [items, setItems] = useState<TItem[]>([])
     const [itemsSale, setItemsSale] = useState<TItemsSale[]>([])
     const [sale, setSale] = useState<TSale>({
@@ -111,7 +111,7 @@ export default function Sales() {
             return `ID:${operationSale.id.toString()} - ${operationSale.description}`
         }
 
-        const newAccountsReceivable: TAccountsReceivable[]  = Array.from(
+        const newAccountsReceivable: TAccountsReceivable[] = Array.from(
             { length: installmentAccount },
             (_, i) => {
                 const remaining = ((Number(sale.tSale) || 0) -
@@ -171,10 +171,10 @@ export default function Sales() {
         }
     }, [operationSale.id]);
 
-    useEffect(()=>{ // Se for cartão de crédito, seta o número de parcelas selecionado
-        if(operationSale.id === 2)
-        setInstallmentAccount(creditCard.installments)
-    },[creditCard, operationSale])
+    useEffect(() => { // Se for cartão de crédito, seta o número de parcelas selecionado
+        if (operationSale.id === 2)
+            setInstallmentAccount(creditCard.installments)
+    }, [creditCard, operationSale])
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -185,8 +185,6 @@ export default function Sales() {
 
     useEffect(() => {
         async function loadUser() {
-            const user = await getUser()
-            setUser(user)
             if (user) {
                 const userSale: TUser = {
                     id: user.id,
@@ -195,7 +193,7 @@ export default function Sales() {
             }
         }
         loadUser()
-    }, [])
+    }, [user])
 
     useEffect(() => {
         const token = user?.token as string

@@ -3,19 +3,18 @@
 import { useEffect, useState } from "react";
 import AccountsReceivableForm from "@/app/components/AccountsReceivable/AccountsReceivableForm";
 import { TAccountsReceivable, TReceipt } from "@/app/models/TAccountsReceivable";
-import { TUser } from "@/app/models/TUser";
-import { getUser } from "@/app/lib/auth";
 import { loadHandle } from "@/app/lib/handleApi";
 import { differenceInDays, isValid } from "date-fns";
 import { useRouter } from 'next/navigation'
 import { TResponseMessage } from "@/app/models/TMessage";
+import { userAuth } from "@/app/lib/userAuth";
 
 export default function AccountsReceivable() {
 
     const router = useRouter()
     const [msg, setMsg] = useState('')
     const [isInterestFine, setIsInterestFine] = useState(true)
-    const [user, setUser] = useState<TUser>()
+    const { user } = userAuth()
     const [accountsReceivables, setAccountsReceivables] = useState<TAccountsReceivable[]>([])
     const [openAccounts, setOpenAccounts] = useState<TAccountsReceivable[]>([])
     const [openAccount, setOpenAccount] = useState<TAccountsReceivable | null>(null)
@@ -52,15 +51,6 @@ export default function AccountsReceivable() {
         const updatedAccounts: TAccountsReceivable[] = processAccounts(accountsReceivables)
         setOpenAccounts(updatedAccounts);
     }, [accountsReceivables, isInterestFine])
-
-
-    useEffect(() => {
-        async function loadUser() {
-            const user = await getUser()
-            setUser(user)
-    }
-        loadUser()
-    }, [])
 
     useEffect(() => {
         const token = user?.token as string
@@ -139,7 +129,7 @@ export default function AccountsReceivable() {
             handleSubmit={handleSubmit}
             setReceipt={setReceipt}
             receipt={receipt}
-        
+
         />
     </>
 }

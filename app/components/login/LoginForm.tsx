@@ -43,7 +43,7 @@ export default function LoginForm({
                     />
                     <button
                         type="submit"
-                        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-200"
+                        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-200 cursor-pointer"
                     >
                         Entrar
                     </button>
@@ -57,13 +57,13 @@ export default function LoginForm({
                 <div className="min-h-screenxx flex items-center justify-center p-3">
                     <button
                         onClick={() => signIn("github", { callbackUrl: '/dashboard' })}
-                        className="bg-black text-white px-6 py-3 rounded-lg"
+                        className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer"
                     >Entrar com GitHub</button>
                 </div>
                 <div className="min-h-screenxx flex items-center justify-center p-3">
                     <button
                         onClick={() => signIn("google", { callbackUrl: '/dashboard' })}
-                        className="bg-black text-white px-6 py-3 rounded-lg"
+                        className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer"
                     >Entrar com google</button>
                 </div>
                 <p className="text-end"><Link href='/' >Sair</Link></p>

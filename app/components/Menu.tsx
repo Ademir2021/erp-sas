@@ -1,7 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { userAuth } from '../lib/userAuth'
 
 export default function Menu() {
+
+  const { isAdmin, isUser } = userAuth()
 
   const styles_links = "block px-2 py-2 rounded-lg text-white-600 hover:bg-gray-600 hover:text-white-200 font-bold transition duration-200"
 
@@ -17,65 +20,58 @@ export default function Menu() {
           height={26}
           title="BR"
         />
-      </li>
-      <hr />
+      </li><hr />
       <ul className="flex flex-col gap-4">
         <li>
           <Link
             href="/dashboard"
             className={styles_links}
           >DashBoard</Link>
-        </li>
-        <hr />
-        <li>
+        </li><hr />
+        {isUser && <><li>
           <Link
             href="/person"
             className={styles_links}
           >Dados do Cliente</Link>
         </li>
-        <hr />
-        <li>
+          <hr /></>}
+        {isAdmin && <> <li>
           <Link
             href="/items"
             className={styles_links}
           >Dados dos Items</Link>
-        </li>
-        <hr />
+        </li><hr /></>}
         <li>
           <Link
             href="/sale"
             className={styles_links}
           >Console de Venda</Link>
-        </li>
-        <hr />
-        <li>
+        </li><hr />
+        {isUser && <> <li>
           <Link
             href="/sales"
             className={styles_links}
           >Vendas</Link>
-        </li>
-        <hr />
-        <li>
+        </li><hr /></>}
+        {isUser && <><li>
           <Link
             href="/accountsreceivable"
             className={styles_links}
           >Contas a Receber</Link>
-        </li>
-        <hr />
-           <li>
+        </li><hr /></>}
+        {isAdmin && <> <li>
           <Link
             href="/cashmovement"
             className={styles_links}
           >Caixa Movimento</Link>
         </li>
-        <hr />
+          <hr /></>}
         <li>
           <Link
             href="/perfil"
             className={styles_links}
           >Perfil</Link>
-        </li>
-        <hr />
+        </li><hr />
         <li>
           <Link
             href="/about"

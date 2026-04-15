@@ -1,12 +1,15 @@
+'use client'
 import Link from "next/link"
 import Logo from "./Logo"
+import { userAuth } from "../lib/userAuth"
+import { LogoutButton } from "./LogoutButton"
 
 type Props = {
   session: any
 }
 
 export default function MenuHeader({ session }: Props) {
-
+  const { user } = userAuth()
   return <>
     <header className="sticky top-0 z-50 bg-gray-900 text-white shadow-md px-4 py-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -25,7 +28,7 @@ export default function MenuHeader({ session }: Props) {
               src={session.user?.image || ""}
             />
           </>
-            : <Link className="font-bold" href={"/login"}>Fazer Login</Link>}
+            : !user ? <Link className="font-bold" href={"/login"}>Fazer Login</Link> : <LogoutButton />}
         </div>
       </div>
     </header>
