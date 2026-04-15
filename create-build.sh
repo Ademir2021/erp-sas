@@ -1,17 +1,19 @@
 #!/bin/bash
 
+DIR=../../builds/erp-sas
+
 echo "Criando build for ERP-SAS"
 rm -rf .next
 npm run build
 
 echo "Removendo build for ERP-SAS"
-rm -rf ../../builds/erp-sas/.next
-rm -rf ../../builds/erp-sas/public
-rm ../../builds/erp-sas/package-lock.json
-rm ../../builds/erp-sas/package.json
+rm -rf $DIR/.next
+rm -rf $DIR/public
+rm $DIR/package-lock.json
+rm $DIR/package.json
 
 echo "Criando build for ERP-SAS"
-cp -rf .next ../../builds/erp-sas
-cp -rf public ../../builds/erp-sas
-cp package-lock.json ../../builds/erp-sas
-cp package.json  ../../builds/erp-sas
+cp -rf .next $DIR
+cp -rf public $DIR
+cp package-lock.json $DIR
+cp package.json  $DIR
