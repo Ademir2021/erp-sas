@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { loadHandle } from "@/app/lib/handleApi";
 import { TResponseMessage } from "@/app/models/TMessage";
 import { userAuth } from "@/app/lib/userAuth";
+import { boolean } from "zod";
 
 export default function Items() {
 
@@ -88,9 +89,32 @@ export default function Items() {
         router.refresh()
     }
 
+    function valFields(item: TItem) {
+        const missing: string[] = [];
+        if (item.name === "") missing.push('Nome');
+        if (item.priceMax === 0) missing.push('Preço Max');
+        if (item.priceMin === 0) missing.push('Preço Min');
+        if (item.barCode === "") missing.push('Codigo de Barras');
+        if (item.imagem === "") missing.push('Imagem');
+        if (item.brand.id === 0) missing.push('Marca');
+        if (item.subGroup.id === 0) missing.push('Sub Grupo');
+        if (item.taxGroup.id === 0) missing.push('Grupo de Tributação');
+        if (item.typeItem.id === 0) missing.push('Tipo');
+        if (item.itemClass.id === 0) missing.push('Classe');
+        if (item.unitMeasure.id === 0) missing.push('UN de Medidas');
+        if (missing.length === 0) {
+            return true;
+        }
+        return 'Falta preencher os campos: ' + missing.join(', ') + '.';
+    }
+
     function handleSubmit(e: Event) {
         e.preventDefault()
-        item.id === 0 ? saveItem(item) : updateItem(item)
+        if (valFields(item) === true) {
+            item.id === 0 ? saveItem(item) : updateItem(item)
+        } else {
+            setMsg(valFields(item) as any)
+        }
     }
 
     return <>
