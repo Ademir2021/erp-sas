@@ -5,7 +5,6 @@ import PersonForm from "@/app/components/Person/PersonForm";
 import { TPerson, TypePerson, Gender, TGroupPerson } from "@/app/models/TPerson";
 import { UserRole } from "@/app/models/TUser";
 import { useRouter } from 'next/navigation'
-import { getUser } from "@/app/lib/auth";
 import { TZipCode } from "@/app/models/TAddress";
 import { loadHandle } from "@/app/lib/handleApi";
 import { TResponseMessage } from "@/app/models/TMessage";
@@ -14,7 +13,7 @@ import { userAuth } from "@/app/lib/userAuth";
 export default function Person() {
 
     const router = useRouter()
-    const [statusSavePerson, setStatusSavePerson] = useState(false)
+    const [flag, setFlag] = useState(false)
     const [zipcodes, setZipcodes] = useState<TZipCode[]>([])
     const [groupPersons, setGroupPersons] = useState<TGroupPerson[]>([])
     const [persons, setPersons] = useState<any[]>([])
@@ -82,7 +81,7 @@ export default function Person() {
         if (!person?.phone) return;
         person.phone = person?.phone.replace(/[()-]/g, '');
     };
-      function loadReplaceRG(person: TPerson): void {
+    function loadReplaceRG(person: TPerson): void {
         if (!person?.rg) return;
         person.rg = person?.rg.replace(/[..-]/g, '');
     };
@@ -104,6 +103,7 @@ export default function Person() {
         }
         router.push('/person')
         setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
+        setFlag(true)
         router.refresh()
     }
 
@@ -130,19 +130,44 @@ export default function Person() {
 
         router.push('/person')
         setMsg('Pessoa registrado com sucesso')
+        setFlag(true)
         router.refresh()
+    }
+
+    function valFields(p: TPerson) {
+        const missing: string[] = [];
+        if (p.name === "") missing.push('Nome');
+        if (p.typePerson > 1 && p.typePerson < 5) missing.push('Tipo');
+        if (p.groupPerson.id === 0) missing.push('Grupo');
+        if (p.branch.id === 0) missing.push('Filial');
+        if (p.email === "") missing.push('Email');
+        if (p.phone === "") missing.push('Telefone');
+        if (p.dateOfBirth === "") missing.push('Nascimento');
+        if (p.gender < 0 || p.gender > 2) missing.push('Gênero');
+        if (p.cpf === "" && p.cnpj === "") missing.push('CPF/CNPJ');
+        if (p.rg === "" && p.inscricState === "") missing.push('RG/Inscr.');
+        if (p.address.street === "") missing.push('Rua/Avenida');
+        if (p.address.number === "") missing.push('Adr/Número');
+        if (p.address.neighborhood === "") missing.push('Bairro');
+        if (p.address.complement === "") missing.push('Adr/Complemento');
+        if (p.address.zipCode?.id === 0) missing.push('Cep');
+        if (missing.length === 0) {
+            return true;
+        }
+        return 'Falta preencher os campos: ' + missing.join(', ') + '.';
     }
 
     function handleSubmit(e: Event) {
         e.preventDefault()
-        if (statusSavePerson === false) {
+        if (valFields(person) === true && flag === false) {
             person.id === 0 ? savePerson(person) :
                 updatePerson(person)
-            setStatusSavePerson(true)
         } else {
-            return person.id !== 0 ? setMsg("Pessoa já foi atualizada") :
-                setMsg('Pessoa já foi gravada')
+            setMsg(valFields(person) as any)
         }
+        if (flag === true)
+            person.id !== 0 ? setMsg("Pessoa já foi atualizada") :
+                setMsg('Pessoa já foi gravada')
     }
 
     return <>

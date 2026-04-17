@@ -97,7 +97,7 @@ export default function Items() {
         if (item.name === "") missing.push('Nome');
         if (item.priceMax === 0) missing.push('Preço Max');
         if (item.priceMin === 0) missing.push('Preço Min');
-        if (item.barCode === "") missing.push('Codigo de Barras');
+        if (item.barCode === "") missing.push('Código de Barras');
         if (item.imagem === "") missing.push('Imagem');
         if (item.brand.id === 0) missing.push('Marca');
         if (item.subGroup.id === 0) missing.push('Sub Grupo');
@@ -119,8 +119,8 @@ export default function Items() {
             setMsg(valFields(item) as any)
         }
 
-        if (flag == true)
-            setMsg(item.id === 0 ? 'Cliente ja foi registrado' : "Cliente ja foi atualizado")
+        if (flag === true)
+            setMsg(item.id === 0 ? 'Item já foi registrado.' : "Item já foi atualizado.")
     }
 
     return <>
