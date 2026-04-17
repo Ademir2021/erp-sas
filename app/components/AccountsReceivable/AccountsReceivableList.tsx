@@ -1,6 +1,6 @@
 import { DateFns } from "@/app/lib/dateFns"
 import { TAccountsReceivable, TReceipt } from "@/app/models/TAccountsReceivable"
-import { globalStyles_overflow, globalStyles_table_list, globalStyles_td, globalStyles_th } from "../GlobalStyles"
+import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 import { txtValueReceived } from "@/app/(private)/accountsreceivable/fileTXT"
 
 type Props = {
@@ -22,10 +22,10 @@ export function AccountsReceivableList({
         receipt.receipt > 0 && txtValueReceived(ar, `recibo_${ar.id}".txt`, receipt)
     }
 
-    return <>
+    return (
         <div className={globalStyles_overflow}>
             <table className={globalStyles_table_list}>
-                {accountsReceivable.length > 0 && <thead className="bg-gray-500">
+                {accountsReceivable.length > 0 && <thead className={globalStyles_thead_list}>
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>
                         <th className={`${globalStyles_th} text-left`}>Emitida</th>
@@ -52,9 +52,9 @@ export function AccountsReceivableList({
                     </tr>
                 </thead>}
 
-                <tbody className="divide-y divide-gray-200">
+                <tbody className={globalStyles_tbody_list}>
                     {accountsReceivable.map((ar: TAccountsReceivable) => (
-                        <tr key={ar.id} className="hover:bg-gray-600 transition text-sky-100 ">
+                        <tr key={ar.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{ar.id}</td>
                             <td className={`${globalStyles_td} text-left`}>{dateFns.formatDate(ar.createdAt as any)}</td>
                             <td className={`${globalStyles_td} text-left`}>{ar.updatedAt as any || "Aberto"}</td>
@@ -78,7 +78,7 @@ export function AccountsReceivableList({
                             <td className={`${globalStyles_td} text-left`}>{ar.descriptionTypeOperation}</td>
                             <td className={`${globalStyles_td} text-center`}><a href="#up-ar"
                                 onClick={() => updateAccountsReceivable(ar)}
-                                className="px-3 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+                                className={globalStyles_btn_list}
                             >Receber</a>
                             </td>
                         </tr>
@@ -86,5 +86,5 @@ export function AccountsReceivableList({
                 </tbody>
             </table>
         </div>
-    </>
+    )
 }

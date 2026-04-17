@@ -1,5 +1,5 @@
 import { TPerson } from "@/app/models/TPerson"
-import { globalStyles_overflow, globalStyles_table_list, globalStyles_td, globalStyles_th } from "../GlobalStyles"
+import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 
 type Props = {
   persons: TPerson[]
@@ -30,10 +30,10 @@ export function PersonList({ persons, setChildren, setShowForm }: Props) {
     setShowForm(true)
   }
 
-  return <>
+  return (
     <div className={globalStyles_overflow} >
     <table className={globalStyles_table_list}>
-      <thead className="bg-gray-500">
+      <thead className={globalStyles_thead_list}>
         <tr>
           <th className={`${globalStyles_th} text-center`}>ID</th>
           <th className={`${globalStyles_th} text-left`}>Nome</th>
@@ -44,9 +44,9 @@ export function PersonList({ persons, setChildren, setShowForm }: Props) {
           <th className={`${globalStyles_th} text-center`}>Ações</th>
         </tr>
       </thead>
-      <tbody className="divide-y divide-gray-200">
+      <tbody className={globalStyles_tbody_list}>
         {persons.map((person: TPerson) => (
-          <tr key={person.id} className="hover:bg-gray-600 transition text-sky-100 ">
+          <tr key={person.id} className={globalStyles_tr}>
             <td className={`${globalStyles_td} text-center`}>{person.id}</td>
             <td className={`${globalStyles_td} text-left`}>{person.name}</td>
             <td className={`${globalStyles_td} text-left`}>{person.cpf ? person.cpf : person.cnpj}</td>
@@ -55,7 +55,7 @@ export function PersonList({ persons, setChildren, setShowForm }: Props) {
             <td className={`${globalStyles_td} text-left`}>{person.email ? person.email : "Não informado"}</td>
             <td className={`${globalStyles_td} text-center`}><a href="#up-person"
                 onClick={() => updatePerson(person)}
-                className="px-2 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+                className={globalStyles_btn_list}
               >Atualizar</a>
             </td>
           </tr>
@@ -63,5 +63,5 @@ export function PersonList({ persons, setChildren, setShowForm }: Props) {
       </tbody>
     </table>
     </div>
-  </>
+  )
 }

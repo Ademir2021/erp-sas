@@ -1,6 +1,6 @@
 import { TItem } from "@/app/models/TItem";
 import { TItemsSale } from "@/app/models/TSale";
-import { globalStyles_overflow, globalStyles_table_list } from "../GlobalStyles";
+import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles";
 
 type Props = {
     items: TItem[]
@@ -36,10 +36,10 @@ export default function ITemsSaleForm({
             return [...prev, newItem]
         })
     }
-    return <>
+    return (
         <div className={globalStyles_overflow}>
             <table className={globalStyles_table_list}>
-                {items.length > 0 && <thead className="bg-gray-500">
+                {items.length > 0 && <thead className={globalStyles_thead_list}>
                     <tr>
                         <th className={`${styles_th} text-center`}>ID</th>
                         <th className={`${styles_th} text-left`}>Descrição</th>
@@ -52,9 +52,9 @@ export default function ITemsSaleForm({
                     </tr>
                 </thead>}
 
-                <tbody className="divide-y divide-gray-200">
+                <tbody className={globalStyles_tbody_list}>
                     {items.map((item: TItem) => (
-                        <tr key={item.id} className="hover:bg-gray-600 transition text-sky-100 ">
+                        <tr key={item.id} className={globalStyles_tr}>
 
                             <td className={`${styles_td} text-center`}>{item.id}</td>
                             {/* <td className={`${styles_td} text-left`}>{item.priceMin}</td> */}
@@ -70,14 +70,13 @@ export default function ITemsSaleForm({
 
                             <td className={`${styles_td} text-center`}><a href="#up-item"
                                 onClick={() => insertItem(item)}
-                                className="px-3 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+                                className={globalStyles_btn_list}
                             >Inserir</a>
                             </td>
-
                         </tr>
                     ))}
                 </tbody>
             </table>
         </div>
-    </>
+    )
 }

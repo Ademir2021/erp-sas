@@ -1,5 +1,5 @@
 import { TItem } from "@/app/models/TItem"
-import { globalStyles_overflow, globalStyles_table_list, globalStyles_td, globalStyles_th } from "../GlobalStyles"
+import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 
 type Props = {
     items: TItem[]
@@ -15,10 +15,10 @@ export default function ItemsList({
         setChildren(item)
     }
 
-    return <>
+    return (
         <div className={globalStyles_overflow}>
             <table className={globalStyles_table_list}>
-                <thead className="bg-gray-400">
+                <thead className={globalStyles_thead_list}>
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>
                         <th className={`${globalStyles_th} text-left`}>Descrição</th>
@@ -30,9 +30,9 @@ export default function ItemsList({
                         <th className={`${globalStyles_th} text-center`}>Ações</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className={globalStyles_tbody_list}>
                     {items.map((item: TItem) => (
-                        <tr key={item.id} className="hover:bg-gray-600 transition text-sky-100 ">
+                        <tr key={item.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{item.id}</td>
                             <td className={`${globalStyles_td} text-left`}>{item.name}</td>
                             <td className={`${globalStyles_td} text-left`}>{item.priceMin}</td>
@@ -42,7 +42,7 @@ export default function ItemsList({
                             <td className={`${globalStyles_td} text-left`}>{item.subGroup.name}</td>
                             <td className={`${globalStyles_td} text-center`}><a href="#up-item"
                                 onClick={() => updateList(item)}
-                                className="px-2 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+                                className={globalStyles_btn_list}
                             >Atualizar</a>
                             </td>
                         </tr>
@@ -50,5 +50,5 @@ export default function ItemsList({
                 </tbody>
             </table>
         </div>
-    </>
+    )
 }

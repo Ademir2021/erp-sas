@@ -1,5 +1,5 @@
 import { TItemsSale } from "@/app/models/TSale"
-import { globalStyles_overflow, globalStyles_table_list } from "../GlobalStyles"
+import { globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 
 type Props = {
     itemsSale: TItemsSale[]
@@ -31,7 +31,7 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
     return <>
         <div className={globalStyles_overflow}>
             <table className={globalStyles_table_list}>
-                {itemsSale.length > 0 && <thead className="bg-gray-700">
+                {itemsSale.length > 0 && <thead className={globalStyles_thead_list}>
                     <tr>
                         <th className={`${styles_th} text-center`}>ID</th>
                         <th className={`${styles_th} text-left`}>Descrição</th>
@@ -41,9 +41,9 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
                         <th className={`${styles_th} text-center`}>X</th>
                     </tr>
                 </thead>}
-                <tbody className="divide-y divide-gray-200">
+                <tbody className={globalStyles_tbody_list}>
                     {itemsSale.map((item: TItemsSale) => (
-                        <tr key={item.item.id} className="hover:bg-gray-600 transition text-sky-100 ">
+                        <tr key={item.item.id} className={globalStyles_tr}>
                             <td className={`${styles_td} text-center`}>{item.item.id}</td>
                             <td className={`${styles_td} text-left`}>{item.item.name}</td>
                             <td className={`${styles_td} text-left`}>

@@ -1,6 +1,6 @@
 import { DateFns } from "@/app/lib/dateFns"
 import { TCashMovement } from "@/app/models/TCashMovement"
-import { globalStyles_overflow, globalStyles_table_list, globalStyles_td, globalStyles_th } from "../GlobalStyles"
+import { globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 
 type Props = {
     cashmovements: TCashMovement[]
@@ -10,10 +10,10 @@ export default function CashmovementList({ cashmovements }: Props) {
 
     const dateFns = new DateFns()
 
-    return <>
+    return (
         <div className={globalStyles_overflow}>
             <table className={globalStyles_table_list}>
-                {cashmovements.length > 0 && <thead className="bg-gray-500">
+                {cashmovements.length > 0 && <thead className={globalStyles_thead_list}>
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>
                         <th className={`${globalStyles_th} text-left`}>Valor</th>
@@ -24,9 +24,9 @@ export default function CashmovementList({ cashmovements }: Props) {
                         <th className={`${globalStyles_th} text-center`}>ID Conta</th>
                     </tr>
                 </thead>}
-                <tbody className="divide-y divide-gray-200">
+                <tbody className={globalStyles_tbody_list}>
                     {cashmovements.map((cash: TCashMovement) => (
-                        <tr key={cash.id} className="hover:bg-gray-600 transition text-sky-100 ">
+                        <tr key={cash.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{cash.id}</td>
                             <td className={`${globalStyles_td} text-left`}>{`R$ ${cash.amount.toFixed(2)}`}</td>
                             <td className={`${globalStyles_td} text-left`}>{cash.description}</td>
@@ -39,5 +39,5 @@ export default function CashmovementList({ cashmovements }: Props) {
                 </tbody>
             </table>
         </div>
-    </>
+    )
 }
