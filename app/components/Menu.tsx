@@ -2,14 +2,18 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { userAuth } from '../lib/userAuth'
 
-export default function Menu() {
+type Props = {
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function Menu({ setCollapsed }: Props) {
 
   const { isAdmin, isUser } = userAuth()
 
   const styles_links = "block px-2 py-2 rounded-lg text-white-600 hover:bg-gray-600 hover:text-white-200 font-bold transition duration-200"
 
   return (
-    <nav className="px-4 py-6">
+    <nav className="px-4 py-6"  onClick={() => setCollapsed(prev => !prev)} >
       <li className="flex items-center gap-1 mb-5 font-bold">
         <span>BR</span>
         <Image
@@ -21,7 +25,7 @@ export default function Menu() {
           title="BR"
         />
       </li><hr />
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-4" >
         <li>
           <Link
             href="/dashboard"

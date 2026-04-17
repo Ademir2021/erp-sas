@@ -25,7 +25,7 @@ overflow-y-auto transition-all duration-300">
           {!collapsed && <a href="/" className="font-bold cursor-pointer">Home</a>}
 
         </div>
-        {!collapsed && <Menu />}
+        {!collapsed && <Menu setCollapsed={setCollapsed} />}
         {!collapsed && <div className="flex-3 p-6 ">
           {user ? <LogoutButtonSocial /> : <a href="/login">Fazer Login</a>}
         </div>}
