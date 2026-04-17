@@ -1,6 +1,6 @@
 export default function Logo(){
-    return <>
+    return (
         <p className="ml-10 text-xl font-semibold tracking-[5px]"
         >ERP-SAS</p>
-    </>
+    )
 }

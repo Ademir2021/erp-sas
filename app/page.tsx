@@ -1,10 +1,4 @@
-import { getServerSession } from "next-auth"
-import MenuHeader from "./components/MenuHeader"
-import Sidebar from "./components/Sidebar"
-
 export default async function RootLayout() {
-
-  const session: any = await getServerSession()
 
   function cards_1(card: string, description: string, button: string) {
     return <div className="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">

@@ -29,7 +29,7 @@ export default async function RootLayout({
 
   const session: any = await getServerSession()
   return (
-    <html lang="pr-BR">
+    <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

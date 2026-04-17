@@ -15,5 +15,4 @@ export function LogoutButton() {
     <button className="font-semibold cursor-pointer"
     onClick={logout}>{ <LogoutIcon titleAccess='Sair' />}{" Sair"}</button>
   )
-
 }
