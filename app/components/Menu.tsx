@@ -80,7 +80,7 @@ export default function Menu({ setCollapsed }: Props) {
           <Link
             href="/about"
             className={styles_links}
-          >About</Link>
+          >Sobre</Link>
         </li>
       </ul>
     </nav>
