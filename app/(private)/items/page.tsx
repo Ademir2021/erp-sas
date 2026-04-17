@@ -14,6 +14,7 @@ export default function Items() {
     const router = useRouter()
     const { user } = userAuth();
     const [msg, setMsg] = useState('')
+    const [flag, setFlag] = useState(false)
     const [items, setItems] = useState<TItem[]>([])
     const [brands, setBrands] = useState<TBrand[]>([])
     const [subGropus, setSubGroups] = useState<TsubGroup[]>([])
@@ -67,6 +68,7 @@ export default function Items() {
         }
         router.push('/items')
         setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
+        setFlag(true)
         router.refresh()
     }
 
@@ -86,6 +88,7 @@ export default function Items() {
 
         router.push('/items')
         setMsg(`${resp.data.message} Name: ${resp.data.name} : ${resp.success}`)
+        setFlag(true)
         router.refresh()
     }
 
@@ -110,11 +113,14 @@ export default function Items() {
 
     function handleSubmit(e: Event) {
         e.preventDefault()
-        if (valFields(item) === true) {
+        if (valFields(item) === true && flag === false) {
             item.id === 0 ? saveItem(item) : updateItem(item)
         } else {
             setMsg(valFields(item) as any)
         }
+
+        if (flag == true)
+            setMsg(item.id === 0 ? 'Cliente ja foi registrado' : "Cliente ja foi atualizado")
     }
 
     return <>
