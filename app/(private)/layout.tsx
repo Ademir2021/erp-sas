@@ -1,19 +1,12 @@
-import MenuHeader from "../components/MenuHeader"
-import Sidebar from "../components/Sidebar"
-import { getServerSession } from "next-auth"
-
 export default async function PublicLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
-const session:any = await getServerSession()
+}: { children: React.ReactNode }) {
 
-  return <>
-    <MenuHeader session={session} />
-      <main className="flex-1 ml-12 p-2 min-h-screen bg-gray-900 text-white">
-      <Sidebar />
-        {children}
-      </main>
-  </>
+  return (
+    <main className="flex-1 p-2 mt-auto  min-h-screen bg-gray-800
+  text-white"
+    >
+      {children}
+    </main>
+  )
 }

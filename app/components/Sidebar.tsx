@@ -1,33 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import Links from "./Menu";
+import Menu from "./Menu";
 import { LogoutButtonSocial } from "./LogoutButtonSocial";
 import Logo from "./Logo";
 import { userAuth } from "../lib/userAuth";
 
 export default function Sidebar() {
 
-  const {user} = userAuth()
+  const { user } = userAuth()
   const [collapsed, setCollapsed] = useState(true);
 
-  return <>
-    <aside className={`fixed top-0 left-0 z-50 h-screen bg-gray-900 text-white
-       overflow-y-auto transition-transform duration-300 ${collapsed ? "w-12" : "w-65"}`} >
-      <div className="">
+  return (
+    <div className="absolute top-[-3] left-0 z-50 bg-gray-900 text-white
+overflow-y-auto transition-all duration-300">
+      <aside className={`${collapsed ? "w-auto h-10 overflow-hidden" : "w-64 h-screen"}`}>
+
         <button onClick={() => setCollapsed(!collapsed)}>
           <div className="cursor-pointer border:0px p-4">{collapsed ? <b>☰</b> : <b>X</b>}</div>
         </button>
-      </div>
-      {!collapsed && <Logo/>}
-      <div className="flex justify-between items-center p-4">
-        {!collapsed && <a href="/" className="font-bold cursor-pointer">Home</a>}
 
-      </div>
-      {!collapsed && <Links />}
-      {!collapsed && <div className="flex-3 p-6 ">
-        {user ? <LogoutButtonSocial /> : <a href="/login">Fazer Login</a>}
-      </div>}
-    </aside>
-  </>
+        {!collapsed && <Logo />}
+        <div className="flex justify-between items-center p-4">
+          {!collapsed && <a href="/" className="font-bold cursor-pointer">Home</a>}
+
+        </div>
+        {!collapsed && <Menu />}
+        {!collapsed && <div className="flex-3 p-6 ">
+          {user ? <LogoutButtonSocial /> : <a href="/login">Fazer Login</a>}
+        </div>}
+      </aside>
+    </div>
+  )
 }

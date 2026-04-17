@@ -4,6 +4,7 @@ import Logo from "./Logo"
 import { userAuth } from "../lib/userAuth"
 import { LogoutButton } from "./LogoutButton"
 
+
 type Props = {
   session: any
 }
@@ -11,7 +12,7 @@ type Props = {
 export default function MenuHeader({ session }: Props) {
   const { user } = userAuth()
   return <>
-    <header className="sticky top-0 z-50 bg-gray-900 text-white shadow-md px-4 py-6">
+  <header className="flex-1 top-0 left-0 w-full z-50 bg-gray-900 text-white shadow-md px-8 py-2 mt-1">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <Logo />
         <div className="flex items-center justify-end gap-3">

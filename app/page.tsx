@@ -29,10 +29,8 @@ export default async function RootLayout() {
     </div>
   }
 
-  return <>
-    <MenuHeader session={session} />
-    <div className="flex min-h-screen">
-      <Sidebar />
+  return (
+    <div className="flex bg-gray-800 text-white">
       <main className="min-h-screen flex flex-col w-326 items-center justify-center bg-gray-800 text-white px-4 py-10">
         {/* Título */}
         <div className="text-center mb-10 max-w-2xl">
@@ -70,5 +68,5 @@ export default async function RootLayout() {
         <p className="text-gray-300 mt-4 text-lg">Comece agora mesmo</p>
       </main>
     </div>
-  </>
+  )
 }
