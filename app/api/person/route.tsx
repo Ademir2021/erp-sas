@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
   const token = await loadToken()
   const person: TPerson = await request.json()
-  console.log(person)
+
   if (!person.name) {
     return NextResponse.json(
       { error: 'Favor preencher todos os campos' },
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
    const token = await loadToken()
   const person: TPerson = await request.json()
-  // console.log(person)
+
   if (!person.id) {
     return NextResponse.json(
       { error: 'ID é obrigatório para atualização' },
