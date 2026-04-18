@@ -28,7 +28,7 @@ export default function LoginForm({
                         name='login'
                         placeholder="Email"
                         value={children.login}
-                        required
+                        // required
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                     />

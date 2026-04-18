@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { API_URL } from '@/app/lib/auth'
 
-type TapiUSer = {
+type TAPIUser = {
   id: number
   login: string
   password: string
@@ -12,62 +12,61 @@ type TapiUSer = {
 }
 
 export async function POST(request: Request) {
+  try {
 
-  const user: TUser = await request.json()
+    const user: TUser = await request.json()
 
-  // chama API REST
-  const apiResponse = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(user)
-  })
+    if (!user?.login || !user?.password) {
+      return NextResponse.json(
+        { error: "Dados inválidos" },
+        { status: 400 }
+      )
+    }
 
-  if (!apiResponse.ok) {
+    const apiResponse = await fetch(`${API_URL}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    })
+
+    if (!apiResponse.ok) {
+      return NextResponse.json(
+        { error: "Credenciais inválidas" },
+        { status: 401 }
+      )
+    }
+
+    const apiUser: TAPIUser = await apiResponse.json();
+
+    const payload: TUser = {
+      id: apiUser.id,
+      login: apiUser.login,
+      role: apiUser.roles,
+      token: apiUser.token
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET!, {
+      expiresIn: "1d"
+    })
+
+    const response = NextResponse.json({ success: true })
+
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24
+    })
+    
+    return response
+
+  } catch (error) {
     return NextResponse.json(
-      { error: "Credenciais inválidas" },
-      { status: 401 }
+      { error: "Erro no servidor" },
+      { status: 500 }
     )
   }
-
-  const apiUser: TapiUSer = await apiResponse.json();
-
-  // dados que irão no token
-  const payload: TUser = {
-    id: apiUser.id,
-    login: apiUser.login,
-    role: apiUser.roles,
-    token: apiUser.token // ero aqui
-  };
-  const token = jwt.sign(payload, process.env.JWT_SECRET!, {
-    expiresIn: "1d"
-  })
-
-  // Dados do User
-  const payLoadUser: TUser = {
-    id: apiUser.id,
-    login: apiUser.login,
-    role: apiUser.roles
-  };
-  const user_ = jwt.sign(payLoadUser, process.env.JWT_SECRET!, {
-    expiresIn: "1d"
-  })
-
-
-  const response = NextResponse.json({ success: true })
-
-  response.cookies.set("token", token, {
-    httpOnly: true,
-    path: "/",
-    maxAge: 60 * 60 * 24
-  })
-
-  response.cookies.set("user", user_, {
-    httpOnly: true,
-    path: "/",
-    maxAge: 60 * 60 * 24
-  })
-
-  return response
 }

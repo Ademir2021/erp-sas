@@ -3,8 +3,9 @@
 import { userAuth } from "@/app/lib/userAuth";
 import Link from "next/link";
 
+
 export default function Dashboard() {
-  
+
   const { user } = userAuth();
 
   const userRole = user?.role || "Sem Perfil" as any

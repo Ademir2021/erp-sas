@@ -1,43 +1,27 @@
 'use client'
+
 import Link from "next/link"
 import Logo from "./Logo"
-import { userAuth } from "../lib/userAuth"
 import { LogoutButton } from "./LogoutButton"
+import { userAuth } from "../lib/userAuth"
 
 
-type Props = {
-  session: any
-}
-export default function MenuHeader({ session }: Props) {
+export default function MenuHeader() {
 
-  const { user } = userAuth();
+  const { user } = userAuth() as any
 
   return (
-    <header className="flex items-center justify-between
+          <header className="flex items-center justify-between
     w-full z-50 bg-gray-900 text-white
     shadow-md px-4 md:px-8 py-2">
 
       <Logo />
 
-      {session &&
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:block text-right">
-            <p className="text-xs text-gray-300">Bem-vindo</p>
-            <p className="text-sm font-semibold truncate max-w[120px]">
-              {session.user?.name}
-            </p>
-          </div>
-          <img
-            className="w-9 h-9 rounded-full border-2 border-blue-500 object-cover"
-            alt="Avatar"
-            src={session.user?.image || ""}
-          />
-        </div>}
-        
-      {user ? <LogoutButton /> :
+      {user ? <p><LogoutButton /></p> :
         <Link className="font-bold text-sm" href={"/login"}>
           Login
         </Link>}
     </header>
   )
+  
 }
