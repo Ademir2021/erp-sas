@@ -8,7 +8,7 @@ export default function Register() {
 
     const router = useRouter()
 
-     const [, setLoading] = useState(false);
+    const [, setLoading] = useState(false);
 
     const [msg, setMsg] = useState('')
     const [user, setUser] = useState<TUser>({
@@ -25,32 +25,34 @@ export default function Register() {
 
     async function handleSubmit(e: Event) {
         e.preventDefault()
+
         setLoading(true)
         setMsg("")
-         try{
-        const res = await fetch('/api/register', {
-            method: 'POST',
-            body: JSON.stringify(user),
-        })
 
-        const resp = await res.json()
+        try {
 
-        if (!res.ok) {
-            setMsg(`Erro: ${resp.error}`)
-            return
+            const res = await fetch('/api/register', {
+                method: 'POST',
+                body: JSON.stringify(user),
+            });
+
+            if (!res.ok) {
+                const resp = await res.json()
+                setMsg(`${resp.error}, status:${res.status}`)
+                return
+            };
+
+            router.push('/register')
+            setMsg('Usuário registrado com sucesso')
+            router.refresh()
+        } catch {
+            setMsg(`Erro na API.`);
+        } finally {
+            setLoading(false);
         }
-        router.push('/register')
-        setMsg('Usuário registrado com sucesso')
-        router.refresh()
-         } catch {
-      setMsg("Erro no servidor");
-    } finally {
-      setLoading(false);
-    }
     }
 
     return <>
-    {/* <p>{JSON.stringify(user)}</p> */}
         <RegisterLoginForm
             handleChange={handleChange}
             handleSubmit={handleSubmit}
