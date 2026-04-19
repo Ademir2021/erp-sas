@@ -9,13 +9,14 @@ type Props = {
     handleLogin: any
     handleChange: any
     error: string
+    msg: string
 }
 
 export default function LoginForm({
     children,
     handleLogin,
     handleChange,
-    error }: Props) {
+    error, msg }: Props) {
     return <>
         <div className="min-h-screen flex items-center justify-center bg-gray-100v text-gray-100">
             <div className="w-full max-w-md bg-gray-800 p-8 rounded-2xl shadow-lg">
@@ -28,7 +29,7 @@ export default function LoginForm({
                         name='login'
                         placeholder="Email"
                         value={children.login}
-                        // required
+                        required
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                     />
@@ -48,24 +49,24 @@ export default function LoginForm({
                         Entrar
                     </button>
                 </form>
-                {error && (
-                    <p className="mt-4 text-sm text-red-600 text-center">
-                        {error}
-                    </p>
+
+                {(error || msg) && (<p className={`mt-4 text-sm text-center
+                ${error ? "text-red-600" : "text-blue-700"}`}>
+                    {error || msg}</p>
                 )}
                 <Link className="text-gray-300 pe-2" href={'/register'}>Registrar-seu Login</Link>
-                <div className="min-h-screenxx flex items-center justify-center p-3">
+                {/* <div className="min-h-screenxx flex items-center justify-center p-3">
                     <button
                         onClick={() => signIn("github", { callbackUrl: '/dashboard' })}
                         className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer"
                     >Entrar com GitHub</button>
-                </div>
-                <div className="min-h-screenxx flex items-center justify-center p-3">
+                </div> */}
+                {/* <div className="min-h-screenxx flex items-center justify-center p-3">
                     <button
                         onClick={() => signIn("google", { callbackUrl: '/dashboard' })}
                         className="bg-black text-white px-6 py-3 rounded-lg cursor-pointer"
                     >Entrar com google</button>
-                </div>
+                </div> */}
                 <p className="text-end"><Link href='/' >Sair</Link></p>
             </div>
         </div>

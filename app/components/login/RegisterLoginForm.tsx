@@ -1,4 +1,6 @@
 "use client"
+
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { TUser, UserRole } from "@/app/models/TUser"
 import Link from "next/link"
 import { useState } from "react"
@@ -29,7 +31,9 @@ export default function RegisterLoginForm({
       setStep(step + 1)
     }
   }
-
+ const back =<>  {step !== 1 && <button onClick={()=>setStep(1)}
+          className="flex cursor-pointer">
+            <KeyboardReturnIcon titleAccess='Voltar'/></button>}</>
   return (
     <div className="min-h-screen text-black flex items-center justify-center bg-gray-800 p-4">
       <div className="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
@@ -43,7 +47,6 @@ export default function RegisterLoginForm({
 
             return (
               <div key={index} className="flex items-center space-x-4">
-
                 {/* Bolinha */}
                 <div
                   className={`w-8 h-8 flex items-center justify-center rounded-full font-bold transition
@@ -67,7 +70,8 @@ export default function RegisterLoginForm({
               </div>
             )
           })}
-        </div>
+         {back}
+          </div>
 
         {/* Lado Direito */}
         <div className="md:w-1/2 p-8">
@@ -119,6 +123,7 @@ export default function RegisterLoginForm({
             )}
           </form>
           {msg && <p className="text-red-600 mt-2 text-center">{msg}</p>}
+          {msg && back}
           <button
            onClick= {step !==3 ? nextStep : handleSubmit}
             className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"

@@ -24,17 +24,19 @@ const handler = NextAuth({
         })
 
         const user = await res.json()
+        if (!res.ok) {
+          throw new Error("INVALID_CREDENTIALS");
+        }
         if (!res.ok) return null
 
-        const user_ = {
+        return {
           id: String(user.id),
           email: user.login,
           name: user.login,
           token: user.token,
           roles: user.roles,
         }
-        // console.log(user_) 
-        return user_
+
       },
     }),
   ],
