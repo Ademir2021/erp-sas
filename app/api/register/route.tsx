@@ -12,7 +12,7 @@ export async function POST(request: Request) {
       { status: user.login == "" ? 422 : 400 }
     )
   };
-
+  
   try {
     const res = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',
@@ -21,9 +21,8 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify(user),
     });
-
+    
     if (!res.ok) {
-      // const error = await res.text()
       return NextResponse.json(
         { error:'Erro no servidor ou Usuário já existe.' }, 
         { status: 500 })
