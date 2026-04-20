@@ -1,17 +1,17 @@
 'use client'
 
+import { globalStyles_form } from "@/app/components/GlobalStyles";
 import { userAuth } from "@/app/lib/userAuth"
 
 export default function Perfil() {
 
     const { user } = userAuth() as any;
     return (
-        <main className="p-6 text-white">
-            
-            <h1 className="text-2xl font-bold mb-4">Perfil</h1>
-
+        <main className={`${globalStyles_form}`} >
+            <h1 className="text-2xl mb-3 font-bold">Perfil .</h1>
+            <hr/>
             {user && (
-                <div className="bg-gray-800 p-4 rounded space-y-3">
+                <div className="">
                     <p><strong>ID:</strong> {String(user?.id).padStart(4, '0')}</p>
                     <p><strong>Login:</strong> {user?.login}</p>
                     <p><strong>Email:</strong> {user?.login}</p>
