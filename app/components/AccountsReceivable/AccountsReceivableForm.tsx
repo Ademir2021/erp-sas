@@ -2,6 +2,7 @@ import { TAccountsReceivable, TReceipt } from "@/app/models/TAccountsReceivable"
 import { AccountsReceivableList } from "./AccountsReceivableList";
 import { useState } from "react";
 import ShowForm from "../ShowForm";
+import { globalStyles_form } from "../GlobalStyles";
 
 type Props = {
     accountsReceivable: TAccountsReceivable[]
@@ -28,7 +29,7 @@ export default function AccountsReceivableForm({
         showForm={showForm}
         setShowForm={setShowForm}
         />
-        {showForm && <> {accountsReceivable.length > 0 ? <div className="max-w-3xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
+        {showForm && <> {accountsReceivable.length > 0 ? <div className={`${globalStyles_form} max-w-xl mx-auto `}>
             <form className="flex flex-col items-center gap-4" onSubmit={handleSubmit}>
                 <label>Informe o Valor a Receber</label>
                 <input

@@ -31,15 +31,15 @@ export default function RegisterLoginForm({
       setStep(step + 1)
     }
   }
- const back =<>  {step !== 1 && <button onClick={()=>setStep(1)}
-          className="flex cursor-pointer">
+ const back =<>  {step !== 1 && <button  onClick={()=>setStep(1)}
+          className="flex cursor-pointer ">
             <KeyboardReturnIcon titleAccess='Voltar'/></button>}</>
   return (
-    <div className="min-h-screen text-black flex items-center justify-center bg-gray-800 p-4">
-      <div className="w-full max-w-4xl bg-gray-800 rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl bg-black/60 rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
 
         {/* Lateral Esquerda - Progresso */}
-        <div className="md:w-1/2 bg-gray-900 text-white flex flex-col justify-center p-8 space-y-6">
+        <div className="md:w-1/2  text-white flex flex-col justify-center p-8 space-y-6">
           {steps.map((title, index) => {
             const currentStep = index + 1
             const isActive = step === currentStep
@@ -75,7 +75,7 @@ export default function RegisterLoginForm({
 
         {/* Lado Direito */}
         <div className="md:w-1/2 p-8">
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+          <h2 className="text-2xl font-semibold mb-6 text-gray-300">
             {steps[step - 1]}
           </h2>
 
@@ -97,7 +97,7 @@ export default function RegisterLoginForm({
             {step === 2 && (
               <>
                 <label>Privilégio</label>
-                <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                <select className="w-full text-gray-700  p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   defaultValue={''}
                   name="role"
                   onChange={handleChange}>

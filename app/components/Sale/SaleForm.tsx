@@ -10,7 +10,7 @@ import { TPerson } from "@/app/models/TPerson"
 import { useEffect, useState } from "react"
 import CreditCardForm from "./CreditCardForm"
 import { TResponsePixQRCode } from '@/app/models/TPagSeguroPix';
-import { globalStylesTitle, globalStylesToggle } from '../GlobalStyles';
+import { globalStyles_form, globalStylesTitle, globalStylesToggle } from '../GlobalStyles';
 import CashForm from './CashForm';
 
 type Props = {
@@ -81,7 +81,7 @@ export default function SaleForm({
     }
 
     return <>
-        <div id="up-sale" className="max-w-7xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
+       <div id="up-sale" className={`${globalStyles_form}`}>
             <div>
                 <h1 className={`${globalStylesTitle} justify-center`}>Orçamentos - Pedidos e Vendas</h1>
                 {<p className="flex justify-center font-sans text-green-100 bg-gray-800 mb-2 p-2 text-center rounded-b-none shadow-md">

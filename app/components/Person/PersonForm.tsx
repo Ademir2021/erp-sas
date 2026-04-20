@@ -10,6 +10,7 @@ import { TPerson, Gender, TypePerson, TGroupPerson } from "@/app/models/TPerson"
 import { TZipCode } from "@/app/models/TAddress"
 import { PersonList } from "./PersonList"
 import ShowForm from "../ShowForm"
+import { globalStyles_form } from "../GlobalStyles"
 
 type FormData = z.infer<typeof cadastroSchema>
 
@@ -123,7 +124,7 @@ export default function PersonForm({
       showForm={showForm}
       setShowForm={setShowForm}
     />
-    {showForm && <div id="up-person" className="max-w-3xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
+    {showForm && <div id="up-person" className={`${globalStyles_form} max-w-xl mx-auto`}>
       {/* STEP INDICATOR */}
       <div className="flex justify-between mb-8">
         {["Tipo", "Dados", "Contato", "Endereço"].map((item, index) => (

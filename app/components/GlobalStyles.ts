@@ -1,5 +1,5 @@
-export const globalStylesTitle = "flex text-lg font-semibold text-gray-800"
-export const globalStylesToggle = "text-[18px] font-semibold text-gray-900"
+export const globalStylesTitle = "flex text-lg font-semibold text-gray-400"
+export const globalStylesToggle = "text-[18px] font-semibold text-gray-500"
 export const globalStyles_th = "px-1 py-1 text-[11px] font-semibold text-gray-200"
 export const globalStyles_td = "px-1 py-1 text-[11px]"
 export const globalStyles_tr = "hover:bg-gray-600 transition text-sky-100"
@@ -8,3 +8,4 @@ export const globalStyles_table_list = "min-w-full border border-gray-100 rounde
 export const globalStyles_tbody_list = "divide-y divide-gray-200"
 export const globalStyles_thead_list = "bg-gray-500"
 export const globalStyles_btn_list = "px-2 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+export const globalStyles_form = "max-w-7xl mx-auto bg-gray-800/50 p-8 rounded-2xl shadow-lg"

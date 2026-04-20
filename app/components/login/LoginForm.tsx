@@ -17,8 +17,9 @@ export default function LoginForm({
     handleChange,
     error, msg }: Props) {
     return <>
-        <div className="min-h-screen flex items-center justify-center bg-gray-100v text-gray-100">
-            <div className="w-full max-w-md bg-gray-800 p-8 rounded-2xl shadow-lg">
+        <div className="min-h-screen flex items-center justify-center bg-gray-100v text-gray-100"
+         style={{ backgroundImage: "url('/bg/bg-layouts.jpg')" }}>
+            <div className="w-full max-w-md bg-black/60 p-8 rounded-2xl shadow-lg" >
                 <p className="flex justify-center text-gray-300 font-bold m-6">Sign in.</p>
                 <form onSubmit={handleLogin} className="space-y-4 ">
                     <input

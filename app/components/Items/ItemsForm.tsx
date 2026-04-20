@@ -2,6 +2,7 @@ import { TItem, TBrand, TsubGroup, TTaxGroup, TTypeItem, TItemClass, TUnitMeasur
 import ItemsList from "./ItemsList"
 import { useState } from "react"
 import ShowForm from "../ShowForm"
+import { globalStyles_form } from "../GlobalStyles"
 
 type Props = {
     children: TItem
@@ -39,7 +40,7 @@ export default function ItemsForm({
     showForm={showForm}
     setShowForm={setShowForm}
     />
-        {showForm && <div className="max-w-3xl mx-auto bg-gray-600 p-8 rounded-2xl shadow-lg">
+        {showForm && <div className={`${globalStyles_form} max-w-xl mx-auto`}>
             <form id="up-item" className="space-y-6">
                 <p className="font-bold">{children.id === 0 ?
                 "Registar Item" :

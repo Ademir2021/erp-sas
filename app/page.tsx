@@ -24,12 +24,15 @@ export default async function RootLayout() {
   }
 
   return (
-    <div className="flex bg-gray-800 text-white">
-      <main className="min-h-screen flex flex-col w-326 items-center justify-center bg-gray-800 text-white px-4 py-10">
+<div className="flex bg-transparent text-white">
+<main
+  className="min-h-screen flex flex-col max-w-7xl w-full mx-auto items-center justify-center text-white px-4 py-10 bg-cover bg-center"
+  style={{ backgroundImage: "url('/bg/bg-home.jpg')" }}
+>
         {/* Título */}
         <div className="text-center mb-10 max-w-2xl">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            Soluções e Segurança para sua ( Empresa ou Negôcio ).
+            Soluções e segurança para sua Empresa ou Negôcio.
           </h1>
           <p className="text-gray-300 text-lg">
             Mais segurança, mais eficiência e mais produtividade para o seu negócio. Conheça nossas soluções e serviços personalizados para atender às suas necessidades específicas.
@@ -59,7 +62,7 @@ export default async function RootLayout() {
             "Gestão de controle de acesso e segurança para sua empresa, garantindo a proteção dos dados e a integridade dos sistemas.",
             "Saiba Mais")}
         </div>
-        <p className="text-gray-300 mt-4 text-lg">Comece agora mesmo</p>
+        <p className="text-gray-400 mt-4 text-2xl text-bold">Comece agora mesmo</p>
       </main>
     </div>
   )
