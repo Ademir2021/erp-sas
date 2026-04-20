@@ -18,6 +18,18 @@ export default function ITemsSaleForm({
     const styles_th = "px-1 py-1 text-[11px] font-semibold text-gray-200"
     const styles_td = "px-1 py-1 text-[11px]"
 
+    const [currentPage, setCurrentPage] = useState(1)
+    const itemsPerPage = 5
+    const totalPages = Math.ceil(items.length / itemsPerPage)
+    const indexOfLastItem = currentPage * itemsPerPage
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage
+    const currentItems = items.slice(indexOfFirstItem, indexOfLastItem)
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+    
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [items])
+
     function insertItem(item: TItem) {
 
         setItemsSale((prev: TItemsSale[]) => {
@@ -39,23 +51,6 @@ export default function ITemsSaleForm({
             return [...prev, newItem]
         })
     }
-
-
-    const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 5
-
-    const totalPages = Math.ceil(items.length / itemsPerPage)
-
-    const indexOfLastItem = currentPage * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-
-    const currentItems = items.slice(indexOfFirstItem, indexOfLastItem)
-
-    useEffect(() => {
-        setCurrentPage(1)
-    }, [items])
-
-    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
 
     return <>
         <div className={globalStyles_overflow}>
