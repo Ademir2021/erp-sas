@@ -16,11 +16,11 @@ export default function LoginForm({
     handleLogin,
     handleChange,
     error, msg }: Props) {
-    return <>
-        <div className="min-h-screen flex items-center justify-center bg-gray-100v text-gray-100"
-         style={{ backgroundImage: "url('/bg/bg-layouts.jpg')" }}>
-            <div className="w-full max-w-md bg-black/60 p-8 rounded-2xl shadow-lg" >
-                <p className="flex justify-center text-gray-300 font-bold m-6">Sign in.</p>
+    return (
+    
+        <div className="flex min-h-screen bg-transparent items-center justify-center text-gray-100">
+            <div className="w-full max-w-md bg-black/60 p-8 rounded-2xl shadow-lg">
+                <p className="flex justify-center text-gray-300 font-bold text-2xl p-1 mb-6">Sign in.</p>
                 <form onSubmit={handleLogin} className="space-y-4 ">
                     <input
                         type="email"
@@ -68,5 +68,5 @@ export default function LoginForm({
                 <p className="text-end"><Link href='/' >Sair</Link></p>
             </div>
         </div>
-    </>
+    )
 }

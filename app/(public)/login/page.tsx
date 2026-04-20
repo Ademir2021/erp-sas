@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { TLogin, TUser, UserRole } from '../models/TUser'
-import LoginForm from '../components/login/LoginForm'
+import { TLogin, TUser, UserRole } from '../../models/TUser'
+import LoginForm from '../../components/login/LoginForm'
 import { signIn } from "next-auth/react"
 
 export default function LoginPage() {

@@ -62,7 +62,7 @@ export default async function RootLayout() {
             "Gestão de controle de acesso e segurança para sua empresa, garantindo a proteção dos dados e a integridade dos sistemas.",
             "Saiba Mais")}
         </div>
-        <p className="text-gray-400 mt-4 text-2xl text-bold">Comece agora mesmo</p>
+        <a href="/login" className="text-gray-400 mt-4 text-2xl text-bold">Comece agora mesmo</a>
       </main>
     </div>
   )
