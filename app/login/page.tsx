@@ -2,30 +2,25 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { TUser, UserRole } from '../models/TUser'
+import { TLogin, TUser, UserRole } from '../models/TUser'
 import LoginForm from '../components/login/LoginForm'
 import { signIn } from "next-auth/react"
 
 export default function LoginPage() {
 
   const router = useRouter()
-
-  const [, setLoading] = useState(false);
-
-  const [user, setUser] = useState<TUser>({
-    login: '',
-    password: '',
-    role: UserRole.USER,
-    token: ''
-  })
-
   const [error, setError] = useState('')
   const [msg, setMsg] = useState('')
+  const [, setLoading] = useState(false);
+  const [login, setLogin] = useState<TLogin>({
+    login: '',
+    password: ''
+  })
 
   const handleChange = (e: any) => {
     const name = e.target.name;
     const value = e.target.value;
-    setUser(values => ({ ...values, [name]: value }))
+    setLogin(values => ({ ...values, [name]: value }))
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -36,7 +31,7 @@ export default function LoginPage() {
     try {
       const res = await fetch('/api/login', {
         method: 'POST',
-        body: JSON.stringify(user),
+        body: JSON.stringify(login),
       })
 
       const resp = await res.json()
@@ -49,10 +44,10 @@ export default function LoginPage() {
       if (res.ok === true)
         setMsg(`${res.ok}: Seu acesso iniciará em 5 segundos`)
       setTimeout(() => {
-        window.location.assign('dashboard')
-        // router.push('dashboard')
+        window.location.assign('/dashboard');
+        // router.push('/dashboard')
         // router.refresh()
-      }, 5000)
+      }, 3000)
 
     } catch {
       setError("Erro no servidor");
@@ -62,14 +57,14 @@ export default function LoginPage() {
 
   }
 
-  async function sigIn(e: React.FormEvent) {
+  async function signIn_(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true);
     setError("");
     try {
       const res = await signIn("credentials", {
-        login: user.login,
-        password: user.password,
+        login: login.login,
+        password: login.password,
         redirect: false,
       });
 
@@ -93,12 +88,12 @@ export default function LoginPage() {
 
   return <>
     <LoginForm
-      handleLogin={!sigIn || handleLogin}
+      handleLogin={!signIn_ || handleLogin}
       handleChange={handleChange}
       error={error as any}
       msg={msg}
     >
-      {user}
+      {login}
     </LoginForm>
   </>
 }

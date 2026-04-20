@@ -1,11 +1,10 @@
 'use client'
 
-import { signIn } from "next-auth/react"
-import { TUser } from "@/app/models/TUser"
+import { TLogin } from "@/app/models/TUser"
 import Link from "next/link"
 
 type Props = {
-    children: TUser
+    children: TLogin
     handleLogin: any
     handleChange: any
     error: string

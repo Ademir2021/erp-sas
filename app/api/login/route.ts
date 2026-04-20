@@ -1,4 +1,4 @@
-import { TUser, UserRole } from '@/app/models/TUser'
+import { TLogin, TUser, UserRole } from '@/app/models/TUser'
 import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { API_URL } from '@/app/lib/auth'
@@ -12,11 +12,12 @@ type TAPIUser = {
 }
 
 export async function POST(request: Request) {
+
   try {
     
-    const user: TUser = await request.json()
+    const login: TLogin = await request.json()
 
-    if (!user?.login || !user?.password) {
+    if (!login?.login || !login?.password) {
       return NextResponse.json(
         { error: "Dados inválidos" },
         { status: 400 }
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(login)
     });
 
     if (!res.ok) {
@@ -55,14 +56,14 @@ export async function POST(request: Request) {
 
     resp.cookies.set("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      // secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24
     });
     
     return resp;
-
+  
   } catch (error) {
     return NextResponse.json(
       { error: "Erro no servidor" },

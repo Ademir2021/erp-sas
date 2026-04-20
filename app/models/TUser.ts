@@ -17,3 +17,8 @@ export type TUserGithub = {
         image:string
     }
 }
+
+export type TLogin = {
+    login:string
+    password:string
+}
