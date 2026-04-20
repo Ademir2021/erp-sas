@@ -5,7 +5,6 @@ import Sidebar from "./components/Sidebar";
 import MenuHeader from "./components/MenuHeader";
 import "./globals.css";
 
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -28,19 +27,19 @@ export default async function RootLayout({
 }>) {
 
   return (
-<html lang="pt-BR">
-  <body
-    className={`${geistSans.variable} ${geistMono.variable} antialiased relative bg-[url('/images/bg.jpg')] bg-cover bg-center`}
-  >
-    <div className="absolute inset-0 bg-black/60"></div>
-
-    <div className="relative z-10">
-      <MenuHeader />
-      <Sidebar />
-      {children}
-      <Footer />
-    </div>
-  </body>
-</html>
+    <html lang="pt-BR">
+      <body
+        className={`${geistSans.variable}
+${geistMono.variable}
+antialiased relative bg-[url('/images/bg.jpg')] bg-cover bg-center`}>
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="relative z-10">
+          <MenuHeader />
+          <Sidebar />
+          {children}
+          <Footer />
+        </div>
+      </body>
+    </html>
   );
 }

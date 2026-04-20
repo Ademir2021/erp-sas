@@ -24,11 +24,12 @@ export default async function RootLayout() {
   }
 
   return (
-<div className="flex bg-transparent text-white">
-<main
-  className="min-h-screen flex flex-col max-w-7xl w-full mx-auto items-center justify-center text-white px-4 py-10 bg-cover bg-center"
-  style={{ backgroundImage: "url('/bg/bg-home.jpg')" }}
->
+    <div className="flex bg-transparent text-white">
+      <main
+        className="min-h-screen flex flex-col max-w-7xl w-full
+mx-auto items-center justify-center
+text-white px-4 py-10 bg-cover bg-center"
+        style={{ backgroundImage: "url('/bg/bg-home.jpg')" }}>
         {/* Título */}
         <div className="text-center mb-10 max-w-2xl">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
@@ -41,14 +42,14 @@ export default async function RootLayout() {
         {/* Cards 1 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
           {/* Cards 1 */}
-            {cards_1(
-              "Controle das Vendas de Items ou Serviços, Pedidos e Orçamentos",
-              "Sistema WEB SAS para controle de vendas, pedidos e orçamentos, com gestão de clientes, produtos, estoque, relatórios e análises para otimizar o desempenho do seu negócio.",
-              "Saiba Mais")}
-            {cards_2(
-              "Checkout para Pagamentos com PIX/Cartão/Crédito Loja",
-              "Sistema WEB SAS com checkout para pagamentos com PIX, crédito Loja e cartão de crédito, garantindo segurança e conveniência para seus clientes.",
-              "Saiba Mais")}
+          {cards_1(
+            "Controle das Vendas de Items ou Serviços, Pedidos e Orçamentos",
+            "Sistema WEB SAS para controle de vendas, pedidos e orçamentos, com gestão de clientes, produtos, estoque, relatórios e análises para otimizar o desempenho do seu negócio.",
+            "Saiba Mais")}
+          {cards_2(
+            "Checkout para Pagamentos com PIX/Cartão/Crédito Loja",
+            "Sistema WEB SAS com checkout para pagamentos com PIX, crédito Loja e cartão de crédito, garantindo segurança e conveniência para seus clientes.",
+            "Saiba Mais")}
           <br />
           {/**Cards 2 */}
         </div>
@@ -62,7 +63,7 @@ export default async function RootLayout() {
             "Gestão de controle de acesso e segurança para sua empresa, garantindo a proteção dos dados e a integridade dos sistemas.",
             "Saiba Mais")}
         </div>
-        <a href="/login" className="text-gray-400 mt-4 text-2xl text-bold">Comece agora mesmo</a>
+        <a href="/login" className="mt-3 text-bold text-2xl">Comece agora mesmo !</a>
       </main>
     </div>
   )
