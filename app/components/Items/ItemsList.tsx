@@ -1,5 +1,7 @@
 import { TItem } from "@/app/models/TItem"
 import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
+import { useEffect, useState } from "react"
+import Pagination from "../Pagination/Pagination"
 
 type Props = {
     items: TItem[]
@@ -11,11 +13,23 @@ export default function ItemsList({
     setChildren
 }: Props) {
 
+    const [currentPage, setCurrentPage] = useState(1)
+    const itemsPerPage = 8
+    const totalPages = Math.ceil(items.length / itemsPerPage)
+    const indexOfLastItem = currentPage * itemsPerPage
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage
+    const currentItems = items.slice(indexOfFirstItem, indexOfLastItem)
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [items])
+
     function updateList(item: TItem) {
         setChildren(item)
     }
 
-    return (
+    return <>
         <div className={globalStyles_overflow}>
             <table className={globalStyles_table_list}>
                 <thead className={globalStyles_thead_list}>
@@ -31,7 +45,7 @@ export default function ItemsList({
                     </tr>
                 </thead>
                 <tbody className={globalStyles_tbody_list}>
-                    {items.map((item: TItem) => (
+                    {currentItems.map((item: TItem) => (
                         <tr key={item.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{item.id}</td>
                             <td className={`${globalStyles_td} text-left`}>{item.name}</td>
@@ -50,5 +64,13 @@ export default function ItemsList({
                 </tbody>
             </table>
         </div>
-    )
+
+        <Pagination
+            props={items}
+            setCurrentPage={setCurrentPage}
+            pageNumbers={pageNumbers}
+            currentPage={currentPage}
+            indexOfLastItem={indexOfLastItem}
+        />
+    </>
 }

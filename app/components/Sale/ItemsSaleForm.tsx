@@ -1,9 +1,8 @@
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { TItem } from "@/app/models/TItem";
 import { TItemsSale } from "@/app/models/TSale";
 import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles";
 import { useEffect, useState } from "react";
+import Pagination from '../Pagination/Pagination';
 
 type Props = {
     items: TItem[]
@@ -25,7 +24,7 @@ export default function ITemsSaleForm({
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
     const currentItems = items.slice(indexOfFirstItem, indexOfLastItem)
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-    
+
     useEffect(() => {
         setCurrentPage(1)
     }, [items])
@@ -73,8 +72,7 @@ export default function ITemsSaleForm({
                             <td className={`${styles_td} text-center`}>{item.id}</td>
                             <td className={`${styles_td} text-left`}>
                                 <a className="font-bold text-blue-500 hover:underline"
-                                    href="##"
-                                    onClick={() => insertItem(item)}>
+                                    href="##" onClick={() => insertItem(item)}>
                                     {item.name} </a> </td>
                             <td className={`${styles_td} text-left text-lg text-gray-300`}>
                                 {item.priceMax.toFixed(2)}</td>
@@ -92,31 +90,12 @@ export default function ITemsSaleForm({
             </table>
         </div>
 
-        {items.length > 5 && <div className="flex justify-center gap-2 mt-4">
-            <button onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                className="cursor-pointer">
-                <KeyboardArrowLeftIcon titleAccess='Anterior' /></button>
-            <span className="px-3 py-1">
-
-                {pageNumbers.map((page) => (
-                    <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`cursor-pointer px-2 py-1 rounded ml-1
-                        ${page === currentPage ? "bg-blue-600 text-black"
-                                : "bg-transparent text-white hover:bg-gray-400"}`}>
-                        {page}
-                    </button>
-                ))}
-            </span>
-            <button onClick={() =>
-                setCurrentPage(prev =>
-                    indexOfLastItem < items.length ? prev + 1 : prev)}
-                className='cursor-pointer'
-            >
-                <KeyboardArrowRightIcon titleAccess='Próximo' />
-            </button>
-        </div>}
-
+        <Pagination
+            props={items}
+            setCurrentPage={setCurrentPage}
+            pageNumbers={pageNumbers}
+            currentPage={currentPage}
+            indexOfLastItem={indexOfLastItem}
+        />
     </>
 }
