@@ -22,11 +22,11 @@ overflow-y-auto transition-all duration-300">
 
         {!collapsed && <Logo />}
         <div className="flex justify-between items-center p-4">
-          {!collapsed && <a href="/" className="font-bold cursor-pointer">Home</a>}
+          {!collapsed && <a href="/" className="font-bold cursor-pointer">HOME</a>}
 
         </div>
         {!collapsed && <Menu setCollapsed={setCollapsed} />}
-        {!collapsed && <div className="flex-3 p-6 ">
+        {!collapsed && <div className="p-6">
           {user ? <LogoutButtonSocial /> : <a href="/login">Fazer Login</a>}
         </div>}
       </aside>

@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { userAuth } from '../lib/userAuth'
+import ShowForm from './ShowForm'
+import { useState } from 'react'
 
 type Props = {
   setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
@@ -8,13 +10,16 @@ type Props = {
 
 export default function Menu({ setCollapsed }: Props) {
 
+  const [showForm, setShowForm] = useState(false)
   const { isAdmin, isUser } = userAuth()
 
-  const styles_links = "block px-2 py-2 rounded-lg text-white-600 hover:bg-gray-600 hover:text-white-200 font-bold transition duration-200"
+  const styles_links = "block px-1 py-2  rounded-lg hover:bg-gray-800 hover:text-gray-100  transition duration-200"
+
+const hr = <hr className="border-t-2 border-gray-800" />
 
   return (
-    <nav className="px-4 py-6"  onClick={() => setCollapsed(prev => !prev)} >
-      <li className="flex items-center gap-1 mb-5 font-bold">
+    <nav className="px-2 py-1">
+      <li className="flex font-black gap-2 mb-3">
         <span>BR</span>
         <Image
           src="/globe.svg"
@@ -24,63 +29,90 @@ export default function Menu({ setCollapsed }: Props) {
           height={26}
           title="BR"
         />
-      </li><hr />
-      <ul className="flex flex-col gap-4" >
+      </li>
+      <ul className="flex text-[12px] flex-col gap-3" >
         <li>
           <Link
             href="/dashboard"
             className={styles_links}
-          >DashBoard</Link>
-        </li><hr />
+              onClick={() => setCollapsed(prev => !prev)}
+          >DASHBOARD</Link>
+        </li>{hr}
+        {isAdmin && <>
+          <div className='font-bold'><ShowForm
+            showForm={showForm}
+            setShowForm={setShowForm}
+          />{<a href='##' onClick={()=>(setShowForm(prev => !prev))}>CADASTROS</a>}</div>{hr}</>} {showForm && <>
+              <li> <Link
+                href="/brand"
+                className={styles_links}
+                  onClick={() => setCollapsed(prev => !prev)}
+              >MARCAS</Link>
+              </li>{hr}
+               <li> <Link
+                href="/brand"
+                className={styles_links}
+                  onClick={() => setCollapsed(prev => !prev)}
+              >SUBGRUPOS</Link>
+              </li>{hr}
+              </>}
         {isUser && <><li>
           <Link
             href="/person"
             className={styles_links}
-          >Dados do Cliente</Link>
+              onClick={() => setCollapsed(prev => !prev)}
+          >DADOS DOS CLIENTES</Link>
         </li>
-          <hr /></>}
+          {hr}</>}
         {isAdmin && <> <li>
           <Link
             href="/items"
             className={styles_links}
-          >Dados dos Items</Link>
-        </li><hr /></>}
+              onClick={() => setCollapsed(prev => !prev)}
+          >DADOS DOS ITEMS</Link>
+        </li>{hr}</>}
         <li>
           <Link
             href="/sale"
             className={styles_links}
-          >Console de Venda</Link>
-        </li><hr />
+              onClick={() => setCollapsed(prev => !prev)}
+          >CHECK-OUT DE VENDAS</Link>
+        </li>{hr}
         {isUser && <> <li>
           <Link
             href="/sales"
             className={styles_links}
-          >Vendas</Link>
-        </li><hr /></>}
+              onClick={() => setCollapsed(prev => !prev)}
+          >CONSULTA VENDAS</Link>
+        </li>{hr}</>}
         {isUser && <><li>
           <Link
             href="/accountsreceivable"
             className={styles_links}
-          >Contas a Receber</Link>
-        </li><hr /></>}
+              onClick={() => setCollapsed(prev => !prev)}
+          >CONTAS A RECEBER</Link>
+        </li>{hr}</>}
         {isAdmin && <> <li>
           <Link
             href="/cashmovement"
             className={styles_links}
-          >Caixa Movimento</Link>
+              onClick={() => setCollapsed(prev => !prev)}
+          >CAIXA MOVIMENTO</Link>
         </li>
-          <hr /></>}
+          {hr}</>}
         <li>
           <Link
             href="/perfil"
             className={styles_links}
-          >Perfil</Link>
-        </li><hr />
+              onClick={() => setCollapsed(prev => !prev)}
+          >PERFIL</Link>
+        </li>{hr}
         <li>
           <Link
             href="/about"
             className={styles_links}
-          >Sobre</Link>
+              onClick={() => setCollapsed(prev => !prev)}
+          >SOBRE !</Link>
         </li>
       </ul>
     </nav>

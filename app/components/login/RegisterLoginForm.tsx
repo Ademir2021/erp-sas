@@ -1,4 +1,3 @@
-"use client"
 
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import { TUser, UserRole } from "@/app/models/TUser"

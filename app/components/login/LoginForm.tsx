@@ -1,4 +1,3 @@
-'use client'
 
 import { TLogin } from "@/app/models/TUser"
 import Link from "next/link"
