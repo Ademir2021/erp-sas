@@ -12,7 +12,7 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(true);
 
   return (
-    <div className="absolute top-[-6] left-0 z-50 bg-gray-900 text-white
+    <div className="absolute top-[-6] left-0 z-50 bg-black text-white
 overflow-y-auto transition-all duration-300">
       <aside className={`${collapsed ? "w-auto h-10 overflow-hidden" : "w-64 h-screen"}`}>
 

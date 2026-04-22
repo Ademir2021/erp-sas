@@ -21,16 +21,17 @@ const hr = <hr className="border-t-2 border-gray-800" />
     <nav className="px-2 py-1">
       <li className="flex font-black gap-2 mb-3">
         <span>BR</span>
-        <Image
+        <img
+        className='bg-white rounded-2xl'
           src="/globe.svg"
           alt="Logo"
           color='white'
-          width={26}
-          height={26}
-          title="BR"
+          width={28}
+          height={28}
+          title="Brasil(BR)"
         />
       </li>
-      <ul className="flex text-[12px] flex-col gap-3" >
+      <ul className="flex font-bold text-[14px] flex-col gap-3" >
         <li>
           <Link
             href="/dashboard"
