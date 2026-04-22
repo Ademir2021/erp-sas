@@ -1,7 +1,7 @@
 export default async function RootLayout() {
 
   function cards_1(card: string, description: string, button: string) {
-    return <div className="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
+    return <div className="bg-black p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
       <h2 className="text-xl font-semibold mb-3">{card}</h2>
       <p className="text-gray-400">
         {description}
@@ -27,15 +27,14 @@ export default async function RootLayout() {
     <div className="flex bg-transparent text-white">
       <main
         className="min-h-screen flex flex-col max-w-7xl w-full
-mx-auto items-center justify-center
-text-white px-4 py-10 bg-cover bg-center"
+mx-auto items-center justify-center px-4 py-10 bg-cover bg-center mt-12"
         style={{ backgroundImage: "url('/bg/bg-home.jpg')" }}>
         {/* Título */}
         <div className="text-center mb-10 max-w-2xl">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
             Soluções e segurança para sua Empresa ou Negôcio.
           </h1>
-          <p className="text-gray-300 text-lg">
+          <p className="text-white text-lg">
             Mais segurança, mais eficiência e mais produtividade para o seu negócio. Conheça nossas soluções e serviços personalizados para atender às suas necessidades específicas.
           </p>
         </div>

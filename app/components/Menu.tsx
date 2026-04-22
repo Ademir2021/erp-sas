@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { userAuth } from '../lib/userAuth'
 import ShowForm from './ShowForm'
 import { useState } from 'react'
@@ -11,6 +10,7 @@ type Props = {
 export default function Menu({ setCollapsed }: Props) {
 
   const [showForm, setShowForm] = useState(false)
+  
   const { isAdmin, isUser } = userAuth()
 
   const styles_links = "block px-1 py-2  rounded-lg hover:bg-gray-800 hover:text-gray-100  transition duration-200"

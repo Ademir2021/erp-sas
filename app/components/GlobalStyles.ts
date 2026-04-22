@@ -10,7 +10,7 @@ export const globalStyles_thead_list = "bg-gray-500"
 export const globalStyles_btn_list = "px-2 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
 export const globalStyles_form = "max-w-7xl mx-auto bg-gray-800/50 p-8 rounded-2xl shadow-lg"
 
-export const globalsStyles_login_div = "min-h-screen bg-transparent flex items-center justify-center p-4"
+export const globalsStyles_login_div = "min-h-screen bg-transparent flex items-center justify-center p-4 mt-10"
 export const globalsStyles_login_main = "w-full max-w-4xl bg-black/60 rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row"
 export const globalsStyles_login_div_left = "md:w-1/2  text-white flex flex-col justify-center p-8 space-y-6"
 export const globalsStyles_login_div_hight = "md:w-1/2 p-8"

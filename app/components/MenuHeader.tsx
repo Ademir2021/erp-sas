@@ -11,7 +11,7 @@ export default function MenuHeader() {
   const { user } = userAuth() as any
 
   return (
-          <header className="flex items-center justify-between
+          <header className="flex fixed items-center justify-between
     w-full z-50 bg-black text-white
     shadow-md px-4 md:px-8 py-2">
 
