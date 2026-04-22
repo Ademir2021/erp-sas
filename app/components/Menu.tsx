@@ -45,16 +45,16 @@ const hr = <hr className="border-t-2 border-gray-800" />
             setShowForm={setShowForm}
           />{<a href='##' onClick={()=>(setShowForm(prev => !prev))}>CADASTROS</a>}</div>{hr}</>} {showForm && <>
               <li> <Link
-                href="/brand"
+                href="/generic"
                 className={styles_links}
                   onClick={() => setCollapsed(prev => !prev)}
-              >MARCAS</Link>
+              >ARQUIVOS</Link>
               </li>{hr}
                <li> <Link
-                href="/brand"
+                href="##"
                 className={styles_links}
                   onClick={() => setCollapsed(prev => !prev)}
-              >SUBGRUPOS</Link>
+              >OUTROS</Link>
               </li>{hr}
               </>}
         {isUser && <><li>
