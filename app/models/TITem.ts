@@ -20,7 +20,7 @@ export type TBrand = {
     name: string
 }
 
-type Tgroup = {
+export type Tgroup = {
     id: number
     name: string
 }
