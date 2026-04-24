@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
 
     const generic: TGeneric = await request.json()
+    console.log(generic)
     const token = await loadToken();
 
     const { searchParams } = new URL(request.url)
@@ -53,6 +54,7 @@ export async function PUT(request: Request) {
     const url_generic = genericDefined?.slice(0, -1)
 
     const generic: TGeneric = await request.json()
+    console.log(generic)
 
     const token = await loadToken();
 

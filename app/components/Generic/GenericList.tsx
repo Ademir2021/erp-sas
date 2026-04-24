@@ -36,8 +36,15 @@ export default function GenericList({ generics,
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>
                         <th className={`${globalStyles_th} text-left`}>Descrição</th>
-                        {genericDefined === 'subgroups' && <><th className={`${globalStyles_th} text-left`}>IDGrupo</th>
-                            <th className={`${globalStyles_th} text-left`}>Grupo</th></>}
+
+                        {genericDefined === 'subgroups' && <th className={`${globalStyles_th} text-left`}>IDGrupo</th>}
+                        {genericDefined === 'subgroups' && <th className={`${globalStyles_th} text-left`}>Grupo</th>}
+
+                        {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>Acronimo</th>}
+                        {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>DDI</th>}
+                        {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>C País</th>}
+                        {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>C Rec Federal</th>}
+
                         <th className={`${globalStyles_th} text-center`}>Ações</th>
                     </tr>
                 </thead>
@@ -46,8 +53,15 @@ export default function GenericList({ generics,
                         <tr key={g.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{g.id}</td>
                             <td className={`${globalStyles_td} text-left`}>{g.name}</td>
-                            {genericDefined === 'subgroups' && <><td className={`${globalStyles_td} text-left`}>{g.group?.id}</td>
-                                <td className={`${globalStyles_td} text-left`}>{g.group?.name}</td></>}
+
+                            {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.id}</td>}
+                            {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.name}</td>}
+
+                            {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.acronym}</td>}
+                            {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.ddi}</td>}
+                            {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.codeCountry}</td>}
+                            {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.codeRevenue}</td>}
+
                             <td className={`${globalStyles_td} text-center`}><a href="#up-generic"
                                 onClick={() => updateList(g)}
                                 className={globalStyles_btn_list}

@@ -10,7 +10,7 @@ import { TPerson, Gender, TypePerson, TGroupPerson } from "@/app/models/TPerson"
 import { TZipCode } from "@/app/models/TAddress"
 import { PersonList } from "./PersonList"
 import ShowForm from "../ShowForm"
-import { globalStyles_form } from "../GlobalStyles"
+import { globalStyles_form, globalStyles_select } from "../GlobalStyles"
 
 type FormData = z.infer<typeof cadastroSchema>
 
@@ -139,7 +139,7 @@ ${step === index + 1 ? "text-blue-600" : "text-gray-400"}`}>
         <div>{"ID:" + String(children.id).padStart(9, '0') + " - " + children.name} </div> </> :
         <p className=" font-bold">Novo Registro</p>}
       {step === 1 && <>  <label>Grupo da Pessoa</label>
-        <select className="w-full p-3 border mb-8 bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+        <select className={`${globalStyles_select} mb-3`}
           value={children.groupPerson.id || ''}
           name="id"
           onChange={(e) => setChildren({
@@ -223,7 +223,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             {dateOfBirt(children, handleChange)}
 
             <label>Gênero: {children.gender}</label>
-            <select className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            <select className={globalStyles_select}
               value={children.gender || ''}
               name="gender"
               onChange={(e) => setChildren({
@@ -393,7 +393,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
           />
           <label>Cep de sua cidade</label>
           <select
-            className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className={globalStyles_select}
             value={children.address.zipCode?.id || ""}
             name="id"
             onChange={(e) =>

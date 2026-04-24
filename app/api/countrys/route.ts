@@ -11,7 +11,7 @@ export async function GET(request: Request) {
             )
         }
         const token = authHeader.replace("Bearer ", "")
-        const response = await fetch(`${API_URL}/itemsclasses`, {
+        const response = await fetch(`${API_URL}/countrys`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
         })
         if (!response.ok) {
             return NextResponse.json(
-                { error: "Erro ao buscar Grupo de Tributação dos Items" },
+                { error: "Erro ao buscar País" },
                 { status: response.status }
             )
         }
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
         return NextResponse.json(data)
 
     } catch (error) {
-        console.error("Erro na API /items_classes:", error)
+        console.error("Erro na API /countrys:", error)
         return NextResponse.json(
             { error: "Erro interno ao buscar dados" },
             { status: 500 }

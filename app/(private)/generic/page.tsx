@@ -13,7 +13,11 @@ function useGenericState<T>() {
     const [generic, setGeneric] = useState<TGeneric>({
         id: 0,
         name: '',
-        group: { id: 0, name: '' }
+        group: { id: 0, name: '' },
+        acronym: '',
+        ddi: '',
+        codeCountry: '',
+        codeRevenue: ''
     });
     const [generics, setGenerics] = useState<TGeneric[]>([])
 
@@ -115,7 +119,7 @@ export default function Generics() {
 
     return (
         <>
-            {/* <p>{JSON.stringify(generic)}</p> */}
+            <p>{JSON.stringify(generic)}</p>
             <GenericsForm
                 setGenericDefined={setGenericDefined}
                 handleChange={handleChange}

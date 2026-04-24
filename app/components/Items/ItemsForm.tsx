@@ -2,7 +2,7 @@ import { TItem, TBrand, TsubGroup, TTaxGroup, TTypeItem, TItemClass, TUnitMeasur
 import ItemsList from "./ItemsList"
 import { useState } from "react"
 import ShowForm from "../ShowForm"
-import { globalStyles_form } from "../GlobalStyles"
+import { globalStyles_form, globalStyles_select } from "../GlobalStyles"
 
 type Props = {
     children: TItem
@@ -82,7 +82,7 @@ export default function ItemsForm({
                 />
                 <label>Marcas dos Items</label>
                 <select
-                    className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className={globalStyles_select}
                     value={children.brand.id || ''}
                     name="id"
                     onChange={(e) => setChildren({
@@ -104,7 +104,7 @@ export default function ItemsForm({
 
                 <label>SubGrupos dos Items</label>
                 <select
-                    className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className={globalStyles_select}
                     value={children.subGroup.id || ''}
                     name="id"
                     onChange={(e) => setChildren({
@@ -125,7 +125,7 @@ export default function ItemsForm({
                 </select>
                 <label>Tabelas de Tributações dos Items</label>
                 <select
-                    className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className={globalStyles_select}
                     value={children.taxGroup.id || ''}
                     name="id"
                     onChange={(e) => setChildren({
@@ -147,7 +147,7 @@ export default function ItemsForm({
 
                 <label>Tipos dos Items</label>
                 <select
-                    className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className={globalStyles_select}
                     value={children.typeItem.id || ''}
                     name="id"
                     onChange={(e) => setChildren({
@@ -169,7 +169,7 @@ export default function ItemsForm({
 
                 <label>Classes dos Items</label>
                 <select
-                    className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className={globalStyles_select}
                     value={children.itemClass.id || ''}
                     name="id"
                     onChange={(e) => setChildren({
@@ -191,7 +191,7 @@ export default function ItemsForm({
 
                 <label>Unidades de medidas dos Items</label>
                 <select
-                    className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className={globalStyles_select}
                     value={children.unitMeasure.id || ''}
                     name="id"
                     onChange={(e) => setChildren({

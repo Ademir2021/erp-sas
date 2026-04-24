@@ -22,6 +22,7 @@ export default function GenericForm({
 
     const genericMap: Record<string, string> = {
         brands: 'Marca',
+        itemsclasses: 'Classe',
         subgroups: 'SubGrupo',
         groups: 'Grupo',
         countrys: 'País',
@@ -39,7 +40,7 @@ export default function GenericForm({
             <div className={`${globalStyles_form} max-w-xl mx-auto`}>
                 {children.id != 0 ? <> <b>Atualizar Registro</b>
                     <div>{"ID:" + String(children.id).padStart(9, '0') + " - "
-                    + children.name} </div> </> :
+                        + children.name} </div> </> :
                     <p className="font-bold mb-3">Novo Registro</p>}
                 <label >Selecionar O Tipo de Registro</label>
                 <select className={globalStyles_select}
@@ -48,6 +49,7 @@ export default function GenericForm({
                 >
                     <option disabled value="">Selecione o Registro</option>
                     <option value={'brands'}>Marcas</option>
+                    <option value={'itemsclasses'}>Classes</option>
                     <option value={'groups'}>Grupos</option>
                     <option value={'subgroups'}>SubGrupos</option>
                     <option className="bg-white" disabled value="" >
@@ -58,6 +60,7 @@ export default function GenericForm({
                     <option value={'zipcodes'}>Ceps</option>
                     <option value={''} ></option>
                 </select>
+
                 {genericDefined === 'subgroups' && <> <label>Selecionar o Grupo</label>
                     <select className={globalStyles_select}
                         value={children.group?.id || ''}
@@ -73,7 +76,9 @@ export default function GenericForm({
                             <option key={g.id} value={g.id} >{g.id} - {g.name}</option>
                         ))}
                     </select></>}
+
                 <form className="space-y-6 mt-10">
+
                     <input className="w-full p-3 border rounded-lg"
                         type="text"
                         name='name'
@@ -81,6 +86,36 @@ export default function GenericForm({
                         onChange={handleChange}
                         placeholder={genericDefined && `Digite a Descrição do(a) ${loadGenericDefined()}` || 'Descrição do Registro'}
                     />
+
+                    {genericDefined === 'countrys' && <input className="w-full p-3 border rounded-lg"
+                        type="text"
+                        name='acronym'
+                        value={children.acronym || "" as any}
+                        onChange={handleChange}
+                        placeholder='Digite o Acronico do País'
+                    />}
+                    {genericDefined === 'countrys' && <input className="w-full p-3 border rounded-lg"
+                        type="text"
+                        name='ddi'
+                        value={children.ddi || "" as any}
+                        onChange={handleChange}
+                        placeholder='Digite o DDI do País'
+                    />}
+                        {genericDefined === 'countrys' && <input className="w-full p-3 border rounded-lg"
+                        type="text"
+                        name='codeRevenue'
+                        value={children.codeRevenue || "" as any}
+                        onChange={handleChange}
+                        placeholder='Digite o código da Receita Federal'
+                    />}
+                        {genericDefined === 'countrys' && <input className="w-full p-3 border rounded-lg"
+                        type="text"
+                        name='codeCountry'
+                        value={children.codeCountry || "" as any}
+                        onChange={handleChange}
+                        placeholder='Digite o código do País'
+                    />}
+
                     <p className="text-gray-300 ">{msg && msg}</p>
                     <a className="px-4 py-2 cursor-pointer bg-green-600 text-white rounded-lg"
                         href="#up-generic"
