@@ -52,7 +52,7 @@ export default function GenericForm({
                 </select>
                 {genericDefined === 'subgroups' && <> <label>Selecionar o Grupo</label>
                     <select className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        value={children.group as any || ''}
+                        value={children.group.id || ''}
                         onChange={(e) => {
                              const selected = groups.find(g => g.id === Number(e.target.value))
                             setGeneric({
