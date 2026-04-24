@@ -14,7 +14,7 @@ export default function Sidebar() {
   return (
     <div className="fixed top-[-6] left-0 z-50 bg-black text-white
 overflow-y-auto transition-all duration-300">
-      <aside className={`${collapsed ? "w-auto h-10 overflow-hidden" : "w-64 h-screen"}`}>
+      <aside className={`${collapsed ? "w-auto h-10 bg-gray-800 overflow-hidden" : "w-64 h-screen"}`}>
 
         <button onClick={() => setCollapsed(!collapsed)}>
           <div className="cursor-pointer border:0px p-4">{collapsed ? <b>☰</b> : <b>X</b>}</div>

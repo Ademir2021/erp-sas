@@ -46,7 +46,6 @@ export default function Generics() {
     }, [genericDefined])
 
     useEffect(() => {
-        setGroups([]) // limpa os Grupos
         const token = user?.token as string
         if (genericDefined !== "")
             loadHandle(token, setGenerics, genericDefined, router)

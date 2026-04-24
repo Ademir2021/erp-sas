@@ -15,4 +15,4 @@ export const globalsStyles_login_main = "w-full max-w-4xl bg-black/60 rounded-2x
 export const globalsStyles_login_div_left = "md:w-1/2  text-white flex flex-col justify-center p-8 space-y-6"
 export const globalsStyles_login_div_hight = "md:w-1/2 p-8"
 export const globalsStyles_login_input = "w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-export const globalsStyles_login_btn = "mt-6 w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+export const globalsStyles_login_btn = "mt-4 cursor-pointer w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
