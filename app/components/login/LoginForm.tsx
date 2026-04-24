@@ -2,7 +2,7 @@
 import { TLogin } from "@/app/models/TUser"
 import Link from "next/link"
 import Logo from "../Logo"
-import { globalsStyles_login_btn, globalsStyles_login_div, globalsStyles_login_div_hight, globalsStyles_login_div_left, globalsStyles_login_input, globalsStyles_login_main } from "../GlobalStyles"
+import { globalStyles_login_btn, globalStyles_login_div, globalStyles_login_div_hight, globalStyles_login_div_left, globalStyles_login_input, globalStyles_login_main } from "../GlobalStyles"
 
 type Props = {
     children: TLogin
@@ -18,17 +18,17 @@ export default function LoginForm({
     handleChange,
     error, msg }: Props) {
     return (
-        <div className={`${globalsStyles_login_div}`}>
-            <main className={`${globalsStyles_login_main}`}>
+        <div className={`${globalStyles_login_div}`}>
+            <main className={`${globalStyles_login_main}`}>
                 {/* Lateral Esquerdo*/}
-                <div className={`${globalsStyles_login_div_left}`}>
+                <div className={`${globalStyles_login_div_left}`}>
                     <div className="text-center text-blue-400"><Logo /></div>
                     <p className="font-normal  text-lg ml-12">Entre com sua Conta!</p>
                     <span className="text-center">Gerencie a gestão de sua Empresa com a <br />
                         segurança que só o ERP-SAS te oferece.</span>
                 </div>
 
-                <div className={`${globalsStyles_login_div_hight}`}>
+                <div className={`${globalStyles_login_div_hight}`}>
                     <p className="flex justify-center text-gray-300 font-bold text-2xl p-1 mb-6">Sign in.</p>
                     <form onSubmit={handleLogin} className="space-y-4 ">
                         <input
@@ -38,7 +38,7 @@ export default function LoginForm({
                             value={children.login}
                             required
                             onChange={handleChange}
-                            className={`${globalsStyles_login_input}`}
+                            className={`${globalStyles_login_input}`}
                         />
                         <input
                             type="password"
@@ -47,14 +47,14 @@ export default function LoginForm({
                             value={children.password}
                             required
                             onChange={handleChange}
-                            className={`${globalsStyles_login_input}`}
+                            className={`${globalStyles_login_input}`}
                         />
                         {(error || msg) && (<p className={`text-sm text-center
                 ${error ? "text-red-600" : "text-blue-700"}`}>
                             {error || msg}</p>
                         )}
                         <button type="submit"
-                            className={`${globalsStyles_login_btn}`}>
+                            className={`${globalStyles_login_btn}`}>
                             Entrar</button>
                     </form>
 

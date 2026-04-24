@@ -1,5 +1,5 @@
 import { TGeneric } from "@/app/models/TGeneric";
-import { globalStyles_form } from "../GlobalStyles";
+import { globalStyles_form, globalStyles_select } from "../GlobalStyles";
 import GenericList from "./GenericList";
 import { Tgroup } from "@/app/models/TItem";
 
@@ -20,43 +20,51 @@ export default function GenericForm({
     genericDefined, generics, setGeneric,
     handleSubmit, msg, groups }: Props) {
 
-    function loadGenericDefined() {
-        if (genericDefined === 'brands')
-            return 'Marca'
-        else if (genericDefined === 'subgroups')
-            return 'SubGrupo'
-        else if (genericDefined === 'groups')
-            return 'Grupo'
+    const genericMap: Record<string, string> = {
+        brands: 'Marca',
+        subgroups: 'SubGrupo',
+        groups: 'Grupo',
+        countrys: 'País',
+        states: 'Estado',
+        cities: 'Cidade',
+        zipcodes: 'CEP'
     }
+
+    function loadGenericDefined() {
+        return genericMap[genericDefined] || ''
+    }
+
     return (
         <div id="up-generic">
             <div className={`${globalStyles_form} max-w-xl mx-auto`}>
                 {children.id != 0 ? <> <b>Atualizar Registro</b>
-                    <div>{"ID:" + String(children.id).padStart(9, '0') + " - " + children.name} </div> </> :
+                    <div>{"ID:" + String(children.id).padStart(9, '0') + " - "
+                    + children.name} </div> </> :
                     <p className="font-bold mb-3">Novo Registro</p>}
                 <label >Selecionar O Tipo de Registro</label>
-                <select className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                <select className={globalStyles_select}
                     value={genericDefined || ""}
                     onChange={(e) => setGenericDefined(e.target.value)}
                 >
                     <option disabled value="">Selecione o Registro</option>
-                    <option value={'brands'} >Marcas</option>
-                    <option value={'groups'} >Grupos</option>
-                    <option value={'subgroups'} >SubGrupos</option>
-                    <option className="bg-white" disabled value="" >---------</option>
-                    <option value={''} >Cidades</option>
-                    <option value={''} >CEPs</option>
-                    <option value={''} ></option>
-                    <option value={''} ></option>
+                    <option value={'brands'}>Marcas</option>
+                    <option value={'groups'}>Grupos</option>
+                    <option value={'subgroups'}>SubGrupos</option>
+                    <option className="bg-white" disabled value="" >
+                        Dados de Localização ...</option>
+                    <option value={'countrys'}>Países</option>
+                    <option value={'states'}>Estados</option>
+                    <option value={'cities'}>Cidades</option>
+                    <option value={'zipcodes'}>Ceps</option>
                     <option value={''} ></option>
                 </select>
                 {genericDefined === 'subgroups' && <> <label>Selecionar o Grupo</label>
-                    <select className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        value={children.group.id || ''}
+                    <select className={globalStyles_select}
+                        value={children.group?.id || ''}
                         onChange={(e) => {
-                             const selected = groups.find(g => g.id === Number(e.target.value))
+                            const selected = groups.find(g => g.id === Number(e.target.value))
                             setGeneric({
-                                ...children, group:  selected as any
+                                ...children, group: selected as any
                             })
                         }}
                     >

@@ -51,10 +51,8 @@ export async function PUT(request: Request) {
     const { searchParams } = new URL(request.url)
     const genericDefined = searchParams.get("name")
     const url_generic = genericDefined?.slice(0, -1)
-    console.log(url_generic)
 
     const generic: TGeneric = await request.json()
-    console.log(generic)
 
     const token = await loadToken();
 
