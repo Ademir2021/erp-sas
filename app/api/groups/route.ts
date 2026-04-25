@@ -7,9 +7,8 @@ export async function GET(request: Request) {
         if (!authHeader) {
             return NextResponse.json(
                 { error: "Token não informado" },
-                { status: 401 }
-            )
-        }
+                { status: 401 })
+        };
         const token = authHeader.replace("Bearer ", "")
         const response = await fetch(`${API_URL}/groups`, {
             method: "GET",
@@ -17,21 +16,18 @@ export async function GET(request: Request) {
                 Authorization: `Bearer ${token}`
             },
             cache: "no-store",
-        })
+        });
         if (!response.ok) {
             return NextResponse.json(
                 { error: "Erro ao buscar grupo dos Items" },
-                { status: response.status }
-            )
-        }
+                { status: response.status })
+        };
         const data = await response.json()
         return NextResponse.json(data)
-
     } catch (error) {
         console.error("Erro na API /groups:", error)
         return NextResponse.json(
             { error: "Erro interno ao buscar dados" },
-            { status: 500 }
-        )
-    }
+            { status: 500 })
+    };
 }

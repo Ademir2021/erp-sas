@@ -28,7 +28,7 @@ type TState = {
     acronym:string // Ex: SP para São Paulo, RJ para Rio de Janeiro
 }
 
-type TCountry = { //País
+export type TCountry = { //País
     id:number
     name:string
     acronym:string // Ex: BR, US, PT
