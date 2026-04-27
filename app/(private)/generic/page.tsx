@@ -131,12 +131,13 @@ export default function Generics() {
             if (generic.group?.id === 0) missing.push('ID do Grupo');
         };
         if (genericDefined === 'countrys') {
+              if (generic?.acronym === "") missing.push('Acrônimo');
             if (generic.codeCountry === '') missing.push('DDI');
             if (generic.codeCountry === '') missing.push('Code Receita Federal');
             if (generic.codeCountry === '') missing.push('Code País');
         };
         if (genericDefined === 'states') {
-            if (generic.state.acronym === "") missing.push('Acrônimo');
+            if (generic?.acronym === "") missing.push('Acrônimo');
         };
         if (genericDefined === 'citys') {
             if (generic.codeIbge === "") missing.push('IBGE');

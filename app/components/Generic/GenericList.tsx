@@ -66,11 +66,12 @@ export default function GenericList({ generics,
                             {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.id}</td>}
                             {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.name}</td>}
 
-                            {(genericDefined === 'countrys'
-                                || genericDefined === 'states') && <td className={`${globalStyles_td} text-left`}>{g.acronym}</td>}
+                            {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.acronym}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.ddi}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.codeCountry}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.codeRevenue}</td>}
+
+                            {genericDefined === 'states' && <td className={`${globalStyles_td} text-left`}>{g.acronym}</td>}
 
                             {genericDefined === 'citys' && <td className={`${globalStyles_td} text-left`}>{g.codeIbge}</td>}
                             {genericDefined === 'citys' && <td className={`${globalStyles_td} text-left`}>{g.state?.acronym}</td>}
