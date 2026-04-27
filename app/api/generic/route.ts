@@ -6,27 +6,32 @@ import { NextResponse } from 'next/server'
 /**POST Generics */
 export async function POST(request: Request) {
     const generic: TGeneric = await request.json();
+  
     const token = await loadToken();
     const { searchParams } = new URL(request.url);
     const genericDefined = searchParams.get("name");
     const url_generic = genericDefined?.slice(0, -1);
-    if (!generic.name) {
-        return NextResponse.json(
-            { error: 'Favor preencher todos os campos' },
-            { status: 400 })
-    };
+
     if (!token.token) {
         return NextResponse.json(
             { error: 'Token não encontrado' },
             { status: 401 })
     };
+
+    const zipcode = {
+        id: generic.id,
+        code: generic.code,
+        city: generic.city
+    }
+    console.log(zipcode)
+
     const apiResponse = await fetch(`${API_URL}/${url_generic}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token.token}`
         },
-        body: JSON.stringify(generic)
+        body: JSON.stringify(zipcode.id !== 0 ? zipcode : generic)
     });
     const data = await apiResponse.json();
     if (!apiResponse.ok) {
@@ -38,6 +43,7 @@ export async function POST(request: Request) {
 /**PUT Generics */
 export async function PUT(request: Request) {
     const generic: TGeneric = await request.json();
+    console.log(generic)
     const token = await loadToken();
     const { searchParams } = new URL(request.url);
     const genericDefined = searchParams.get("name");
@@ -47,11 +53,7 @@ export async function PUT(request: Request) {
             { error: 'ID é obrigatório para atualização' },
             { status: 400 })
     };
-    if (!generic.name) {
-        return NextResponse.json(
-            { error: 'Favor preencher todos os campos' },
-            { status: 400 })
-    };
+
     if (!token.token) {
         return NextResponse.json(
             { error: 'Token não encontrado' },

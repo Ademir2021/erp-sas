@@ -11,7 +11,7 @@ export async function GET(request: Request) {
             )
         }
         const token = authHeader.replace("Bearer ", "")
-        const response = await fetch(`${API_URL}/unit_measures`, {
+        const response = await fetch(`${API_URL}/unitmeasures`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
         return NextResponse.json(data)
 
     } catch (error) {
-        console.error("Erro na API /unit_measures:", error)
+        console.error("Erro na API /unitmeasures:", error)
         return NextResponse.json(
             { error: "Erro interno ao buscar dados" },
             { status: 500 }

@@ -35,15 +35,24 @@ export default function GenericList({ generics,
                 <thead className={globalStyles_thead_list}>
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>
-                        <th className={`${globalStyles_th} text-left`}>Descrição</th>
+                        <th className={`${globalStyles_th} text-left`}>{genericDefined !== 'zipcodes' ? 'Descrição' : "CEP"}</th>
 
                         {genericDefined === 'subgroups' && <th className={`${globalStyles_th} text-left`}>IDGrupo</th>}
                         {genericDefined === 'subgroups' && <th className={`${globalStyles_th} text-left`}>Grupo</th>}
 
-                        {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>Acronimo</th>}
+                        {genericDefined === "countrys"
+                            || genericDefined === 'states' && <th className={`${globalStyles_th} text-left`}>Acronimo</th>}
                         {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>DDI</th>}
                         {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>C País</th>}
                         {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>C Rec Federal</th>}
+
+                        {genericDefined === 'citys' && <th className={`${globalStyles_th} text-left`}>IBGE</th>}
+                        {genericDefined === 'citys' && <th className={`${globalStyles_th} text-left`}>Estado</th>}
+                        {genericDefined === 'citys' && <th className={`${globalStyles_th} text-left`}>País</th>}
+
+                        {genericDefined === 'zipcodes' && <th className={`${globalStyles_th} text-left`}>IDMunic</th>}
+                        {genericDefined === 'zipcodes' && <th className={`${globalStyles_th} text-left`}>Munícipio</th>}
+                        {genericDefined === 'zipcodes' && <th className={`${globalStyles_th} text-left`}>Estado</th>}
 
                         <th className={`${globalStyles_th} text-center`}>Ações</th>
                     </tr>
@@ -52,15 +61,25 @@ export default function GenericList({ generics,
                     {currentItems.map((g: TGeneric) => (
                         <tr key={g.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{g.id}</td>
-                            <td className={`${globalStyles_td} text-left`}>{g.name}</td>
+                            <td className={`${globalStyles_td} text-left`}>{genericDefined !== 'zipcodes'? g.name : g.code}</td>
 
                             {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.id}</td>}
                             {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.name}</td>}
 
-                            {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.acronym}</td>}
+                            {genericDefined === 'countrys'
+                                || genericDefined === 'states' && <td className={`${globalStyles_td} text-left`}>{g.acronym}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.ddi}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.codeCountry}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.codeRevenue}</td>}
+
+                            {genericDefined === 'citys' && <td className={`${globalStyles_td} text-left`}>{g.codeIbge}</td>}
+                            {genericDefined === 'citys' && <td className={`${globalStyles_td} text-left`}>{g.state?.acronym}</td>}
+                            {genericDefined === 'citys' && <td className={`${globalStyles_td} text-left`}>{g.country?.acronym}</td>}
+
+                            {genericDefined === 'zipcodes' && <td className={`${globalStyles_td} text-left`}>{g.city?.id}</td>}
+                            {genericDefined === 'zipcodes' && <td className={`${globalStyles_td} text-left`}>{g.city?.name}</td>}
+                            {genericDefined === 'zipcodes' && <td className={`${globalStyles_td} text-left`}>{g.city?.state.acronym}</td>}
+
 
                             <td className={`${globalStyles_td} text-center`}><a href="#up-generic"
                                 onClick={() => updateList(g)}

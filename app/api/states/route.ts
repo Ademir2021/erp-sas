@@ -11,7 +11,7 @@ export async function GET(request: Request) {
             )
         }
         const token = authHeader.replace("Bearer ", "")
-        const response = await fetch(`${API_URL}/typeitems`, {
+        const response = await fetch(`${API_URL}/states`, {
             method: "GET",
             headers: {
                 Authorization: `Bearer ${token}`
@@ -20,7 +20,7 @@ export async function GET(request: Request) {
         })
         if (!response.ok) {
             return NextResponse.json(
-                { error: "Erro ao buscar Grupo de Tributação dos Items" },
+                { error: "Erro ao buscar Estado" },
                 { status: response.status }
             )
         }
@@ -28,9 +28,9 @@ export async function GET(request: Request) {
         return NextResponse.json(data)
 
     } catch (error) {
-        console.error("Erro na API /typeitems:", error)
+        console.error("Erro na API /states:", error)
         return NextResponse.json(
-            { error: "Erro interno ao buscar dados" },
+            { error: "Erro interno ao buscar Estado" },
             { status: 500 }
         )
     }

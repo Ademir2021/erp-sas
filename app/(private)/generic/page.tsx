@@ -8,17 +8,23 @@ import { loadHandle } from "@/app/lib/handleApi";
 import { TGeneric } from "@/app/models/TGeneric";
 import { TResponseMessage } from "@/app/models/TMessage";
 import { Tgroup } from "@/app/models/TItem";
-import { TCountry } from "@/app/models/TAddress";
+import { TCity, TCountry, TState } from "@/app/models/TAddress";
 
 function useGenericState<T>() {
     const [generic, setGeneric] = useState<TGeneric>({
         id: 0,
         name: '',
+        code: '',
         group: { id: 0, name: '' },
         acronym: '',
         ddi: '',
         codeCountry: '',
-        codeRevenue: ''
+        codeRevenue: '',
+        codeIbge: '',
+        country: { id: 0, name: '', acronym: '', ddi: '', codeCountry: '', codeRevenue: '' } as any,
+        state: { id: 0, name: "", acronym: "" },
+        city: { id: 0, name: '' } as any,
+        zipcode: { id: 0, code: '' }
     });
     const [generics, setGenerics] = useState<TGeneric[]>([])
     return { generic, setGeneric, generics, setGenerics }
@@ -35,16 +41,32 @@ export default function Generics() {
     const [genericDefined, setGenericDefined] = useState<string>("");
     const [groups, setGroups] = useState<Tgroup[]>([])
     const [countrys, setCountrys] = useState<TCountry[]>([]);
+    const [states, setStates] = useState<TState[]>([])
+    const [citys, setCitys] = useState<TCity[]>([])
     const handleChange = (e: any) => {
         const { name, value } = e.target
         setGeneric({ ...generic, [name]: value })
     };
 
     useEffect(() => {
+        const token = user?.token as string
+        if (genericDefined === 'zipcodes')
+            loadHandle(token, setCitys, 'citys', router)
+    }, [genericDefined, user, router])
+
+    useEffect(() => {
+        const token = user?.token as string;
+        if (genericDefined === "cities")
+            loadHandle(token, setCountrys, 'countrys', router);
+        loadHandle(token, setStates, 'states', router);
+
+    }, [genericDefined, user, router])
+
+    useEffect(() => {
         const token = user?.token as string;
         const config = {
             subgroups: { setter: setGroups, key: 'groups' },
-            citys: { setter: setCountrys, key: 'countrys' }
+            citys: { setter: setCountrys, key: 'countrys' },
         };
         const current = config[genericDefined as keyof typeof config];
         if (current) {
@@ -52,7 +74,7 @@ export default function Generics() {
         }
     }, [genericDefined, user, router]);
 
-  
+
     useEffect(() => {
         if (!user?.token || !genericDefined) return;
         loadHandle(user.token, setGenerics, genericDefined, router);
@@ -99,10 +121,28 @@ export default function Generics() {
     function valFields(generic: TGeneric) {
         const missing: string[] = [];
         if (genericDefined === "") missing.push("Tipo de Registro !!")
-        if (generic.name === "") missing.push('Nome');
+        if (genericDefined !== "zipcodes") {
+            if (generic.name === "") missing.push('Descrição');
+        } else {
+            if (generic.code === "") missing.push('CEP');
+            if (generic.city.id === 0) missing.push('Município');
+        };
         if (genericDefined === 'subgroups') {
             if (generic.group?.id === 0) missing.push('ID do Grupo');
-        }
+        };
+        if (genericDefined === 'countrys') {
+            if (generic.codeCountry === '') missing.push('DDI');
+            if (generic.codeCountry === '') missing.push('Code Receita Federal');
+            if (generic.codeCountry === '') missing.push('Code País');
+        };
+        if (genericDefined === 'states') {
+            if (generic.state.acronym === "") missing.push('Acrônimo');
+        };
+        if (genericDefined === 'citys') {
+            if (generic.codeIbge === "") missing.push('IBGE');
+            if (generic.state.id === 0) missing.push('Estado');
+            if (generic.country.id === 0) missing.push('País');
+        };
         if (missing.length === 0) {
             return true;
         }
@@ -122,7 +162,6 @@ export default function Generics() {
 
     return (
         <>
-            <p>{JSON.stringify(countrys)}</p>
             <GenericsForm
                 setGenericDefined={setGenericDefined}
                 handleChange={handleChange}
@@ -132,6 +171,9 @@ export default function Generics() {
                 handleSubmit={handleSubmit}
                 msg={msg}
                 groups={groups}
+                countrys={countrys}
+                states={states}
+                citys={citys}
             >
                 {generic}
             </GenericsForm>

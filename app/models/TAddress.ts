@@ -14,7 +14,7 @@ export type TZipCode = {
     city?:TCity
 }
 
-type TCity = {
+export type TCity = {
     id:number
     name:string
     codeIbge:string
@@ -22,7 +22,7 @@ type TCity = {
     country: TCountry
 }
 
-type TState = {
+export type TState = {
     id:number
     name:string
     acronym:string // Ex: SP para São Paulo, RJ para Rio de Janeiro
