@@ -40,8 +40,8 @@ export default function GenericList({ generics,
                         {genericDefined === 'subgroups' && <th className={`${globalStyles_th} text-left`}>IDGrupo</th>}
                         {genericDefined === 'subgroups' && <th className={`${globalStyles_th} text-left`}>Grupo</th>}
 
-                        {genericDefined === "countrys"
-                            || genericDefined === 'states' && <th className={`${globalStyles_th} text-left`}>Acronimo</th>}
+                        {(genericDefined === "countrys"
+                            || genericDefined === 'states') && <th className={`${globalStyles_th} text-left`}>Acronimo</th>}
                         {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>DDI</th>}
                         {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>C País</th>}
                         {genericDefined === "countrys" && <th className={`${globalStyles_th} text-left`}>C Rec Federal</th>}
@@ -66,8 +66,8 @@ export default function GenericList({ generics,
                             {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.id}</td>}
                             {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.name}</td>}
 
-                            {genericDefined === 'countrys'
-                                || genericDefined === 'states' && <td className={`${globalStyles_td} text-left`}>{g.acronym}</td>}
+                            {(genericDefined === 'countrys'
+                                || genericDefined === 'states') && <td className={`${globalStyles_td} text-left`}>{g.acronym}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.ddi}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.codeCountry}</td>}
                             {genericDefined === 'countrys' && <td className={`${globalStyles_td} text-left`}>{g.codeRevenue}</td>}

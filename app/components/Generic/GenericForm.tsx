@@ -150,7 +150,7 @@ export default function GenericForm({
                         placeholder={genericDefined && `Digite a Descrição do(a) ${loadGenericDefined()}` || 'Descrição do Registro'}
                     />}
 
-                    {genericDefined === 'countrys' || genericDefined === 'states' && <input className="w-full p-3 border rounded-lg"
+                    {(genericDefined === 'countrys' || genericDefined === 'states') && <input className="w-full p-3 border rounded-lg"
                         type="text"
                         name='acronym'
                         value={children.acronym || "" as any}
