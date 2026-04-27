@@ -3,6 +3,8 @@ import { globalStyles_form, globalStyles_select } from "../GlobalStyles";
 import GenericList from "./GenericList";
 import { Tgroup } from "@/app/models/TItem";
 import { TCity, TCountry, TState } from "@/app/models/TAddress";
+import ShowForm from "../ShowForm";
+import { useState } from "react";
 
 type Props = {
     children: TGeneric
@@ -24,6 +26,9 @@ export default function GenericForm({
     genericDefined, generics, setGeneric,
     handleSubmit, msg, groups, states, countrys, citys }: Props) {
 
+    
+      const [showForm, setShowForm] = useState(false)
+
     const genericMap: Record<string, string> = {
         brands: 'Marca',
         itemsclasses: 'Classe',
@@ -41,9 +46,13 @@ export default function GenericForm({
         return genericMap[genericDefined] || ''
     }
 
-    return (
-        <div id="up-generic">
-            <div className={`${globalStyles_form} max-w-xl mx-auto`}>
+    return (<>
+        <ShowForm
+          showForm={showForm}
+          setShowForm={setShowForm}
+        />
+         <div id="up-generic">
+           {showForm && <div className={`${globalStyles_form} max-w-xl mx-auto`}>
                 {children.id != 0 ? <> <b>Atualizar Registro</b>
                     <div>{"ID:" + String(children.id).padStart(9, '0') + " - "
                         + (children.name ? children.name : children.code)} </div> </> :
@@ -196,7 +205,7 @@ export default function GenericForm({
                         {children.id === 0 ? "registrar" : "Atualizar"}
                     </a>
                 </form>
-            </div>
+            </div>}
 
             <GenericList
                 setGeneric={setGeneric}
@@ -204,5 +213,5 @@ export default function GenericForm({
                 genericDefined={genericDefined}
             />
         </div>
-    )
+    </>)
 }

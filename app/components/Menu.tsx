@@ -40,10 +40,11 @@ const hr = <hr className="border-t-2 border-gray-800" />
           >DASHBOARD</Link>
         </li>{hr}
         {isAdmin && <>
-          <div className='font-bold'><ShowForm
+        {<div><a href='##' onClick={()=>(setShowForm(prev => !prev))}>CADASTROS</a></div>}
+         <div className="flex justify-end absolute top-61 right-[30]"> <ShowForm
             showForm={showForm}
             setShowForm={setShowForm}
-          />{<a href='##' onClick={()=>(setShowForm(prev => !prev))}>CADASTROS</a>}</div>{hr}</>} {showForm && <>
+          /></div>{hr}</>} {showForm && <>
               <li> <Link
                 href="/generic"
                 className={styles_links}
@@ -54,7 +55,7 @@ const hr = <hr className="border-t-2 border-gray-800" />
                 href="##"
                 className={styles_links}
                   onClick={() => setCollapsed(prev => !prev)}
-              >OUTROS</Link>
+              >FILIAL</Link>
               </li>{hr}
               </>}
         {isUser && <><li>

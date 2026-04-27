@@ -48,6 +48,15 @@ export default function Generics() {
         setGeneric({ ...generic, [name]: value })
     };
 
+
+    useEffect(() => {
+        setGeneric({
+            ...generic,
+            id: 0,
+            name: ""
+        });
+    }, [genericDefined]);
+
     useEffect(() => {
         const token = user?.token as string
         if (genericDefined === 'zipcodes')
@@ -131,7 +140,7 @@ export default function Generics() {
             if (generic.group?.id === 0) missing.push('ID do Grupo');
         };
         if (genericDefined === 'countrys') {
-              if (generic?.acronym === "") missing.push('Acrônimo');
+            if (generic?.acronym === "") missing.push('Acrônimo');
             if (generic.codeCountry === '') missing.push('DDI');
             if (generic.codeCountry === '') missing.push('Code Receita Federal');
             if (generic.codeCountry === '') missing.push('Code País');
