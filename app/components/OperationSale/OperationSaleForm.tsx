@@ -8,14 +8,16 @@ import OperationSaleList from "./OperationSaleList"
 
 type Props = {
     children: TOperationSale
-    setChildren:Function
+    setChildren: Function
     handleChange: any
     operationSales: TOperationSale[]
+    handleSubmit: any
+    msg: string
 }
 
 
 export default function OperationSaleForm({ children, handleChange,
-    operationSales, setChildren }: Props) {
+    operationSales, setChildren, handleSubmit, msg }: Props) {
 
     const [showForm, setShowForm] = useState(false)
 
@@ -39,7 +41,7 @@ export default function OperationSaleForm({ children, handleChange,
                         placeholder='Digite a Descrição da Operação'
                     />
 
-                     <label >Selecionar a natureza da Operação : {children.defaultNature && `: ${children?.defaultNature}`}</label>
+                    <label >Selecionar a natureza da Operação: {children?.defaultNature}</label>
                     <select className={`${globalStyles_select} cursor-pointer`}
                         name="defaultNature"
                         value={children.defaultNature || ""}
@@ -50,8 +52,8 @@ export default function OperationSaleForm({ children, handleChange,
                         <option value={'Orcamento'}>Orçamento</option>
                     </select>
 
-                    
-                <label >Selecionar o Tipo: {children.type && `Selecionado: ${children?.type}`}</label>
+
+                    <label >Selecionar o Tipo: {children.type && `Selecionado: ${children?.type}`}</label>
                     <select className={`${globalStyles_select} cursor-pointer`}
                         name="type"
                         value={children.type || ""}
@@ -143,13 +145,30 @@ export default function OperationSaleForm({ children, handleChange,
                             />
                             É Retorno
                         </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                name='updateCost'
+                                checked={children.updateCost || false}
+                                onChange={handleChange}
+                            />
+                            Atualiza Custo
+                        </label>
                     </div>
+                    <p className="text-gray-300 ">{msg && msg}</p>
+                    <a className="px-4 py-2 cursor-pointer bg-green-600 text-white rounded-lg"
+                        href="#up-generic"
+                        type="submit"
+                        onClick={handleSubmit}
+                    >
+                        {children.id === 0 ? "registrar" : "Atualizar"}
+                    </a>
                 </form>
             </div>}
         </div>
         <OperationSaleList
-        operationSales={operationSales}
-        setChildren={setChildren}
+            operationSales={operationSales}
+            setChildren={setChildren}
         />
     </>
     )

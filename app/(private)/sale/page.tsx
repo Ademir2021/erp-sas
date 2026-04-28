@@ -75,8 +75,8 @@ export default function Sales() {
         operationSale: {
             id: 0, description: '', type: "", controlsStock: false,
             generateFinancial: false, allowDiscount: false, updateCost: false,
-            requiresInvoice: false, isReturn: false, cfop: '', defaultNature: '',
-            active: true
+            finalConsumer: true, requiresInvoice: false,
+            isReturn: false, cfop: '', defaultNature: '', active: true
         },
         accountsReceivable: []
     });

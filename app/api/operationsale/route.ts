@@ -1,5 +1,76 @@
 import { NextResponse } from "next/server"
 import { API_URL } from "@/app/lib/auth"
+import { loadToken } from '@/app/lib/endPoint'
+import { TOperationSale } from "@/app/models/TSale"
+
+
+export async function POST(request: Request) {
+    const token = await loadToken()
+    const operation: TOperationSale = await request.json()
+
+    if (!operation.description) {
+        return NextResponse.json(
+            { error: 'Favor preencher todos os campos' },
+            { status: 400 }
+        )
+    }
+    if (!token.token) {
+        return NextResponse.json(
+            { error: 'Token não encontrado' },
+            { status: 401 }
+        )
+    }
+    const apiResponse = await fetch(`${API_URL}/operationsale`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.token}`
+        },
+        body: JSON.stringify(operation)
+    })
+    const data = await apiResponse.json()
+    if (!apiResponse.ok) {
+        return NextResponse.json(data, { status: apiResponse.status })
+    }
+    return NextResponse.json({ success: true })
+};
+
+export async function PUT(request: Request) {
+    const token = await loadToken()
+    const operation: TOperationSale = await request.json()
+
+    if (!operation.id) {
+        return NextResponse.json(
+            { error: 'ID é obrigatório para atualização' },
+            { status: 400 }
+        )
+    }
+    if (!operation.description) {
+        return NextResponse.json(
+            { error: 'Favor preencher todos os campos' },
+            { status: 400 }
+        )
+    }
+    if (!token.token) {
+        return NextResponse.json(
+            { error: 'Token não encontrado' },
+            { status: 401 }
+        )
+    }
+    const apiResponse = await fetch(`${API_URL}/operationsale/${operation.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.token}`
+        },
+        body: JSON.stringify(operation)
+    })
+    const data = await apiResponse.json()
+    if (!apiResponse.ok) {
+        return NextResponse.json(data, { status: apiResponse.status })
+    }
+    return NextResponse.json({ success: true, data })
+};
 
 export async function GET(request: Request) {
     try {
