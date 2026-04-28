@@ -25,11 +25,12 @@ export type TItemsSale = {
 export type TOperationSale = {
     id: number
     description: string
-    type: string
+    type: "saida" | "entrada" | string
     controlsStock: boolean
     generateFinancial: boolean
     allowDiscount: boolean
     updateCost: boolean
+    finalConsumer:boolean
     requiresInvoice: boolean
     isReturn: boolean
     cfop: string
