@@ -57,7 +57,7 @@ export default function GenericForm({
                     <div>{"ID:" + String(children.id).padStart(9, '0') + " - "
                         + (children.name ? children.name : children.code)} </div> </> :
                     <p className="font-bold mb-3">Novo Registro</p>}
-                <label >Selecionar O Tipo de Registro</label>
+                <label >Selecionar o Tipo de Registro</label>
                 <select className={`${globalStyles_select} cursor-pointer`}
                     value={genericDefined || ""}
                     onChange={(e) => setGenericDefined(e.target.value)}

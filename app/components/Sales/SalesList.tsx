@@ -1,3 +1,4 @@
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { DateFns } from "@/app/lib/dateFns"
 import { TSaleResponse } from "@/app/models/TSale"
 import { globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
@@ -22,7 +23,8 @@ export default function SalesList({ sales }: Props) {
                         <th className={`${globalStyles_th} text-left`}>TNota</th>
                         <th className={`${globalStyles_th} text-left`}>CFOP</th>
                         <th className={`${globalStyles_th} text-left`}>Operação</th>
-                        <th className={`${globalStyles_th} text-center`}>Imprimir</th>
+                        <th className={`${globalStyles_th} text-center bg-gray-600`}><PictureAsPdfIcon titleAccess='Imprimir'/></th>
+                        <th className={`${globalStyles_th} text-center bg-gray-700`}><PictureAsPdfIcon titleAccess='Imprimir'/></th>
                     </tr>
                 </thead>}
                 <tbody className={globalStyles_tbody_list}>
@@ -35,7 +37,8 @@ export default function SalesList({ sales }: Props) {
                             <td className={`${globalStyles_td} text-left`}>{`R$ ${sale.totalNote.toFixed(2)}`}</td>
                             <td className={`${globalStyles_td} text-left`}>{sale.operationSale.cfop}</td>
                             <td className={`${globalStyles_td} text-left`}>{sale.operationSale.description}</td>
-                            <td className={`${globalStyles_td} text-center`}><a href={`${process.env.NEXT_PUBLIC_API_NOTA}/${sale.id}/pdf`}>Imprimir</a></td>
+                            <td className={`${globalStyles_td} text-center`}><a href={`${process.env.NEXT_PUBLIC_API_NOTA}/${sale.id}/pdf`}>Nota</a></td>
+                            <td className={`${globalStyles_td} text-center`}><a href={`${process.env.NEXT_PUBLIC_API_CUPOM}/${sale.id}/pdf`}>Cupom</a></td>
                         </tr>
                     ))}
                 </tbody>
