@@ -85,6 +85,22 @@ export default function Sales() {
     const [installmentAccount, setInstallmentAccount] = useState(0)
     const [, setSaleAccountsReceivables] = useState<TAccountsReceivable[]>([])
 
+    function handleItemAmount(): { handleItem: string; handleAmount: number } {
+        if (searchItemName.includes('*')) {
+            const [amount, item] = searchItemName.split('*');
+            return {
+                handleItem: item || '',
+                handleAmount: Number(amount) || 1
+            };
+        } else {
+            return {
+                handleItem: searchItemName,
+                handleAmount: 1
+            };
+        }
+    };
+    const { handleAmount, handleItem } = handleItemAmount();
+
     useEffect(() => {
         if (!installmentAccount || installmentAccount <= 0) {
             setSaleAccountsReceivables([]);
@@ -206,7 +222,8 @@ export default function Sales() {
         async function searchItemsByName() {
             const token = user?.token
             const params = new URLSearchParams({
-                name: searchItemName,
+                // name: searchItemName,
+                name: handleItem
             })
             try {
                 if (!token) return
@@ -427,7 +444,11 @@ export default function Sales() {
             qrcode={qrcodePagSeguro || null}
             setInstallmentAccount={setInstallmentAccount}
             cash={cash}
-            setCash={setCash}>
+            setCash={setCash}
+            handleAmount={handleAmount}
+            handleItem={handleItem}
+            searchItemName={searchItemName}
+        >
             {sale}
         </SaleForm>
     </>

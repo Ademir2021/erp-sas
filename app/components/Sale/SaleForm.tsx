@@ -38,6 +38,9 @@ type Props = {
     setInstallmentAccount: Function
     cash: number
     setCash: Function
+    handleAmount: number
+    handleItem: string
+    searchItemName: string
 }
 
 export default function SaleForm({
@@ -47,7 +50,8 @@ export default function SaleForm({
     operationsSale, setOperationSale, operationSale,
     creditCard, setCreditCard, handleSubmitCreditCard, person,
     setPerson, msgCreditCard, responseIdSale, handleSubmitPix,
-    qrcode, setInstallmentAccount, cash, setCash }: Props) {
+    qrcode, setInstallmentAccount, cash, setCash, handleAmount,
+    handleItem, searchItemName }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -80,8 +84,29 @@ export default function SaleForm({
         >{title}</a>
     }
 
+    function addItemInput() {
+        if (!handleItem || !handleAmount || !items?.length) return;
+        setItemsSale((prev: TItemsSale[]) => {
+            const existingItemIndex = prev.findIndex(
+                (i) => i.item.id === items[0].id) // Ajuste conforme a chave única do item
+
+            if (existingItemIndex !== -1) { // Item já existe → incrementa quantidade
+                return prev.map((i, index) =>
+                    index === existingItemIndex
+                        ? { ...i, amount: i.amount + handleAmount || 1, tItem: i.amount * i.price } : i)
+            }
+            const newItem: TItemsSale = {  // Item não existe → adiciona novo
+                item: items[0],
+                amount: handleAmount || 1,
+                price: items[0].priceMax
+            }
+            return [...prev, newItem]
+        })
+        setSearchITemName('!')
+    }
+
     return <>
-       <div id="up-sale" className={`${globalStyles_form}`}>
+        <div id="up-sale" className={`${globalStyles_form}`}>
             <div>
                 <h1 className={`${globalStylesTitle} justify-center`}>Orçamentos - Pedidos e Vendas</h1>
                 {<p className="flex justify-center font-sans text-green-100 bg-gray-800 mb-2 p-2 text-center rounded-b-none shadow-md">
@@ -91,14 +116,17 @@ export default function SaleForm({
                 itemsSale={itemsSale}
                 setItemsSale={setItemsSale}
             />
-            <form>
+            <div>
                 <label className={`${globalStylesTitle}`}>Pesquisar Items ...</label>
                 <input
                     className="mb-3 w-full p-3 border rounded-lg"
-                    placeholder="Buscar Item ..."
+                    value={searchItemName !== "!" ? searchItemName : ""}
+                    type='search'
+                    placeholder="Item ... || Quant*Item ..."
                     onChange={(e) => setSearchITemName(e.target.value.toString())}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { addItemInput(); } }} autoFocus
                 />
-            </form>
+            </div>
             {/**Step Toggle */}
             <button className={`${globalStylesToggle} cursor-pointer`} onClick={() => setStep(!step)}>
                 {step ? <ExpandLessIcon fontSize="large" /> : <ArrowForwardIosIcon fontSize='small' />}
@@ -207,7 +235,7 @@ export default function SaleForm({
                         {finalizeOrder("Finalizar Compra")}
                         <a />
                     </div></>} </>}
-                    
+
             {/**Orçamentos */}
             {operationSale.id === 4 && itemsSale.length > 0 && person &&
                 <p className='flex justify-center p-1 text-green-500 '>
@@ -264,6 +292,7 @@ export default function SaleForm({
                 items={items}
                 setItemsSale={setItemsSale}
                 msg={msg}
+                handleAmount={handleAmount}
             />
         </div>
     </>

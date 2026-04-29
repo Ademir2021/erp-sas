@@ -8,10 +8,11 @@ type Props = {
     items: TItem[]
     setItemsSale: Function
     msg: string
+    handleAmount:number
 }
 
 export default function ITemsSaleForm({
-    items, setItemsSale, msg
+    items, setItemsSale, msg, handleAmount
 }: Props) {
 
     const styles_th = "px-1 py-1 text-[11px] font-semibold text-gray-200"
@@ -38,12 +39,12 @@ export default function ITemsSaleForm({
             if (existingItemIndex !== -1) { // Item já existe → incrementa quantidade
                 return prev.map((i, index) =>
                     index === existingItemIndex
-                        ? { ...i, amount: i.amount + 1, tItem: i.amount * i.price } : i)
+                        ? { ...i, amount: i.amount + handleAmount || 1, tItem: i.amount * i.price } : i)
             }
 
             const newItem: TItemsSale = {  // Item não existe → adiciona novo
                 item,
-                amount: 1,
+                amount: handleAmount || 1,
                 price: item.priceMax
             }
 
