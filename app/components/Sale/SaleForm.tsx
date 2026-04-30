@@ -85,24 +85,35 @@ export default function SaleForm({
     }
 
     function addItemInput() {
-        if (!handleItem || !handleAmount || !items?.length) return;
+        if (!handleItem || items?.length === 0) return;
         setItemsSale((prev: TItemsSale[]) => {
+            const item = items[0];
+            const amountToAdd = handleAmount || 1;
             const existingItemIndex = prev.findIndex(
-                (i) => i.item.id === items[0].id) // Ajuste conforme a chave única do item
+                (i) => i.item.id === item.id);
+            if (existingItemIndex !== -1) {
+                return prev.map((i, index) => {
+                    if (index !== existingItemIndex) return i;
+                    const newAmount = i.amount + amountToAdd;
+                    return {
+                        ...i,
+                        amount: newAmount,
+                        tItem: newAmount * i.price
+                    };
+                });
+            }
 
-            if (existingItemIndex !== -1) { // Item já existe → incrementa quantidade
-                return prev.map((i, index) =>
-                    index === existingItemIndex
-                        ? { ...i, amount: i.amount + handleAmount || 1, tItem: i.amount * i.price } : i)
-            }
-            const newItem: TItemsSale = {  // Item não existe → adiciona novo
-                item: items[0],
-                amount: handleAmount || 1,
-                price: items[0].priceMax
-            }
-            return [...prev, newItem]
-        })
-        setSearchITemName('!')
+            const newItem: TItemsSale = {
+                item,
+                amount: amountToAdd,
+                price: item.priceMax,
+                tItem: amountToAdd * item.priceMax
+            };
+
+            return [...prev, newItem];
+        });
+
+        setSearchITemName('!');
     }
 
     return <>
@@ -117,12 +128,12 @@ export default function SaleForm({
                 setItemsSale={setItemsSale}
             />
             <div>
-                <label className={`${globalStylesTitle}`}>Pesquisar Items ...</label>
+                <label className={`${globalStylesTitle}`}>Buscar</label>
                 <input
                     className="mb-3 w-full p-3 border rounded-lg"
                     value={searchItemName !== "!" ? searchItemName : ""}
                     type='search'
-                    placeholder="Item ... || Quant*Item ..."
+                    placeholder="ID\Descrição\Código de barras (ou) Quant*Item"
                     onChange={(e) => setSearchITemName(e.target.value.toString())}
                     onKeyDown={(e) => { if (e.key === 'Enter') { addItemInput(); } }} autoFocus
                 />

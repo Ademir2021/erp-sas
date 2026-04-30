@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import GenericsForm from "@/app/components/Generic/GenericForm";
 import { userAuth } from "@/app/lib/userAuth";
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { loadHandle } from "@/app/lib/handleApi";
 import { TGeneric } from "@/app/models/TGeneric";
 import { TResponseMessage } from "@/app/models/TMessage";
@@ -43,11 +43,11 @@ export default function Generics() {
     const [countrys, setCountrys] = useState<TCountry[]>([]);
     const [states, setStates] = useState<TState[]>([])
     const [citys, setCitys] = useState<TCity[]>([])
+
     const handleChange = (e: any) => {
         const { name, value } = e.target
         setGeneric({ ...generic, [name]: value })
     };
-
 
     useEffect(() => {
         setGeneric({
@@ -104,7 +104,7 @@ export default function Generics() {
         };
         router.push('/generic')
         setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
-        setFlag(true)
+        // setFlag(true)
         router.refresh()
     }
 

@@ -61,7 +61,7 @@ export default function GenericList({ generics,
                     {currentItems.map((g: TGeneric) => (
                         <tr key={g.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{g.id}</td>
-                            <td className={`${globalStyles_td} text-left`}>{genericDefined !== 'zipcodes'? g.name : g.code}</td>
+                            <td className={`${globalStyles_td} text-left`}>{genericDefined !== 'zipcodes' ? g.name : g.code}</td>
 
                             {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.id}</td>}
                             {genericDefined === 'subgroups' && <td className={`${globalStyles_td} text-left`}>{g.group?.name}</td>}

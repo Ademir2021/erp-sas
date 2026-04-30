@@ -31,7 +31,7 @@ export default function ITemsSaleForm({
     }, [items])
 
     function insertItem(item: TItem) {
-
+        
         setItemsSale((prev: TItemsSale[]) => {
             const existingItemIndex = prev.findIndex(
                 (i) => i.item.id === item.id) // Ajuste conforme a chave única do item
