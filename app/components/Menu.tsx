@@ -31,7 +31,7 @@ export default function Menu({ setCollapsed }: Props) {
           title="Brasil(BR)"
         />
       </li>
-      <ul className="flex font-bold text-[14px] flex-col gap-3" >
+      <ul className="flex font-normal text-[14px] flex-col gap-3" >
         <li>
           <Link
             href="/dashboard"
@@ -75,7 +75,7 @@ export default function Menu({ setCollapsed }: Props) {
             href="/person"
             className={styles_links}
             onClick={() => setCollapsed(prev => !prev)}
-          >DADOS DOS CLIENTES</Link>
+          >CLIENTES</Link>
         </li>
           {hr}</>}
         {isAdmin && <> <li>
@@ -83,35 +83,35 @@ export default function Menu({ setCollapsed }: Props) {
             href="/items"
             className={styles_links}
             onClick={() => setCollapsed(prev => !prev)}
-          >DADOS DOS ITEMS</Link>
+          >ITEMS</Link>
         </li>{hr}</>}
         <li>
           <Link
             href="/sale"
             className={styles_links}
             onClick={() => setCollapsed(prev => !prev)}
-          >CHECK-OUT DE VENDAS</Link>
+          >VENDER</Link>
         </li>{hr}
         {isUser && <> <li>
           <Link
             href="/sales"
             className={styles_links}
             onClick={() => setCollapsed(prev => !prev)}
-          >CONSULTA VENDAS</Link>
+          >VENDAS</Link>
         </li>{hr}</>}
         {isUser && <><li>
           <Link
             href="/accountsreceivable"
             className={styles_links}
             onClick={() => setCollapsed(prev => !prev)}
-          >CONTAS A RECEBER</Link>
+          >CONTAS</Link>
         </li>{hr}</>}
         {isAdmin && <> <li>
           <Link
             href="/cashmovement"
             className={styles_links}
             onClick={() => setCollapsed(prev => !prev)}
-          >CAIXA MOVIMENTO</Link>
+          >CAIXA</Link>
         </li>
           {hr}</>}
         <li>

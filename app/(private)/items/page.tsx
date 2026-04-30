@@ -13,7 +13,6 @@ export default function Items() {
     const router = useRouter()
     const { user } = userAuth();
     const [msg, setMsg] = useState('')
-    const [flag, setFlag] = useState(false)
     const [items, setItems] = useState<TItem[]>([])
     const [brands, setBrands] = useState<TBrand[]>([])
     const [subGropus, setSubGroups] = useState<TsubGroup[]>([])
@@ -21,24 +20,29 @@ export default function Items() {
     const [typeItems, setTypeItems] = useState<TTypeItem[]>([])
     const [itemsClasses, setItemsClasses] = useState<TItemClass[]>([])
     const [unitMeasures, setUnitMeasures] = useState<TUnitMeasure[]>([])
-    const [item, setItem] = useState<TItem>({
-        id: 0,
-        name: '',
-        priceMax: 0,
-        priceMin: 0,
-        barCode: '',
-        imagem: '',
-        brand: { id: 0, name: '' },
-        subGroup: { id: 0, name: '', group: { id: 0, name: '' } },
-        taxGroup: { id: 0, name: '', taxationTable: { id: 0, name: '' } },
-        typeItem: { id: 0, name: '' },
-        itemClass: { id: 0, name: '' },
-        unitMeasure: { id: 0, name: '' }
-    })
+    const initialItem:TItem = {
+            id: 0,
+            name: '',
+            priceMax: 0,
+            priceMin: 0,
+            barCode: '',
+            imagem: '',
+            brand: { id: 0, name: '' },
+            subGroup: { id: 0, name: '', group: { id: 0, name: '' } },
+            taxGroup: { id: 0, name: '', taxationTable: { id: 0, name: '' } },
+            typeItem: { id: 0, name: '' },
+            itemClass: { id: 0, name: '' },
+            unitMeasure: { id: 0, name: '' }
+        }
+    const [item, setItem] = useState<TItem>(initialItem)
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
         setItem({ ...item, [name]: value })
+    }
+
+    function clearFields() {
+        setItem({...initialItem})
     }
 
     useEffect(() => {
@@ -53,41 +57,32 @@ export default function Items() {
     }, [user]);
 
     async function updateItem(item: TItem) {
-
         const res = await fetch('/api/item', {
             method: 'PUT',
             body: JSON.stringify(item),
         })
-
         const resp: TResponseMessage = await res.json()
-
         if (!res.ok) {
             setMsg(`Erro ao atualizar Item: ${resp.error}`)
             return
         }
         router.push('/items')
         setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
-        setFlag(true)
         router.refresh()
     }
 
     async function saveItem(item: TItem) {
-
         const res = await fetch('/api/item', {
             method: 'POST',
             body: JSON.stringify(item),
         })
-
         const resp: TResponseMessage = await res.json()
-
         if (!res.ok) {
             setMsg(`Erro ao registrar Item: ${resp?.details}`)
             return
         }
-
         router.push('/items')
         setMsg(`${resp.data.message} Name: ${resp.data.name} : ${resp.success}`)
-        setFlag(true)
         router.refresh()
     }
 
@@ -112,14 +107,12 @@ export default function Items() {
 
     function handleSubmit(e: Event) {
         e.preventDefault()
-        if (valFields(item) === true && flag === false) {
+        if (valFields(item) === true) {
             item.id === 0 ? saveItem(item) : updateItem(item)
+            clearFields()
         } else {
             setMsg(valFields(item) as any)
         }
-
-        if (flag === true)
-            setMsg(item.id === 0 ? 'Item já foi registrado.' : "Item já foi atualizado.")
     }
 
     return <>

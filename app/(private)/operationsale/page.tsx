@@ -11,15 +11,15 @@ export default function OperationSale() {
 
     const router = useRouter()
     const { user } = userAuth();
-    const [flag, setFlag] = useState(false)
     const [msg, setMsg] = useState('')
     const [operationSales, setOperationSales] = useState<TOperationSale[]>([])
-    const [operationSale, setOperationSale] = useState<TOperationSale>({
+    const initialOperationSale:TOperationSale = {
         id: 0, description: "", type: "", controlsStock: true,
         generateFinancial: true, allowDiscount: true, updateCost: true,
         finalConsumer: true, requiresInvoice: true, isReturn: false, cfop: "",
         defaultNature: "", active: true
-    })
+    }
+    const [operationSale, setOperationSale] = useState<TOperationSale>(initialOperationSale)
 
     const handleChange = (e: any) => {
         const { name, value, type, checked } = e.target
@@ -29,6 +29,10 @@ export default function OperationSale() {
             [name]: type === "checkbox" ? checked : value
         });
     };
+
+    function clearFields(){
+        setOperationSale({...initialOperationSale})
+    }
 
     useEffect(() => {
         const token = user?.token as string
@@ -41,14 +45,12 @@ export default function OperationSale() {
             body: JSON.stringify(operationSale),
         })
         const resp: TResponseMessage = await res.json()
-
         if (!res.ok) {
             setMsg(`Erro ao atualizar Operação: ${resp.error}`)
             return
         }
         router.push('/operationsale')
         setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
-        setFlag(true)
         router.refresh()
     }
 
@@ -57,15 +59,12 @@ export default function OperationSale() {
             method: 'POST',
             body: JSON.stringify(operationSale),
         })
-
         if (!res.ok) {
             setMsg(`Erro ao registrar Operação: ${JSON.stringify(res)}`)
             return
         }
-
         router.push('/operationsale')
         setMsg('Operação registrada com sucesso')
-        setFlag(true)
         router.refresh()
     }
 
@@ -83,22 +82,17 @@ export default function OperationSale() {
 
     function handleSubmit(e: Event) {
         e.preventDefault()
-        if (valFields(operationSale) === true && flag === false) {
+        if (valFields(operationSale) === true) {
             operationSale.id === 0 ? saveOperationSale(operationSale) :
-                updateOperationSale(operationSale)
+            updateOperationSale(operationSale);
+            clearFields()
         } else {
             setMsg(valFields(operationSale) as any)
         }
-        if (flag === true)
-            operationSale.id !== 0 ? setMsg("Operação já foi atualizada") :
-                setMsg('Operação já foi gravada')
     }
 
     return (
         <>
-            {/* <p>{JSON.stringify(operationSale)}</p> */}
-            {/* <br /> */}
-            {/* <p>{JSON.stringify(operationSales)}</p> */}
             <OperationSaleForm
                 handleChange={handleChange}
                 operationSales={operationSales}

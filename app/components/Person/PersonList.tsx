@@ -4,7 +4,7 @@ import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, 
 type Props = {
   persons: TPerson[]
   setChildren: Function
-   setShowForm: React.Dispatch<React.SetStateAction<boolean>>
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function PersonList({ persons, setChildren, setShowForm }: Props) {

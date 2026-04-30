@@ -6,11 +6,13 @@ import Pagination from "../Pagination/Pagination"
 type Props = {
     items: TItem[]
     setChildren: Function
+     setShowForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function ItemsList({
     items,
-    setChildren
+    setChildren,
+    setShowForm
 }: Props) {
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -27,6 +29,8 @@ export default function ItemsList({
 
     function updateList(item: TItem) {
         setChildren(item)
+        setShowForm(true)
+        
     }
 
     return <>

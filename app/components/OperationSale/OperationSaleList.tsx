@@ -6,9 +6,11 @@ import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, 
 type Props = {
     operationSales: TOperationSale[]
     setChildren: Function
+     setShowForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function OperationSaleList({ operationSales, setChildren }: Props) {
+export default function OperationSaleList({
+    operationSales, setChildren, setShowForm }: Props) {
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 8
@@ -24,6 +26,7 @@ export default function OperationSaleList({ operationSales, setChildren }: Props
 
     function updateList(operationSale: TOperationSale) {
         setChildren(operationSale)
+        setShowForm(true)
     }
 
     return (

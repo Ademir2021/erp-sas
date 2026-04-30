@@ -10,8 +10,9 @@ import { TResponseMessage } from "@/app/models/TMessage";
 import { Tgroup } from "@/app/models/TItem";
 import { TCity, TCountry, TState } from "@/app/models/TAddress";
 
-function useGenericState<T>() {
-    const [generic, setGeneric] = useState<TGeneric>({
+export default function Generics() {
+
+    const initialGeneric: TGeneric = {
         id: 0,
         name: '',
         code: '',
@@ -25,17 +26,17 @@ function useGenericState<T>() {
         state: { id: 0, name: "", acronym: "" },
         city: { id: 0, name: '' } as any,
         zipcode: { id: 0, code: '' }
-    });
-    const [generics, setGenerics] = useState<TGeneric[]>([])
-    return { generic, setGeneric, generics, setGenerics }
-}
+    }
 
-export default function Generics() {
+    function useGenericState<T>() {
+        const [generic, setGeneric] = useState<TGeneric>(initialGeneric);
+        const [generics, setGenerics] = useState<TGeneric[]>([])
+        return { generic, setGeneric, generics, setGenerics }
+    }
 
     const router = useRouter()
     const { user } = userAuth();
     const [msg, setMsg] = useState('')
-    const [flag, setFlag] = useState(false)
     const { generic, setGeneric } = useGenericState<TGeneric>()
     const { generics, setGenerics } = useGenericState<TGeneric[]>();
     const [genericDefined, setGenericDefined] = useState<string>("");
@@ -48,6 +49,10 @@ export default function Generics() {
         const { name, value } = e.target
         setGeneric({ ...generic, [name]: value })
     };
+
+    function clearFields() {
+        setGeneric({ ...initialGeneric })
+    }
 
     useEffect(() => {
         setGeneric({
@@ -104,7 +109,6 @@ export default function Generics() {
         };
         router.push('/generic')
         setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
-        // setFlag(true)
         router.refresh()
     }
 
@@ -123,7 +127,6 @@ export default function Generics() {
         };
         router.push('/generic')
         setMsg(`${resp.data.message} Name: ${resp.data.name} : ${resp.success}`)
-        setFlag(true)
         router.refresh()
     }
 
@@ -161,13 +164,12 @@ export default function Generics() {
 
     function handleSubmit(e: Event) {
         e.preventDefault()
-        if (valFields(generic) === true && flag === false) {
+        if (valFields(generic) === true) {
             generic.id === 0 ? saveGeneric(generic) : updateGeneric(generic)
+            clearFields()
         } else {
             setMsg(valFields(generic) as any)
         }
-        if (flag === true)
-            setMsg(generic.id === 0 ? 'Arquivo já foi registrado.' : "Arquivo já foi atualizado.")
     }
 
     return (

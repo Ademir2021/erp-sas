@@ -13,13 +13,12 @@ import { userAuth } from "@/app/lib/userAuth";
 export default function Person() {
 
     const router = useRouter()
-    const [flag, setFlag] = useState(false)
     const [zipcodes, setZipcodes] = useState<TZipCode[]>([])
     const [groupPersons, setGroupPersons] = useState<TGroupPerson[]>([])
     const [persons, setPersons] = useState<any[]>([])
     const { user } = userAuth();
     const [msg, setMsg] = useState('')
-    const [person, setPerson] = useState<TPerson>({
+    const initialPerson:TPerson = {
         id: 0,
         typePerson: TypePerson.FISICA,
         groupPerson: { id: 0, name: '' },
@@ -55,11 +54,16 @@ export default function Person() {
                 code: '',
             }
         }
-    })
+    }
+    const [person, setPerson] = useState<TPerson>(initialPerson)
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
         setPerson({ ...person, [name]: value })
+    }
+
+    function clearFields (){
+        setPerson({...initialPerson})
     }
 
     useEffect(() => {
@@ -103,7 +107,6 @@ export default function Person() {
         }
         router.push('/person')
         setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
-        setFlag(true)
         router.refresh()
     }
 
@@ -127,10 +130,8 @@ export default function Person() {
             setMsg(`Erro ao registrar Pessoa: ${JSON.stringify(res)}`)
             return
         }
-
         router.push('/person')
         setMsg('Pessoa registrado com sucesso')
-        setFlag(true)
         router.refresh()
     }
 
@@ -159,15 +160,12 @@ export default function Person() {
 
     function handleSubmit(e: Event) {
         e.preventDefault()
-        if (valFields(person) === true && flag === false) {
-            person.id === 0 ? savePerson(person) :
-                updatePerson(person)
+        if (valFields(person) === true) {
+            person.id === 0 ? savePerson(person) : updatePerson(person);
+            clearFields()
         } else {
             setMsg(valFields(person) as any)
         }
-        if (flag === true)
-            person.id !== 0 ? setMsg("Pessoa já foi atualizada") :
-                setMsg('Pessoa já foi gravada')
     }
 
     return <>

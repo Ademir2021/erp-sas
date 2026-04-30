@@ -15,7 +15,6 @@ type Props = {
     msg: string
 }
 
-
 export default function OperationSaleForm({ children, handleChange,
     operationSales, setChildren, handleSubmit, msg }: Props) {
 
@@ -169,6 +168,7 @@ export default function OperationSaleForm({ children, handleChange,
         <OperationSaleList
             operationSales={operationSales}
             setChildren={setChildren}
+            setShowForm={setShowForm}
         />
     </>
     )

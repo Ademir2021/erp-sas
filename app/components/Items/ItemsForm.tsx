@@ -224,6 +224,7 @@ export default function ItemsForm({
         <ItemsList
             items={items}
             setChildren={setChildren}
+            setShowForm={setShowForm}
         />
     </>
 }
