@@ -211,6 +211,7 @@ export default function GenericForm({
                 setGeneric={setGeneric}
                 generics={generics}
                 genericDefined={genericDefined}
+                setShowForm={setShowForm}
             />
         </div>
     </>)

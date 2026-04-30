@@ -8,10 +8,11 @@ type Props = {
     generics: TGeneric[]
     setGeneric: React.Dispatch<React.SetStateAction<TGeneric>>
     genericDefined: string
+    setShowForm: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function GenericList({ generics,
-    setGeneric, genericDefined }: Props) {
+    setGeneric, genericDefined, setShowForm }: Props) {
 
     const [currentPage, setCurrentPage] = useState(1)
     const itemsPerPage = 8
@@ -27,6 +28,7 @@ export default function GenericList({ generics,
 
     function updateList(g: TGeneric) {
         setGeneric(g)
+        setShowForm(true)
     }
 
     return <>
