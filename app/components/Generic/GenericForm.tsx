@@ -53,7 +53,7 @@ export default function GenericForm({
           setShowForm={setShowForm}
         />
          <div id="up-generic">
-           {showForm && <div className={`${globalStyles_form} max-w-xl mx-auto`}>
+           {showForm && <div className={`${globalStyles_form}`}>
             <CloseForm setCloseForm={setShowForm}/>
                 {children.id != 0 ? <> <b>Atualizar Registro</b>
                     <div>{"ID:" + String(children.id).padStart(9, '0') + " - "

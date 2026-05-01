@@ -27,6 +27,9 @@ export const config = {
     '/perfil/:path*',
     '/items/:path*',
     '/sales/:path*',
-    '/accountsreceivable/:path*'
+    '/accountsreceivable/:path*',
+    '/generic/:path*',
+    '/operationsale/:path*',
+    '/cashmovement/:path*'
   ]
 }

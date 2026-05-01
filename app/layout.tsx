@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "./components/Footer";
 import Sidebar from "./components/Sidebar";
 import MenuHeader from "./components/MenuHeader";
+import CookieBanner from './components/CookieBanner'
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,13 +31,14 @@ export default async function RootLayout({
     <html lang="pt-BR">
       <body
         className={`${geistSans.variable}
-${geistMono.variable}
-antialiased relative bg-[url('/images/bg.jpg')] bg-cover bg-center`}>
+        ${geistMono.variable}
+        antialiased relative bg-[url('/images/bg.jpg')] bg-cover bg-center`}>
         <div className="absolute inset-0 bg-black/60"></div>
         <div className="relative z-10">
           <MenuHeader />
           <Sidebar />
           {children}
+          <CookieBanner />
           <Footer />
         </div>
       </body>

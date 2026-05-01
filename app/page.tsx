@@ -1,69 +1,98 @@
-export default async function RootLayout() {
+import Link from "next/link";
 
-  function cards_1(card: string, description: string, button: string) {
-    return <div className="bg-black p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
-      <h2 className="text-xl font-semibold mb-3">{card}</h2>
-      <p className="text-gray-400">
-        {description}
-      </p>
-      <button className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
-        {button}
-      </button>
-    </div>
-  };
-  function cards_2(card: string, description: string, button: string) {
-    return <div className="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition duration-300">
-      <h2 className="text-xl font-semibold mb-3">{card}</h2>
-      <p className="text-gray-400">
-        {description}
-      </p>
-      <button className="mt-4 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg">
-        {button}
-      </button>
-    </div>
-  }
+type CardProps = {
+  title: string;
+  description: string;
+  buttonText: string;
+  variant?: "dark" | "light";
+};
+
+function Card({ title, description, buttonText, variant = "dark" }: CardProps) {
+  const styles =
+    variant === "dark"
+      ? "bg-black"
+      : "bg-gray-900";
+
+  const buttonStyles =
+    variant === "dark"
+      ? "bg-blue-600 hover:bg-blue-700"
+      : "bg-green-600 hover:bg-green-700";
 
   return (
-    <div className="flex bg-transparent text-white">
+    <div className={`${styles} p-6 rounded-2xl shadow-lg hover:scale-105 transition`}>
+      <h2 className="text-xl font-semibold mb-3">{title}</h2>
+      <p className="text-gray-400">{description}</p>
+
+      <Link
+        href="/solutions"
+        className={`inline-block mt-4 px-4 py-2 rounded-lg text-white ${buttonStyles}`}
+      >
+        {buttonText}
+      </Link>
+    </div>
+  );
+}
+
+const cardsData = [
+  {
+    title: "Controle das Vendas de Items ou Serviços, Pedidos e Orçamentos",
+    description:
+      "Controle de vendas, pedidos e orçamentos, com gestão de clientes, produtos, estoque, relatórios e análises para otimizar o desempenho do seu negócio.",
+    buttonText: "Saiba Mais",
+    variant: "dark",
+  },
+  {
+    title: "Checkout para Pagamentos com PIX/Cartão/Crédito Loja",
+    description:
+      "Checkout para pagamentos com PIX, crédito Loja e cartão de crédito, garantindo segurança e conveniência para seus clientes.",
+    buttonText: "Saiba Mais",
+    variant: "light",
+  },
+  {
+    title: "Gestão Integrada no Cadastro de Clientes",
+    description:
+      "Gestão integrada do cadastro de clientes, com funcionalidades de atualização, consulta e análise de dados para melhorar o atendimento e a satisfação do cliente.",
+    buttonText: "Saiba Mais",
+    variant: "dark",
+  },
+  {
+    title: "Controle de Acesso e Segurança para sua Empresa",
+    description:
+      "Gestão de controle de acesso e segurança para sua empresa, garantindo a proteção dos dados e a integridade dos sistemas.",
+    buttonText: "Saiba Mais",
+    variant: "light",
+  },
+];
+
+export default function RootLayout() {
+  return (
+    <div className="flex text-white">
       <main
-        className="min-h-screen flex flex-col max-w-7xl w-full
-mx-auto items-center justify-center px-4 py-10 bg-cover bg-center mt-12"
-        style={{ backgroundImage: "url('/bg/bg-home.jpg')" }}>
-        {/* Título */}
-        <div className="text-center mb-10 max-w-2xl">
+        className="min-h-screen flex flex-col max-w-7xl w-full mx-auto items-center justify-center px-4 py-10 bg-cover bg-center mt-12"
+        style={{ backgroundImage: "url('/bg/bg-home.jpg')" }}
+      >
+        {/* Header */}
+        <div className="text-center text-black/90 mb-10 max-w-2xl">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            Soluções e segurança para sua Empresa ou Negôcio.
+            Soluções e segurança para sua Empresa ou Negócio.
           </h1>
-          <p className="text-white text-lg">
-            Mais segurança, mais eficiência e mais produtividade para o seu negócio. Conheça nossas soluções e serviços personalizados para atender às suas necessidades específicas.
+          <p className="text-black/90 text-lg">
+            Mais segurança, mais eficiência e mais produtividade para o seu negócio.
+            Conheça nossas soluções e serviços personalizados.
           </p>
         </div>
-        {/* Cards 1 */}
+
+        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-          {/* Cards 1 */}
-          {cards_1(
-            "Controle das Vendas de Items ou Serviços, Pedidos e Orçamentos",
-            "Sistema WEB SAS para controle de vendas, pedidos e orçamentos, com gestão de clientes, produtos, estoque, relatórios e análises para otimizar o desempenho do seu negócio.",
-            "Saiba Mais")}
-          {cards_2(
-            "Checkout para Pagamentos com PIX/Cartão/Crédito Loja",
-            "Sistema WEB SAS com checkout para pagamentos com PIX, crédito Loja e cartão de crédito, garantindo segurança e conveniência para seus clientes.",
-            "Saiba Mais")}
-          <br />
-          {/**Cards 2 */}
+          {cardsData.map((card, index) => (
+            <Card key={index} {...card as CardProps} />
+          ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-          {cards_1(
-            "Gestão Integrada no Cadastro de Clientes",
-            "Sistema WEB SAS para gestão integrada do cadastro de clientes, com funcionalidades de atualização, consulta e análise de dados para melhorar o atendimento e a satisfação do cliente.",
-            "Saiba Mais")}
-          {cards_2(
-            "Controle de Acesso e Segurança para sua Empresa",
-            "Gestão de controle de acesso e segurança para sua empresa, garantindo a proteção dos dados e a integridade dos sistemas.",
-            "Saiba Mais")}
-        </div>
-        <a href="/login" className="mt-3 text-bold text-2xl">Comece agora mesmo !</a>
+
+        <Link href="/login" className="mt-6 text-black/70 text-2xl font-bold">
+          Comece agora mesmo!
+        </Link>
       </main>
     </div>
-  )
+  );
 }
