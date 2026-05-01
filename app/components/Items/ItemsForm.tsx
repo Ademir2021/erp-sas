@@ -3,6 +3,7 @@ import ItemsList from "./ItemsList"
 import { useState } from "react"
 import ShowForm from "../ShowForm"
 import { globalStyles_form, globalStyles_select } from "../GlobalStyles"
+import CloseForm from "../CloseForm"
 
 type Props = {
     children: TItem
@@ -41,7 +42,8 @@ export default function ItemsForm({
     setShowForm={setShowForm}
     />
         {showForm && <div className={`${globalStyles_form} max-w-xl mx-auto`}>
-            <form id="up-item" className="space-y-6">
+            <CloseForm setCloseForm={setShowForm}/>
+            <form id="up-item" className="space-y-4 mt-[-28]">
                 <p className="font-bold">{children.id === 0 ?
                 "Registar Item" :
                 "Atualizar Item :" + children.id}</p>

@@ -5,6 +5,7 @@ import { Tgroup } from "@/app/models/TItem";
 import { TCity, TCountry, TState } from "@/app/models/TAddress";
 import ShowForm from "../ShowForm";
 import { useState } from "react";
+import CloseForm from "../CloseForm";
 
 type Props = {
     children: TGeneric
@@ -53,10 +54,11 @@ export default function GenericForm({
         />
          <div id="up-generic">
            {showForm && <div className={`${globalStyles_form} max-w-xl mx-auto`}>
+            <CloseForm setCloseForm={setShowForm}/>
                 {children.id != 0 ? <> <b>Atualizar Registro</b>
                     <div>{"ID:" + String(children.id).padStart(9, '0') + " - "
                         + (children.name ? children.name : children.code)} </div> </> :
-                    <p className="font-bold mb-3">Novo Registro</p>}
+                    <p className="font-bold mb-3 mt-[-38]">Novo Registro</p>}
                 <label >Selecionar o Tipo de Registro</label>
                 <select className={`${globalStyles_select} cursor-pointer`}
                     value={genericDefined || ""}
