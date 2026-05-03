@@ -18,7 +18,7 @@ export default function Person() {
     const [persons, setPersons] = useState<any[]>([])
     const { user } = userAuth();
     const [msg, setMsg] = useState('')
-    const initialPerson:TPerson = {
+    const initialPerson: TPerson = {
         id: 0,
         typePerson: TypePerson.FISICA,
         groupPerson: { id: 0, name: '' },
@@ -62,15 +62,15 @@ export default function Person() {
         setPerson({ ...person, [name]: value })
     }
 
-    function clearFields (){
-        setPerson({...initialPerson})
+    function clearFields() {
+        setPerson({ ...initialPerson })
     }
 
     useEffect(() => {
         const token = user?.token as string
-        loadHandle(token, setZipcodes, 'zipcodes', router)
-        loadHandle(token, setGroupPersons, 'grouppersons', router)
+        loadHandle('permitAll()', setZipcodes, 'zipcodes', router)
         loadHandle(token, setPersons, 'person', router)
+        loadHandle('permitAll()', setGroupPersons, 'grouppersons', router)
     }, [user]);
 
     function loadReplaceCPF(person: TPerson): void {
@@ -112,7 +112,7 @@ export default function Person() {
 
     async function savePerson(person: TPerson) {
         if (person)
-            person.user.id = user?.id || 0
+            person.user.id = user?.id || 1
         person.cpf = person.cpf || null as any
         person.rg = person.rg || null as any
         person.cnpj = person.cnpj || null as any
@@ -158,17 +158,41 @@ export default function Person() {
         return 'Falta preencher os campos: ' + missing.join(', ') + '.';
     }
 
+
+    const [urlPlano, setUrlPlano] = useState('/person')
+    useEffect(() => {
+        const res = localStorage.getItem("url_plano") as any || "person";
+        if (res)
+            setUrlPlano(res)
+
+    }, [person])
+
+
+    function loadPlanos(person: TPerson) {
+        if (person) {
+            localStorage.setItem("person", JSON.stringify(person));
+        }
+        if (urlPlano) {
+            setTimeout(() => {
+                window.location.assign(urlPlano);
+            }, 3000)
+        }
+    }
+
     function handleSubmit(e: Event) {
         e.preventDefault()
         if (valFields(person) === true) {
-            person.id === 0 ? savePerson(person) : updatePerson(person);
             clearFields()
+        person.id === 0 ? savePerson(person) : updatePerson(person);
+        loadPlanos(person)
         } else {
             setMsg(valFields(person) as any)
         }
     }
 
     return <>
+        {/* {JSON.stringify(urlPlano)} */}
+        {person === null && loadPlanos(person)}
         <PersonForm
             handleChange={handleChange}
             handleSubmit_={handleSubmit}
@@ -177,6 +201,7 @@ export default function Person() {
             zipcodes={zipcodes}
             groupPersons={groupPersons}
             persons={persons}
+            url_plano={urlPlano}
         >
             {person}
         </PersonForm>

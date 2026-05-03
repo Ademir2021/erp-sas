@@ -16,6 +16,7 @@ export async function POST(request: Request) {
   try {
     
     const login: TLogin = await request.json()
+    // console.log(login)
 
     if (!login?.login || !login?.password) {
       return NextResponse.json(
@@ -32,28 +33,29 @@ export async function POST(request: Request) {
       body: JSON.stringify(login)
     });
 
+    
     if (!res.ok) {
       return NextResponse.json(
         { error: "Credenciais inválidas" },
         { status: 401 }
       )
     };
-
+    
     const apiUser: TAPIUser = await res.json();
-
+    
     const payload: TUser = {
       id: apiUser.id,
       login: apiUser.login,
       role: apiUser.roles,
       token: apiUser.token
     };
-
+    
     const token = jwt.sign(payload, process.env.JWT_SECRET!, {
       expiresIn: "1d"
     });
-
+    
     const resp = NextResponse.json({ success: true });
-
+    
     resp.cookies.set("token", token, {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
@@ -62,6 +64,7 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24
     });
     
+    console.log(resp)
     return resp;
   
   } catch (error) {

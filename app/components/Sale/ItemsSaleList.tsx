@@ -53,7 +53,7 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
                                     value={item.amount}
                                     placeholder={item.amount > 0 ? "UN" : "KG"}
                                     onChange={(e) => updateAmount(item.item.id, Number(e.target.value))}
-                                    className="w-12 text-black px-1 rounded cursor-pointer"
+                                    className="w-12 text-white px-1 rounded cursor-pointer"
                                 />
                             </td>
                             <td className={`${styles_td} text-left`}>{item.item.priceMax.toFixed(2)}</td>

@@ -1,14 +1,20 @@
+import { TPlano } from "@/app/models/TPlanos"
 import { TCreditCart } from "@/app/models/TSale"
 
 type Props = {
     creditCard: TCreditCart
     setCreditCard: Function
     handleSubmitCreditCard: any
-    msgCreditCard:string
+    msgCreditCard: string
+    plano?: TPlano
 }
 
 export default function CreditCardForm({
-    creditCard, setCreditCard, handleSubmitCreditCard, msgCreditCard
+    creditCard,
+    setCreditCard,
+    handleSubmitCreditCard,
+    msgCreditCard,
+    plano
 }: Props) {
 
     const styles_input = "w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -28,12 +34,20 @@ export default function CreditCardForm({
         }));
     };
 
+    function removePlano(){
+    localStorage.removeItem("url_plano");
+    localStorage.removeItem("person");
+      setTimeout(() => {
+                window.location.assign('/solutions');
+            }, 3000)
+    }
+
     return <>
         <form
             onSubmit={handleSubmitCreditCard}
-            className="mt-2 max-w-md mx-auto bg-gray-500 p-6 rounded-2xl shadow-md space-y-4"
+            className="mt-2 max-w-md mx-auto bg-black/80 p-6 rounded-2xl shadow-md space-y-4"
         >
-            <h2 className="text-xl font-semibold text-gray-700">Cartão de Crédito</h2>
+            <h2 className="text-xl font-semibold text-gray-300">Cartão de Crédito</h2>
             <input
                 type="text"
                 placeholder="Nome no cartão"
@@ -88,30 +102,31 @@ export default function CreditCardForm({
             </div>
             <input type="hidden" name="encrypted" disabled />
             {/**Parcelas */}
-            <div className="flex items-center justify-between bg-gray-600 p-3 rounded-lg">
-                <span className="text-gray-300 font-bold">{creditCard.installments === 1 ? "À vista" : "Parcelas"}</span>
+            <div className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+                {!!!plano ? <><span className="text-gray-300 font-bold">{creditCard.installments === 1 ? "À vista" : "Parcelas"}</span>
+                    <div className="flex items-center gap-3">
+                        <button
+                            type="button"
+                            onClick={decreaseInstallments}
+                            className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                        >-</button>
 
-                <div className="flex items-center gap-3">
-                    <button
-                        type="button"
-                        onClick={decreaseInstallments}
-                        className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                    >-</button>
+                        {<span className=" text-white px-3 py-1 rounded">
+                            {creditCard.installments === 1 ? creditCard.payment.toFixed(2) : `${creditCard.installments} x
+                    ${((creditCard.payment / creditCard.installments).toFixed(2))}`}
+                        </span>}
 
-                    <span className="font-semibold bg-gray-600 text-white px-3 py-1 rounded">
-                        {creditCard.installments === 1 ? creditCard.payment.toFixed(2) : `${creditCard.installments} x ${((creditCard.payment / creditCard.installments).toFixed(2))}`}
-                    </span>
-
-                    <button
-                        type="button"
-                        onClick={increaseInstallments}
-                        className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                    >
-                        +
-                    </button>
-                </div>
+                        <button
+                            type="button"
+                            onClick={increaseInstallments}
+                            className="px-3 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                        >
+                            +
+                        </button>
+                    </div></> : <><span> {`Valor do plano ... R$ ${(plano?.preco).toFixed(2)} `}</span>
+                    <a href="##" type="button" onClick={()=>{removePlano()}}>Cancelar</a></>}
             </div>
-            <button type="submit"
+            <button type="submit" 
                 className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition duration-200"
             >Pagar</button>
             {msgCreditCard && <p className="text-red-600 text-center">{msgCreditCard}</p>}

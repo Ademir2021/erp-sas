@@ -14,7 +14,7 @@ export async function GET(request: Request) {
         const response = await fetch(`${API_URL}/group_persons`, {
             method: "GET",
             headers: {
-                Authorization: `Bearer ${token}`
+                // Authorization: `Bearer ${token}`
             },
             cache: "no-store",
         })

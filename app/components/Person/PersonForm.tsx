@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from 'next/navigation'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { cadastroSchema } from "../../lib/schema"
 import { buscarCNPJ } from "../../lib/receita"
@@ -11,6 +12,7 @@ import { TZipCode } from "@/app/models/TAddress"
 import { PersonList } from "./PersonList"
 import ShowForm from "../ShowForm"
 import { globalStyles_form, globalStyles_select } from "../GlobalStyles"
+import { TPlano } from "@/app/models/TPlanos"
 
 type FormData = z.infer<typeof cadastroSchema>
 
@@ -23,6 +25,7 @@ type Props = {
   setChildren: React.Dispatch<React.SetStateAction<TPerson | any>>
   groupPersons: TGroupPerson[]
   persons: TPerson[]
+  url_plano:any
 }
 
 export default function PersonForm({
@@ -33,10 +36,13 @@ export default function PersonForm({
   msg,
   setChildren,
   groupPersons,
-  persons }: Props) {
+  persons,
+  url_plano }: Props) {
 
   const [showForm, setShowForm] = useState(false)
   const [step, setStep] = useState(1)
+
+  const router = useRouter()
 
   const genders = [
     { gender: Gender.MASCULINO, name: 'Masculino' },
@@ -120,11 +126,11 @@ export default function PersonForm({
   }
 
   return <>
-    <ShowForm
+   {persons.length !== 0 && <ShowForm
       showForm={showForm}
       setShowForm={setShowForm}
-    />
-    {showForm && <div id="up-person" className={`${globalStyles_form} max-w-xl mx-auto`}>
+    />}
+    {(showForm || persons.length === 0) && <div id="up-person" className={`${globalStyles_form} max-w-xl mx-auto`}>
       {/* STEP INDICATOR */}
       <div className="flex justify-between mb-8">
         {["Tipo", "Dados", "Contato", "Endereço"].map((item, index) => (
@@ -430,25 +436,29 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
           {step < 4 ? (
             <button type="button"
               onClick={() => setStep(step + 1)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg">
+              className="px-4 py-2 cursor-pointer bg-blue-600 text-white rounded-lg">
               Próximo
             </button>
           ) : (
             <button
               type="submit"
               onClick={handleSubmit_}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg">
+              className="px-4 cursor-pointer py-2 bg-green-600 text-white rounded-lg">
               {children.id === 0 ? "Finalizar" : "Atualizar"}
             </button>
           )}
         </div>
         <p className="text-gray-300 ">{msg && msg}</p>
       </form>
+       {url_plano !== "person" && <button
+       className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-lg"
+       onClick={()=>router.push(url_plano)}
+       >Retornar ao Plano</button>}
     </div>}
-    <PersonList
+    {persons.length > 0 && <PersonList
       persons={persons}
       setChildren={setChildren}
       setShowForm={setShowForm}
-    />
+    />}
   </>
 }

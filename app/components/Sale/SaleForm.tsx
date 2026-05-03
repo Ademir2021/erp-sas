@@ -119,9 +119,9 @@ export default function SaleForm({
     return <>
         <div id="up-sale" className={`${globalStyles_form}`}>
             <div>
-                <h1 className={`${globalStylesTitle} justify-center`}>Orçamentos - Pedidos e Vendas</h1>
-                {<p className="flex justify-center font-sans text-green-100 bg-gray-800 mb-2 p-2 text-center rounded-b-none shadow-md">
-                    Total da Compra {totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
+                <h1 className={`${globalStylesTitle} justify-center `}>Vendas</h1>
+                {<p className="flex justify-center font-semibold text-3xl bg-white/2 mb-2 p-2 text-center rounded-b-none shadow-md">
+                    Total {totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
             </div>
             <ItemsSaleList
                 itemsSale={itemsSale}
@@ -133,7 +133,7 @@ export default function SaleForm({
                     className="mb-3 w-full p-3 border rounded-lg"
                     value={searchItemName !== "!" ? searchItemName : ""}
                     type='search'
-                    placeholder="ID\Descrição\Código de barras (ou) Quant*Item"
+                    placeholder="Item ..."
                     onChange={(e) => setSearchITemName(e.target.value.toString())}
                     onKeyDown={(e) => { if (e.key === 'Enter') { addItemInput(); } }} autoFocus
                 />

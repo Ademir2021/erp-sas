@@ -8,7 +8,7 @@ export const globalStyles_table_list = "min-w-full border border-gray-100 rounde
 export const globalStyles_tbody_list = "divide-y divide-gray-200"
 export const globalStyles_thead_list = "bg-gray-500"
 export const globalStyles_btn_list = "px-2 py-1 text-[12px] font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
-export const globalStyles_form = "max-w-7xl mx-auto bg-gray-800 p-8 rounded-2xl shadow-lg"
+export const globalStyles_form = "max-w-7xl mx-auto bg-black/90 p-8 rounded-2xl shadow-lg"
 export const globalStyles_select = "w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
 
 export const globalStyles_login_div = "min-h-screen bg-transparent flex items-center justify-center p-4 mt-10"
