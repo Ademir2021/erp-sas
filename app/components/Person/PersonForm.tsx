@@ -12,7 +12,6 @@ import { TZipCode } from "@/app/models/TAddress"
 import { PersonList } from "./PersonList"
 import ShowForm from "../ShowForm"
 import { globalStyles_form, globalStyles_select } from "../GlobalStyles"
-import { TPlano } from "@/app/models/TPlanos"
 
 type FormData = z.infer<typeof cadastroSchema>
 
@@ -25,7 +24,7 @@ type Props = {
   setChildren: React.Dispatch<React.SetStateAction<TPerson | any>>
   groupPersons: TGroupPerson[]
   persons: TPerson[]
-  url_plano:any
+  url_plano: any
 }
 
 export default function PersonForm({
@@ -126,7 +125,7 @@ export default function PersonForm({
   }
 
   return <>
-   {persons.length !== 0 && <ShowForm
+    {persons.length !== 0 && <ShowForm
       showForm={showForm}
       setShowForm={setShowForm}
     />}
@@ -397,7 +396,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             placeholder="Complemento"
             className="w-full p-3 border rounded-lg"
           />
-          <label>Cep de sua cidade</label>
+          <label>Cidade</label>
           <select
             className={globalStyles_select}
             value={children.address.zipCode?.id || ""}
@@ -415,11 +414,11 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             }
           >
             <option disabled value="">
-              Selecione o Cep de sua Cidade ...
+              Selecione uma Cidade ...
             </option>
             {zipcodes.map((zipcode) => (
               <option key={zipcode.id}
-                value={zipcode.id}>{zipcode.code}</option>
+                value={zipcode.id}>{zipcode.city?.name + " - " + zipcode.city?.state.acronym}</option>
             ))}
           </select>
         </>}
@@ -450,10 +449,10 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
         </div>
         <p className="text-gray-300 ">{msg && msg}</p>
       </form>
-       {url_plano !== "person" && <button
-       className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-lg"
-       onClick={()=>router.push(url_plano)}
-       >Retornar ao Plano</button>}
+      {url_plano !== "person" && <button
+        className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-lg"
+        onClick={() => router.push(url_plano)}
+      >Retornar ao Plano</button>}
     </div>}
     {persons.length > 0 && <PersonList
       persons={persons}
