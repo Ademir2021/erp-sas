@@ -23,11 +23,17 @@ export default function CheckoutPage() {
 
   const [person, setPerson] = useState<TPerson | null>(null)
   const [msgCreditCard, setMsgCreditCard] = useState('')
-
   const [publicKey, setPublicKey] = useState<TPublicKey>({
     public_key: '', created_at: ''
   })
-  const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCardJSON as any)
+  const pagSeguroCard_: any = pagSeguroCardJSON
+  const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCard_)
+  const [responsePagSeguroCard, setResponsePagSeguroCard] = useState<TPagSeguroResponseCard>({
+    id: "", charges: [{
+      id: "", reference_id: "", status: 'PENDING',
+      created_at: "", paid_at: "", description: ""
+    }]
+  });
   const [creditCard, setCreditCard] = useState<TCreditCart>({
     public_key: "", holder: "", number: "",
     ex_month: "", ex_year: "", secure_code: "", encrypted: "",
@@ -63,92 +69,87 @@ export default function CheckoutPage() {
   }, []);
 
   useEffect(() => {
-    loadHandle('token', setPublicKey, 'pagseguropublickey', router)
+    loadHandle('permitAll()', setPublicKey, 'pagseguropublickey', router)
   }, [person]);
 
   useEffect(() => {
-    // const phone = person?.phone?.replace(/\D/g, '') || '';
-    const valorReais = creditCard?.payment; // transforma string em número
-    const valorCentavos = Math.round(valorReais * 100); // transforma em centavos e arredonda
-
-    if (plano) {
-      setPagSeguroCard(prev => {
-        const charges = [...(prev.charges || [])]
-
-        if (charges.length === 0) {
-          charges.push({
-            amount: { value: valorCentavos },
-            payment_method: {
-              installments: creditCard.installments
-            },
-            holder:{
-              tax_id:person?.cpf,
-              name:person?.name
-            }
-          } as any)
-        } else {
-          charges[0] = {
-            ...charges[0],
-            amount: {
-              ...charges[0].amount,
-              value: plano.preco,
-            },
-            payment_method: {
-              installments: creditCard.installments
-            } as any
-          }
-        };
-        const items = [...(prev.items || [])]
-        if (items.length === 0) {
-          items.push({
-            name: plano.nome,
-            amount: 1,
-            amount_unit: plano.preco
-          } as any)
-        } else {
-          items[0] = {
-            ...items[0],
-            name: plano.nome,
-            amount: 1,
-            amount_unit: plano.preco
-          } as any
-        }
-
-        return {
-          ...prev,
-          reference_id:uuidv4(),
+    if (!plano || !person) return;
+    const {
+      name,
+      email,
+      cpf,
+      cnpj,
+      phone = "",
+      address,
+    } = person;
+    const city = address?.zipCode?.city;
+    const state = city?.state;
+    const country = city?.country;
+    const phoneDDD = phone.slice(0, 2);
+    const phoneNumber = phone.substring(2);
+    const valorCentavos = Math.round(Number(creditCard?.payment || 0) * 100);
+    const updatedPagSeguroCard = {
+      ...pagSeguroCard,
+      reference_id: uuidv4(),
+      description: plano.descricao,
+      customer: {
+        ...pagSeguroCard.customer,
+        name: name?.toString(),
+        email: email?.toString(),
+        tax_id: cpf?.toString() || cnpj?.toString(),
+        phones: [
+          {
+            country: country?.ddi?.toString() || "55",
+            area: phoneDDD,
+            number: phoneNumber,
+            type: "MOBILE",
+          },
+        ],
+      },
+      shipping: {
+        ...pagSeguroCard.shipping,
+        address: {
+          ...pagSeguroCard.shipping.address,
+          street: address?.street?.toString(),
+          number: address?.number?.toString(),
+          complement: address?.complement?.toString(),
+          locality: address?.neighborhood?.toString(),
+          city: city?.name?.toString() || "Barbosa Ferraz",
+          region_code: state?.acronym?.toString() || "PR",
+          country: country?.acronym?.toString() || "BRA",
+          postal_code: address?.zipCode?.code?.replace(/\D/g, ""),
+        },
+      },
+      charges: [
+        {
+          ...pagSeguroCard.charges[0],
+          reference_id: uuidv4(),
           description: plano.descricao,
-          customer: {
-            name: person?.name,
-            email: person?.email,
-            tax_id: person?.cpf || person?.cnpj,
-            phones: [
-              {
-                country: person?.address.zipCode?.city?.country.ddi || "55",
-                area: person?.phone.slice(0, -9).toString() as any,
-                number: person?.phone.substring(2) as any,
-                type: "MOBILE"
-              }
-            ]
-          } as any,
-          shipping: {
-            address: {
-              street: person?.address.street.toString(),
-              number: person?.address.number || '0',
-              complement: person?.address.complement,
-              locality: person?.address.neighborhood,
-              city: person?.address.zipCode?.city?.name,
-              region_code: person?.address.zipCode?.city?.state?.acronym,
-              country: person?.address.zipCode?.city?.country?.acronym,
-              postal_code: person?.address.zipCode?.code?.replace(/\D/g, '')
-            }
-          } as any,
-          charges,
-          items
-        }
-      })
-    }
-  }, [plano, creditCard.installments, person])
+          amount: {
+            value: valorCentavos,
+            currency: "BRL"
+          },
+          payment_method: {
+            ...pagSeguroCard.charges[0].payment_method,
+            installments: creditCard.installments,
+            holder: {
+              name: name?.toString(),
+              tax_id: cpf?.toString(),
+            },
+          },
+        },
+      ],
+      items: [
+        {
+          reference_id: "1",
+          name: plano.nome?.toString(),
+          quantity: 1,
+          unit_amount: Math.round(Number(plano.preco) * 100),
+        },
+      ],
+    };
+    setPagSeguroCard(updatedPagSeguroCard as TPagSeguroCard);
+  }, [plano, person, creditCard.installments, creditCard.payment]);
 
   useEffect(() => {
     setCreditCard(prev => ({
@@ -172,8 +173,12 @@ export default function CheckoutPage() {
         securityCode: creditCard.secure_code,
       });
       if (encrypted) {
-        pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
-        // pagSeguroCard.charges[0].amount.value = plano.preco
+        // pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
+        // setCreditCard(prev => ({ ...prev, encrypted: encrypted.encryptedCard }))
+        setCreditCard(prev => ({
+          ...prev,
+          encrypted: encrypted.encryptedCard
+        }));
         registerPagSeguroCard()
       }
       if (encrypted.hasErrors === true) {
@@ -183,6 +188,11 @@ export default function CheckoutPage() {
       setMsgCreditCard('ErroEncryptCard: ' + err)
     }
   };
+
+  function clearPlano() {
+    localStorage.removeItem("url_plano");
+    localStorage.removeItem("person");
+  }
 
   async function registerPagSeguroCard() {
     try {
@@ -204,6 +214,8 @@ export default function CheckoutPage() {
       switch (charge.status) {
         case "PAID":
           setMsgCreditCard(`Pagamento aprovado! ID: ${charge.id ? charge.id : 'N/A'}`);
+          setResponsePagSeguroCard(data);
+          clearPlano();
           break;
         case "DECLINED":
           setMsgCreditCard("Pagamento recusado. Verifique os dados do cartão.");
@@ -229,8 +241,6 @@ export default function CheckoutPage() {
   function handleSubmitCreditCard(e: Event) {
     e.preventDefault()
     sdkPagSeguro()
-    localStorage.removeItem("url_plano");
-    localStorage.removeItem("person");
   }
 
   function handlePagamento() {
@@ -239,7 +249,7 @@ export default function CheckoutPage() {
   }
 
   return (<>
-    {/* <p>{JSON.stringify(publicKey)}</p> */}
+    <p>{JSON.stringify(pagSeguroCard.charges[0].amount.currency)}</p>
     {!person && <PlanosChecKoutForm
       plano={plano}
       handlePagamento={handlePagamento}

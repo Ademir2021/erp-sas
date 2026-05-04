@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import planos from "../checkout/[plano]/planos.json";
 
 export default function Solutions() {
   const router = useRouter();
@@ -45,23 +46,23 @@ export default function Solutions() {
 
       <div className="grid md:grid-cols-3 gap-8">
         <Card
-          titulo="Plano Básico"
+          titulo={`${planos.basico.nome}`}
           descricao="Ideal para quem está começando. Inclui suporte básico e funcionalidades essenciais."
-          preco="R$ 29,90"
+          preco={`R$ ${planos.basico.preco}`}
           rota="/checkout/basico"
         />
 
         <Card
-          titulo="Plano Profissional"
+          titulo={`${planos.pro.nome}`}
           descricao="Perfeito para negócios em crescimento. Inclui suporte prioritário e mais recursos."
-          preco="R$ 59,90"
+          preco={`R$ ${planos.pro.preco}`} 
           rota="/checkout/pro"
         />
 
         <Card
-          titulo="Plano Premium"
+          titulo={`${planos.premium.nome}`}
           descricao="Solução completa com todos os recursos, suporte dedicado e máxima performance."
-          preco="R$ 99,90"
+          preco={`R$ ${planos.premium.preco}`}
           rota="/checkout/premium"
         />
       </div>

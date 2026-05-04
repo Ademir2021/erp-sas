@@ -1,17 +1,17 @@
 {
     "basico": {
         "nome": "Plano Básico",
-        "preco": 29.9,
+        "preco": 5.9,
         "descricao": "Ideal para começar com o essencial."
     },
     "pro": {
         "nome": "Plano Profissional",
-        "preco": 59.9,
+        "preco": 129.9,
         "descricao": "Perfeito para crescimento do seu negócio."
     },
     "premium": {
         "nome": "Plano Premium",
-        "preco": 99.9,
+        "preco": 250.9,
         "descricao": "Todos os recursos liberados + suporte total."
     }
 }
