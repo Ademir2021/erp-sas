@@ -191,7 +191,7 @@ export default function Person() {
     }
 
     return <>
-        {/* {JSON.stringify(urlPlano)} */}
+        {/* {JSON.stringify(person)} */}
         {person === null && loadPlanos(person)}
         <PersonForm
             handleChange={handleChange}

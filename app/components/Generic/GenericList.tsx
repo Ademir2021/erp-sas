@@ -2,6 +2,7 @@ import { TGeneric } from "@/app/models/TGeneric"
 import { useEffect, useState } from "react"
 import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 import Pagination from "../Pagination/Pagination"
+import ItemsPerPage from "../ItemsPerPage"
 
 
 type Props = {
@@ -15,7 +16,7 @@ export default function GenericList({ generics,
     setGeneric, genericDefined, setShowForm }: Props) {
 
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 8
+    const [itemsPerPage, setItemsPerPage] = useState(8)
     const totalPages = Math.ceil(generics.length / itemsPerPage)
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -33,6 +34,7 @@ export default function GenericList({ generics,
 
     return <>
         <div className={globalStyles_overflow}>
+            <ItemsPerPage itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />
             <table className={globalStyles_table_list}>
                 <thead className={globalStyles_thead_list}>
                     <tr>

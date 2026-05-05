@@ -8,7 +8,7 @@ import { TCreditCart } from "@/app/models/TSale";
 import { useEffect, useState } from "react";
 import { TPagSeguroCard, TPagSeguroResponseCard, TPublicKey } from "@/app/models/TPagSeguroCard";
 import { loadHandle } from "@/app/lib/handleApi";
-import pagSeguroCardJSON from './pagSeguroCard.json'
+import pagSeguroCardJSON  from './pagSeguroCard.json'
 import CreditCardForm from "@/app/components/Sale/CreditCardForm";
 import { v4 as uuidv4 } from 'uuid';
 import { TPerson } from "@/app/models/TPerson";
@@ -23,6 +23,7 @@ export default function CheckoutPage() {
 
   const [person, setPerson] = useState<TPerson | null>(null)
   const [msgCreditCard, setMsgCreditCard] = useState('')
+  const [encrypted, setEncrypted] = useState('')
   const [publicKey, setPublicKey] = useState<TPublicKey>({
     public_key: '', created_at: ''
   })
@@ -34,11 +35,12 @@ export default function CheckoutPage() {
       created_at: "", paid_at: "", description: ""
     }]
   });
-  const [creditCard, setCreditCard] = useState<TCreditCart>({
+  const initialCreditCard: TCreditCart = {
     public_key: "", holder: "", number: "",
     ex_month: "", ex_year: "", secure_code: "", encrypted: "",
     installments: 1, payment: 0
-  });
+  }
+  const [creditCard, setCreditCard] = useState<TCreditCart>(initialCreditCard);
   const planos: Record<TipoPlano, TPlano> = planosJSON
   const params = useParams();
   const router = useRouter();
@@ -51,6 +53,10 @@ export default function CheckoutPage() {
         Plano não encontrado
       </div>
     );
+  }
+
+  function clearCreditCard() {
+    setCreditCard({ ...initialCreditCard });
   }
 
   useEffect(() => {
@@ -99,10 +105,10 @@ export default function CheckoutPage() {
         tax_id: cpf?.toString() || cnpj?.toString(),
         phones: [
           {
-            country: country?.ddi?.toString() || "55",
+            country: country?.ddi?.toString(),
             area: phoneDDD,
             number: phoneNumber,
-            type: "MOBILE",
+            type: "MOBILE"
           },
         ],
       },
@@ -114,10 +120,10 @@ export default function CheckoutPage() {
           number: address?.number?.toString(),
           complement: address?.complement?.toString(),
           locality: address?.neighborhood?.toString(),
-          city: city?.name?.toString() || "Barbosa Ferraz",
-          region_code: state?.acronym?.toString() || "PR",
-          country: country?.acronym?.toString() || "BRA",
-          postal_code: address?.zipCode?.code?.replace(/\D/g, ""),
+          city: city?.name?.toString(),
+          region_code: state?.acronym?.toString(),
+          country: country?.acronym?.toString(),
+          postal_code: address?.zipCode?.code?.replace(/\D/g, "")
         },
       },
       charges: [
@@ -131,10 +137,16 @@ export default function CheckoutPage() {
           },
           payment_method: {
             ...pagSeguroCard.charges[0].payment_method,
+            type: "CREDIT_CARD",
             installments: creditCard.installments,
+            capture: true,
+            card: {
+              encrypted: encrypted,
+              store: false
+            },
             holder: {
               name: name?.toString(),
-              tax_id: cpf?.toString(),
+              tax_id: cpf?.toString() || cnpj?.toString(),
             },
           },
         },
@@ -149,7 +161,7 @@ export default function CheckoutPage() {
       ],
     };
     setPagSeguroCard(updatedPagSeguroCard as TPagSeguroCard);
-  }, [plano, person, creditCard.installments, creditCard.payment]);
+  }, [plano, person, creditCard.installments, creditCard.payment, encrypted]);
 
   useEffect(() => {
     setCreditCard(prev => ({
@@ -164,23 +176,21 @@ export default function CheckoutPage() {
       return;
     }
     try {
+      const { holder, number, ex_month,
+        ex_year, secure_code }: TCreditCart = creditCard
       const encrypted = await window.PagSeguro.encryptCard({
         publicKey: publicKey.public_key,
-        holder: creditCard.holder,
-        number: creditCard.number,
-        expMonth: creditCard.ex_month,
-        expYear: creditCard.ex_year,
-        securityCode: creditCard.secure_code,
+        holder: holder,
+        number: number,
+        expMonth: ex_month,
+        expYear: ex_year,
+        securityCode: secure_code,
       });
       if (encrypted) {
-        // pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
-        // setCreditCard(prev => ({ ...prev, encrypted: encrypted.encryptedCard }))
-        setCreditCard(prev => ({
-          ...prev,
-          encrypted: encrypted.encryptedCard
-        }));
+        const updateEncriptedCard = encrypted.encryptedCard
+        setEncrypted(updateEncriptedCard)
         registerPagSeguroCard()
-      }
+      };
       if (encrypted.hasErrors === true) {
         setMsgCreditCard(JSON.stringify(encrypted.errors[0].code))
       }
@@ -206,7 +216,7 @@ export default function CheckoutPage() {
       if (!response.ok) {
         throw new Error(`Erro HTTP: ${response.status}`);
       }
-      const data: TPagSeguroResponseCard = await response.json(); //mudar para TPagSeguroResponse se a resposta for consistente
+      const data: TPagSeguroResponseCard = await response.json();
       const charge = data?.charges?.[0];
       if (!charge) {
         throw new Error("Resposta inválida do PagSeguro");
@@ -216,6 +226,7 @@ export default function CheckoutPage() {
           setMsgCreditCard(`Pagamento aprovado! ID: ${charge.id ? charge.id : 'N/A'}`);
           setResponsePagSeguroCard(data);
           clearPlano();
+          clearCreditCard();
           break;
         case "DECLINED":
           setMsgCreditCard("Pagamento recusado. Verifique os dados do cartão.");
@@ -232,10 +243,13 @@ export default function CheckoutPage() {
       }
     } catch (error: any) {
       console.error("Erro geral:", error);
-      setMsgCreditCard(
-        "Erro ao processar pagamento. Tente novamente mais tarde."
-      );
+      setTimeout(() => {
+        setMsgCreditCard('Ocorreu um erro ao processar o pagamento. Tente novamente.');
+      }, 5000)
     }
+    setTimeout(() => {
+      setMsgCreditCard('');
+    }, 10000)
   }
 
   function handleSubmitCreditCard(e: Event) {
@@ -249,7 +263,7 @@ export default function CheckoutPage() {
   }
 
   return (<>
-    <p>{JSON.stringify(pagSeguroCard.charges[0].amount.currency)}</p>
+    {/* <p>{JSON.stringify(pagSeguroCard.charges)}</p> */}
     {!person && <PlanosChecKoutForm
       plano={plano}
       handlePagamento={handlePagamento}

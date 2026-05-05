@@ -401,17 +401,16 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             className={globalStyles_select}
             value={children.address.zipCode?.id || ""}
             name="id"
-            onChange={(e) =>
+            onChange={(e) => {
+              const selected = zipcodes.find(g => g.id === Number(e.target.value))
               setChildren({
                 ...children,
                 address: {
                   ...children.address,
-                  zipCode: {
-                    id: parseInt(e.target.value)
-                  }
+                  zipCode: selected as TZipCode
                 }
               })
-            }
+            }}
           >
             <option disabled value="">
               Selecione uma Cidade ...

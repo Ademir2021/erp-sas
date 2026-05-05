@@ -13,17 +13,17 @@ export async function POST(request: Request) {
       { status: 400 }
     )
   }
-  if (!token.token) {
-    return NextResponse.json(
-      { error: 'Token não encontrado' },
-      { status: 401 }
-    )
-  }
+  // if (!token.token) {
+  //   return NextResponse.json(
+  //     { error: 'Token não encontrado' },
+  //     { status: 401 }
+  //   )
+  // }
   const apiResponse = await fetch(`${API_URL}/person`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token.token}`
+      // Authorization: `Bearer ${token.token}`
     },
     body: JSON.stringify(person)
   })

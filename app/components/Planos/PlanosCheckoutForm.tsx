@@ -29,7 +29,7 @@ export default function PlanosChecKoutForm({
                     onClick={handlePagamento}
                     className="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold"
                 >Finalizar Plano</button>
-                <button onClick={() => router.back()}
+                <button onClick={() => router.push('/solutions')}
                     className="w-full mt-3 text-gray-400 hover:text-white text-sm"
                 >Voltar</button>
             </div>
