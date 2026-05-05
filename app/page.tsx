@@ -89,7 +89,7 @@ export default function RootLayout() {
           ))}
         </div>
 
-        <Link href="/login" className="mt-6 text-black/70 text-2xl font-bold">
+        <Link href="/login" className="mt-6 text-white/80 text-2xl font-bold">
           Comece agora mesmo!
         </Link>
       </main>
