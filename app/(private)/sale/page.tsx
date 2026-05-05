@@ -25,39 +25,45 @@ declare global {
 }
 
 export default function Sales() {
-    const router = useRouter()
-    const pagSeguroCard_: any = pagSeguroCardJSON
-    const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCard_);
+
+    const router = useRouter();
+
+    const [encrypted, setEncrypted] = useState('');
+
+    const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCardJSON as TPagSeguroCard);
     const [responsePagSeguroCard, setResponsePagSeguroCard] = useState<TPagSeguroResponseCard>({
         id: "", charges: [{
             id: "", reference_id: "", status: 'PENDING',
             created_at: "", paid_at: "", description: ""
         }]
     });
-    const [encrypted, setEncrypted] = useState('')
+
+
     const [publicKey, setPublicKey] = useState<TPublicKey>({
         public_key: '', created_at: ''
-    })
+    });
+
     const [creditCard, setCreditCard] = useState<TCreditCart>({
         public_key: "", holder: "", number: "",
         ex_month: "", ex_year: "", secure_code: "", encrypted: "",
         installments: 1, payment: 0
     });
-    const pagSeguroPix_: any = pagSeguroPixJSON
-    const [pagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPix_);
+
+    const [pagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPixJSON as TPagSeguroPix);
     const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
         id: "",
         qr_codes: [{ id: "", text: "", amount: { value: 0 } }],
         error_messages: [{ code: "", description: "", parameter_name: "" }]
     });
+
     const [cash, setCash] = useState(0);
+    const { user } = userAuth();
+    const [msgCreditCard, setMsgCreditCard] = useState('')
+    const [msg, setMsg] = useState('')
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
     const [responseIdSale, setResponseIdSale] = useState(0)
-    const [msg, setMsg] = useState('')
-    const [msgCreditCard, setMsgCreditCard] = useState('')
     const [searchItemName, setSearchITemName] = useState('!')
-    const { user } = userAuth();
     const [items, setItems] = useState<TItem[]>([])
     const [itemsSale, setItemsSale] = useState<TItemsSale[]>([])
     const [sale, setSale] = useState<TSale>({
@@ -201,7 +207,7 @@ export default function Sales() {
     }, []);
 
     useEffect(() => {
-        async function loadUser() {
+        function loadUser() {
             if (user) {
                 const userSale: TUser = {
                     id: user.id,
@@ -302,19 +308,31 @@ export default function Sales() {
         }
     }
 
-    function getPagSeguroCard(pagSeguroCard: TPagSeguroCard) {
-        mapFieldsPagSeguroCard(
-            pagSeguroCard as TPagSeguroCard,
-            sale as TSale,
-            operationSale as TOperationSale,
-            person as TPerson,
-            creditCard as TCreditCart,
-            itemsSale as TItemsSale[],
-            encrypted as string,
-            setPagSeguroCard);
+    function getPagSeguroCard() {
+        // mapFieldsPagSeguroCard(
+        //     pagSeguroCard as TPagSeguroCard,
+        //     sale as TSale,
+        //     operationSale as TOperationSale,
+        //     person as TPerson,
+        //     creditCard as TCreditCart,
+        //     itemsSale as TItemsSale[],
+        //     encrypted as string,
+        //     setPagSeguroCard);
+
+        setPagSeguroCard(prev =>
+            mapFieldsPagSeguroCard({
+                p: prev,
+                sale,
+                operationSale,
+                creditCard,
+                person: sale.person! as TPerson,
+                itemsSale,
+                encrypted
+            })
+        )
     };
     useEffect(() => {
-        getPagSeguroCard(pagSeguroCard)
+        getPagSeguroCard()
     }, [sale, operationSale, person, creditCard,
         itemsSale, encrypted, setPagSeguroCard]
     );
@@ -338,7 +356,7 @@ export default function Sales() {
             if (encrypted) {
                 const encrypted_ = encrypted.encryptedCard
                 setEncrypted(encrypted_);
-                getPagSeguroCard(pagSeguroCard)
+                getPagSeguroCard()
                 registerPagSeguroCard()
             }
             if (encrypted.hasErrors === true) {
@@ -360,8 +378,8 @@ export default function Sales() {
             itemsSale as TItemsSale[]);
         const tSale = Math.round(Number(sale.tSale - cash) * 100);
         pagSeguroPix.qr_codes[0].amount.value = tSale;
-        pagSeguroPix.qr_codes[0].expiration_date = expiration_date_qrcode
-        pagSeguroPix.notification_urls = ["https://meusite.com/notificacoes"]
+        pagSeguroPix.qr_codes[0].expiration_date = expiration_date_qrcode as any;
+        pagSeguroPix.notification_urls = ["https://meusite.com/notificacoes"] as any;
     };
 
     async function registerPagSeguroPIX() {
