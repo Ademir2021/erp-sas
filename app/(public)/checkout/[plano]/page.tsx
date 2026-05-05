@@ -217,7 +217,7 @@ export default function CheckoutPage() {
         throw new Error(`Erro HTTP: ${response.status}`);
       }
       const data: TPagSeguroResponseCard = await response.json();
-      const charge = data?.charges?.[0];
+      const charge = data?.charges?.[0]
       if (!charge) {
         throw new Error("Resposta inválida do PagSeguro");
       }
@@ -243,13 +243,9 @@ export default function CheckoutPage() {
       }
     } catch (error: any) {
       console.error("Erro geral:", error);
-      setTimeout(() => {
-        setMsgCreditCard('Ocorreu um erro ao processar o pagamento. Tente novamente.');
-      }, 5000)
+        setMsgCreditCard(`Erro: ${error.message || error}`);
     }
-    setTimeout(() => {
-      setMsgCreditCard('');
-    }, 10000)
+  
   }
 
   function handleSubmitCreditCard(e: Event) {

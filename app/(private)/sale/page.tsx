@@ -34,6 +34,7 @@ export default function Sales() {
             created_at: "", paid_at: "", description: ""
         }]
     });
+    const [encrypted, setEncrypted] = useState('')
     const [publicKey, setPublicKey] = useState<TPublicKey>({
         public_key: '', created_at: ''
     })
@@ -204,6 +205,7 @@ export default function Sales() {
             if (user) {
                 const userSale: TUser = {
                     id: user.id,
+                    login: user.login,
                 } as any
                 setSale({ ...sale, user: userSale })
             }
@@ -296,11 +298,26 @@ export default function Sales() {
             }
         } catch (error: any) {
             console.error("Erro geral:", error);
-            setMsgCreditCard(
-                "Erro ao processar pagamento. Tente novamente mais tarde."
-            );
+            setMsgCreditCard(`Erro:${error}`);
         }
     }
+
+    function getPagSeguroCard(pagSeguroCard: TPagSeguroCard) {
+        mapFieldsPagSeguroCard(
+            pagSeguroCard as TPagSeguroCard,
+            sale as TSale,
+            operationSale as TOperationSale,
+            person as TPerson,
+            creditCard as TCreditCart,
+            itemsSale as TItemsSale[],
+            encrypted as string,
+            setPagSeguroCard);
+    };
+    useEffect(() => {
+        getPagSeguroCard(pagSeguroCard)
+    }, [sale, operationSale, person, creditCard,
+        itemsSale, encrypted, setPagSeguroCard]
+    );
 
     const sdkPagSeguro = async () => {
         if (!window.PagSeguro || !publicKey) {
@@ -308,23 +325,20 @@ export default function Sales() {
             return;
         }
         try {
+            const { holder, number, ex_month,
+                ex_year, secure_code }: TCreditCart = creditCard;
             const encrypted = await window.PagSeguro.encryptCard({
                 publicKey: publicKey.public_key,
-                holder: creditCard.holder,
-                number: creditCard.number,
-                expMonth: creditCard.ex_month,
-                expYear: creditCard.ex_year,
-                securityCode: creditCard.secure_code,
+                holder: holder,
+                number: number,
+                expMonth: ex_month,
+                expYear: ex_year,
+                securityCode: secure_code,
             });
             if (encrypted) {
-                pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted.encryptedCard
-                mapFieldsPagSeguroCard(pagSeguroCard as TPagSeguroCard,
-                    sale as TSale,
-                    operationSale as TOperationSale,
-                    person as TPerson,
-                    creditCard as TCreditCart,
-                    itemsSale as TItemsSale[],
-                    setPagSeguroCard);
+                const encrypted_ = encrypted.encryptedCard
+                setEncrypted(encrypted_);
+                getPagSeguroCard(pagSeguroCard)
                 registerPagSeguroCard()
             }
             if (encrypted.hasErrors === true) {
@@ -421,6 +435,7 @@ export default function Sales() {
     }
 
     return <>
+        <p>{JSON.stringify(pagSeguroCard)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const pagSeguroCard = await req.json();
+export async function POST(request: Request) {
+  const pagSeguroCard = await request.json();
   console.log("PagSeguro Card:", pagSeguroCard);
   /* produção: URL_PAGSEGURO_ORDERS || homologação: URL_PAGSEGURO_SANDBOX_ORDERS
   producao: TOKEN_PAGSEGURO || homologação: TOKEN_PAGSEGURO_SANDBOX */

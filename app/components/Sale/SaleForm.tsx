@@ -112,7 +112,6 @@ export default function SaleForm({
 
             return [...prev, newItem];
         });
-
         setSearchITemName('!');
     }
 
@@ -177,13 +176,14 @@ export default function SaleForm({
                         value={children.person.id || ''}
                         name="id"
                         onChange={(e) => {
-                            const selectedId = Number(e.target.value);
-                            children.person.id = selectedId // para o id da Pessoa da venda
-                            const selectedOperation = persons.find(
-                                (per) => per.id === selectedId
-                            );
-                            setPerson(selectedOperation);
-                        }}>
+                            const selected = persons.find(p => p.id === Number(e.target.value))
+                            setChildren((prev: TSale) => ({
+                                ...prev,
+                                person: selected as TPerson
+                            }));
+                            setPerson(selected as TPerson);
+                        }
+                        }>
                         <option disabled value="">
                             Selecione o Comprador ...
                         </option>
