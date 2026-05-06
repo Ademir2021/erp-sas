@@ -1,7 +1,7 @@
 {
     "basico": {
         "nome": "Plano Básico",
-        "preco": 5.9,
+        "preco": 99.9,
         "descricao": "Ideal para começar com o essencial."
     },
     "pro": {

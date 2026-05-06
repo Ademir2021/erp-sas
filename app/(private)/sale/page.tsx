@@ -9,8 +9,8 @@ import { TItem } from "@/app/models/TItem"
 import { TResponseMessage } from "@/app/models/TMessage"
 import { TPerson } from "@/app/models/TPerson"
 import { loadHandle } from "@/app/lib/handleApi"
-import pagSeguroCardJSON from "./JSON/pagSeguroCard.json"
-import pagSeguroPixJSON from "./JSON/pagSeguroPix.json"
+import pagSeguroCardJSON from "../../json/pagSeguroCard.json"
+import pagSeguroPixJSON from "../../json/pagSeguroPix.json"
 import { TPagSeguroCard, TPagSeguroResponseCard, TPublicKey } from "@/app/models/TPagSeguroCard"
 import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPagSeguroPix"
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
@@ -445,7 +445,7 @@ export default function Sales() {
     }
 
     return <>
-        {/* <p>{JSON.stringify(pagSeguroPix)}</p> */}
+        <p>{JSON.stringify(pagSeguroPix)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

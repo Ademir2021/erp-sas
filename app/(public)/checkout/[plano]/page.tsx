@@ -4,11 +4,11 @@ import { useParams, useRouter } from "next/navigation";
 import planosJSON from './planos.json'
 import { TPlano, TipoPlano } from "@/app/models/TPlanos";
 import PlanosChecKoutForm from "@/app/components/Planos/PlanosCheckoutForm";
-import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale";
+import { TCreditCart, TOperationSale, TSale } from "@/app/models/TSale";
 import { useEffect, useState } from "react";
 import { TPagSeguroCard, TPagSeguroResponseCard, TPublicKey } from "@/app/models/TPagSeguroCard";
 import { loadHandle } from "@/app/lib/handleApi";
-import pagSeguroCardJSON from './pagSeguroCard.json';
+import pagSeguroCardJSON from '../../../json/pagSeguroCard.json';
 import CreditCardForm from "@/app/components/Sale/CreditCardForm";
 import { v4 as uuidv4 } from 'uuid';
 import { TPerson } from "@/app/models/TPerson";
@@ -28,8 +28,7 @@ export default function CheckoutPage() {
   const [publicKey, setPublicKey] = useState<TPublicKey>({
     public_key: '', created_at: ''
   })
-  const pagSeguroCard_: any = pagSeguroCardJSON
-  const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCard_)
+  const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCardJSON as TPagSeguroCard);
   const [responsePagSeguroCard, setResponsePagSeguroCard] = useState<TPagSeguroResponseCard>({
     id: "", charges: [{
       id: "", reference_id: "", status: 'PENDING',
