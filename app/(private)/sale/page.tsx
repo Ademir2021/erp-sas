@@ -334,13 +334,14 @@ export default function Sales() {
                 sale,
                 operationSale,
                 person: sale.person! as TPerson,
-                itemsSale
+                itemsSale,
+                cash
             }));
     };
     useEffect(() => {
         getPagSeguroPix()
     }, [sale, operationSale, person, creditCard,
-        itemsSale, encrypted]
+        itemsSale, encrypted, cash]
     );
     async function registerPagSeguroPIX() {
         try {
@@ -407,7 +408,7 @@ export default function Sales() {
         registerPagSeguroPIX()
     };
     return <>
-        {/* <p>{JSON.stringify(pagSeguroPix)}</p> */}
+        {/* <p>{JSON.stringify(creditCard.payment)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

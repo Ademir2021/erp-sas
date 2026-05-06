@@ -2,6 +2,7 @@ import { TPagSeguroCard, TPagSeguroItems } from "@/app/models/TPagSeguroCard";
 import { TPagSeguroPix } from "@/app/models/TPagSeguroPix";
 import { TPerson } from "@/app/models/TPerson";
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale";
+import { ca } from "date-fns/locale";
 import { v4 as uuidv4 } from 'uuid';
 
 export function arrayItems(p: TPagSeguroCard, saleItens: TItemsSale[]) {
@@ -43,7 +44,8 @@ const mapShipping = (person: TPerson) => ({
 })
 
 const mapQrCode = (
-    sale: TSale
+    sale: TSale,
+    cash: number
 ) => {
     let time = new Date();
     let expiration_date_qrcode = new Date();
@@ -52,7 +54,7 @@ const mapQrCode = (
         type: "PIX",
         amount: {
             currency: "BRL",
-            value: Math.round(Number(sale.tSale) * 100)
+            value: Math.round(Number(sale.tSale - cash) * 100)
         },
         expiration_date: expiration_date_qrcode,
         links: [{ href: "https://meusite.com/notificacoes" }]
@@ -64,7 +66,7 @@ const mapCharges = (
     person: TPerson,
     operationSale: TOperationSale,
     encrypted: string,
-    baseCharge: any
+    baseCharge: any,
 ) => {
     const valorCentavos = Math.round((creditCard?.payment ?? 0) * 100)
     return [{
@@ -130,6 +132,7 @@ type PropsPIX = {
     operationSale: TOperationSale;
     person: TPerson;
     itemsSale: TItemsSale[];
+    cash: number;
 }
 
 export const mapFieldsPagSeguroPix = ({
@@ -138,6 +141,7 @@ export const mapFieldsPagSeguroPix = ({
     operationSale,
     person,
     itemsSale,
+    cash
 }: PropsPIX): TPagSeguroPix => {
     const newP = {
         ...p,
@@ -145,7 +149,7 @@ export const mapFieldsPagSeguroPix = ({
         description: operationSale.description,
         customer: mapCustomer(person, sale),
         shipping: mapShipping(person),
-        qr_codes: mapQrCode(sale),
+        qr_codes: mapQrCode(sale, cash),
     }
     arrayItems(newP as any, itemsSale)
     return newP as TPagSeguroPix;
