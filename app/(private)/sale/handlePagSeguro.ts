@@ -47,8 +47,8 @@ const mapQrCode = (
     sale: TSale,
     cash: number
 ) => {
-    let time = new Date();
-    let expiration_date_qrcode = new Date();
+    const time = new Date();
+    const expiration_date_qrcode = new Date();
     expiration_date_qrcode.setHours(time.getHours() + 48);
     return [{
         type: "PIX",
