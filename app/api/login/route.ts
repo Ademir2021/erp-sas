@@ -33,7 +33,6 @@ export async function POST(request: Request) {
       body: JSON.stringify(login)
     });
 
-    
     if (!res.ok) {
       return NextResponse.json(
         { error: "Credenciais inválidas" },
@@ -64,7 +63,7 @@ export async function POST(request: Request) {
       maxAge: 60 * 60 * 24
     });
     
-    console.log(resp)
+    // console.log(resp)
     return resp;
   
   } catch (error) {
