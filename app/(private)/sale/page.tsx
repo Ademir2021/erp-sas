@@ -27,9 +27,9 @@ declare global {
 export default function Sales() {
 
     const router = useRouter();
+    const { user } = userAuth();
 
     const [encrypted, setEncrypted] = useState('');
-
     const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCardJSON as TPagSeguroCard);
     const [responsePagSeguroCard, setResponsePagSeguroCard] = useState<TPagSeguroResponseCard>({
         id: "", charges: [{
@@ -37,27 +37,21 @@ export default function Sales() {
             created_at: "", paid_at: "", description: ""
         }]
     });
-
-
     const [publicKey, setPublicKey] = useState<TPublicKey>({
         public_key: '', created_at: ''
     });
-
     const [creditCard, setCreditCard] = useState<TCreditCart>({
         public_key: "", holder: "", number: "",
         ex_month: "", ex_year: "", secure_code: "", encrypted: "",
         installments: 1, payment: 0
     });
-
-    const [pagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPixJSON as TPagSeguroPix);
+    const [pagSeguroPix, setPagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPixJSON as TPagSeguroPix);
     const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
         id: "",
         qr_codes: [{ id: "", text: "", amount: { value: 0 } }],
         error_messages: [{ code: "", description: "", parameter_name: "" }]
     });
-
     const [cash, setCash] = useState(0);
-    const { user } = userAuth();
     const [msgCreditCard, setMsgCreditCard] = useState('')
     const [msg, setMsg] = useState('')
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
@@ -309,16 +303,6 @@ export default function Sales() {
     }
 
     function getPagSeguroCard() {
-        // mapFieldsPagSeguroCard(
-        //     pagSeguroCard as TPagSeguroCard,
-        //     sale as TSale,
-        //     operationSale as TOperationSale,
-        //     person as TPerson,
-        //     creditCard as TCreditCart,
-        //     itemsSale as TItemsSale[],
-        //     encrypted as string,
-        //     setPagSeguroCard);
-
         setPagSeguroCard(prev =>
             mapFieldsPagSeguroCard({
                 p: prev,
@@ -334,7 +318,7 @@ export default function Sales() {
     useEffect(() => {
         getPagSeguroCard()
     }, [sale, operationSale, person, creditCard,
-        itemsSale, encrypted, setPagSeguroCard]
+        itemsSale, encrypted]
     );
 
     const sdkPagSeguro = async () => {
@@ -367,20 +351,28 @@ export default function Sales() {
         }
     };
 
-    const createPagSeguroPix = () => {
+    const getPagSeguroPix = () => {
         let time = new Date();
         let expiration_date_qrcode = new Date();
         expiration_date_qrcode.setHours(time.getHours() + 48);
-        mapFieldsPagSeguroPix(pagSeguroPix as TPagSeguroPix | any,
-            person as TPerson,
-            user as TUser,
-            operationSale as TOperationSale,
-            itemsSale as TItemsSale[]);
+        setPagSeguroPix(prev =>
+            mapFieldsPagSeguroPix({
+                p: prev,
+                sale,
+                operationSale,
+                person: sale.person! as TPerson,
+                itemsSale
+            }));
         const tSale = Math.round(Number(sale.tSale - cash) * 100);
         pagSeguroPix.qr_codes[0].amount.value = tSale;
         pagSeguroPix.qr_codes[0].expiration_date = expiration_date_qrcode as any;
         pagSeguroPix.notification_urls = ["https://meusite.com/notificacoes"] as any;
     };
+    useEffect(() => {
+        getPagSeguroPix()
+    }, [sale, operationSale, person, creditCard,
+        itemsSale, encrypted]
+    );
 
     async function registerPagSeguroPIX() {
         try {
@@ -448,12 +440,12 @@ export default function Sales() {
     function handleSubmitPix(e: Event) {
         e.preventDefault()
         loadItemsSale(sale)
-        createPagSeguroPix()
+        getPagSeguroPix()
         registerPagSeguroPIX()
     }
 
     return <>
-        <p>{JSON.stringify(pagSeguroCard)}</p>
+        <p>{JSON.stringify(pagSeguroPix)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

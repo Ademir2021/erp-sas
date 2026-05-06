@@ -2,35 +2,7 @@ import { TPagSeguroCard, TPagSeguroItems } from "@/app/models/TPagSeguroCard";
 import { TPagSeguroPix } from "@/app/models/TPagSeguroPix";
 import { TPerson } from "@/app/models/TPerson";
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale";
-import { TUser } from "@/app/models/TUser";
 import { v4 as uuidv4 } from 'uuid';
-
-export const mapFieldsPagSeguroPix = (p: TPagSeguroPix | any,
-    person: TPerson, user: TUser, operationSale: TOperationSale, itemsSale: TItemsSale[]) => {
-    const phone = person?.phone?.replace(/\D/g, '') || '';
-    p.customer = p.customer || {};
-    p.customer.phones = p.customer.phones || [{}];
-    p.shipping = p.shipping || {};
-    p.shipping.address = p.shipping.address || {};
-    p.reference_id = user?.id;
-    p.description = operationSale.description;
-    p.customer.name = person?.name;
-    p.customer.email = user?.login;
-    p.customer.tax_id = person?.cpf;
-    p.customer.phones[0].country = person?.address.zipCode?.city?.country.ddi;
-    p.customer.phones[0].area = phone.substring(0, 2);
-    p.customer.phones[0].number = phone.substring(2);
-    p.customer.phones[0].type = "MOBILE";
-    p.shipping.address.street = person?.address.street;
-    p.shipping.address.number = person?.address.number || '0';
-    p.shipping.address.complement = person?.address.complement;
-    p.shipping.address.locality = person?.address.neighborhood;
-    p.shipping.address.city = person?.address.zipCode?.city?.name;
-    p.shipping.address.region_code = person?.address.zipCode?.city?.state?.acronym;
-    p.shipping.address.country = person?.address.zipCode?.city?.country?.acronym;
-    p.shipping.address.postal_code = person?.address.zipCode?.code?.replace(/\D/g, '');
-    arrayItems(p, itemsSale);
-}
 
 export function arrayItems(p: TPagSeguroCard, saleItens: TItemsSale[]) {
     p.items = []
@@ -57,6 +29,8 @@ const mapCustomer = (person: TPerson, sale: TSale) => ({
     }]
 })
 
+
+
 const mapShipping = (person: TPerson) => ({
     address: {
         street: person?.address?.street ?? "",
@@ -77,9 +51,7 @@ const mapCharges = (
     encrypted: string,
     baseCharge: any
 ) => {
-
     const valorCentavos = Math.round((creditCard?.payment ?? 0) * 100)
-
     return [{
         ...baseCharge,
         reference_id: uuidv4(),
@@ -100,7 +72,7 @@ const mapCharges = (
     }]
 }
 
-type Props = {
+type PropsCard = {
     p: TPagSeguroCard;
     sale: TSale;
     operationSale: TOperationSale;
@@ -118,8 +90,7 @@ export const mapFieldsPagSeguroCard = ({
     creditCard,
     itemsSale,
     encrypted
-}: Props): TPagSeguroCard => {
-
+}: PropsCard): TPagSeguroCard => {
     const newP = {
         ...p,
         reference_id: uuidv4(),
@@ -134,8 +105,35 @@ export const mapFieldsPagSeguroCard = ({
             p.charges[0]
         )
     }
-
     arrayItems(newP as TPagSeguroCard, itemsSale)
-
     return newP as TPagSeguroCard
 }
+
+type PropsPIX = {
+    p: TPagSeguroPix;
+    sale: TSale;
+    operationSale: TOperationSale;
+    person: TPerson;
+    itemsSale: TItemsSale[];
+}
+
+export const mapFieldsPagSeguroPix = ({
+    p,
+    sale,
+    operationSale,
+    person,
+    itemsSale,
+}: PropsPIX): TPagSeguroPix => {
+    const newP = {
+        ...p,
+        reference_id: uuidv4(),
+        description: operationSale.description,
+        customer: mapCustomer(person, sale),
+        shipping: mapShipping(person)
+    }
+    arrayItems(newP as TPagSeguroPix as any, itemsSale)
+    return newP as TPagSeguroPix
+}
+
+
+
