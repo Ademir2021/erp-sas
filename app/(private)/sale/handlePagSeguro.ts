@@ -42,6 +42,23 @@ const mapShipping = (person: TPerson) => ({
     }
 })
 
+const mapQrCode = (
+    sale: TSale
+) => {
+    let time = new Date();
+    let expiration_date_qrcode = new Date();
+    expiration_date_qrcode.setHours(time.getHours() + 48);
+    return [{
+        type: "PIX",
+        amount: {
+            currency: "BRL",
+            value: Math.round(Number(sale.tSale) * 100)
+        },
+        expiration_date: expiration_date_qrcode,
+        links: [{ href: "https://meusite.com/notificacoes" }]
+    },]
+}
+
 const mapCharges = (
     creditCard: TCreditCart,
     person: TPerson,
@@ -127,10 +144,11 @@ export const mapFieldsPagSeguroPix = ({
         reference_id: uuidv4(),
         description: operationSale.description,
         customer: mapCustomer(person, sale),
-        shipping: mapShipping(person)
+        shipping: mapShipping(person),
+        qr_codes: mapQrCode(sale),
     }
-    arrayItems(newP as TPagSeguroPix as any, itemsSale)
-    return newP as TPagSeguroPix
+    arrayItems(newP as any, itemsSale)
+    return newP as TPagSeguroPix;
 }
 
 

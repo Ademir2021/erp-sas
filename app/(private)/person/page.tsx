@@ -158,7 +158,6 @@ export default function Person() {
         return 'Falta preencher os campos: ' + missing.join(', ') + '.';
     }
 
-
     const [urlPlano, setUrlPlano] = useState('/person')
     useEffect(() => {
         const res = localStorage.getItem("url_plano") as any || "person";

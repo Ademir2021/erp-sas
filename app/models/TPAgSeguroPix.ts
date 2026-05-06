@@ -41,11 +41,12 @@ type TPhone = {
   type: "MOBILE" | "HOME" | "WORK"; // pode ajustar se houver mais tipos
 };
 
+
 type TQrCode = {
   amount: {
     value: number;
   };
-  expiration_date: string; // pode virar Date se você transformar depois
+  expiration_date: string | Date; // pode virar Date se você transformar depois
   links: TLink[];
 };
 
