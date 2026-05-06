@@ -445,7 +445,7 @@ export default function Sales() {
     }
 
     return <>
-        <p>{JSON.stringify(pagSeguroPix)}</p>
+        {/* <p>{JSON.stringify(pagSeguroPix)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
