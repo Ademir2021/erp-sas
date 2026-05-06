@@ -29,8 +29,6 @@ const mapCustomer = (person: TPerson, sale: TSale) => ({
     }]
 })
 
-
-
 const mapShipping = (person: TPerson) => ({
     address: {
         street: person?.address?.street ?? "",

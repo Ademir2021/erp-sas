@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const pagSeguroPix = await req.json();
-  console.log(pagSeguroPix)
+  // console.log(pagSeguroPix)
   /* produção: URL_PAGSEGURO_ORDERS || homologação: URL_PAGSEGURO_SANDBOX_ORDERS
   producao: TOKEN_PAGSEGURO || homologação: TOKEN_PAGSEGURO_SANDBOX */
   const URL = process.env.URL_PAGSEGURO_ORDERS as string
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       body: JSON.stringify(pagSeguroPix),
     });
     const data = await response.json();
-    console.log(data)
+    // console.log(data)
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(

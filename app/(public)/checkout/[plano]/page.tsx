@@ -200,7 +200,7 @@ export default function CheckoutPage() {
   }
 
   return (<>
-    <p>{JSON.stringify(pagSeguroCard)}</p>
+    {/* <p>{JSON.stringify(pagSeguroCard)}</p> */}
     {!person && <PlanosChecKoutForm
       plano={plano}
       handlePagamento={handlePagamento}
