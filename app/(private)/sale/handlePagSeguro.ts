@@ -65,7 +65,6 @@ const mapCharges = (
     creditCard: TCreditCart,
     person: TPerson,
     operationSale: TOperationSale,
-    encrypted: string,
     baseCharge: any,
 ) => {
     const valorCentavos = Math.round((creditCard?.payment ?? 0) * 100)
@@ -80,7 +79,6 @@ const mapCharges = (
         payment_method: {
             ...baseCharge.payment_method,
             installments: creditCard.installments,
-            card: { encrypted },
             holder: {
                 name: person?.name ?? "",
                 tax_id: person?.cpf || person?.cnpj || ""
@@ -96,7 +94,6 @@ type PropsCard = {
     person: TPerson;
     creditCard: TCreditCart;
     itemsSale: TItemsSale[];
-    encrypted: string;
 }
 
 export const mapFieldsPagSeguroCard = ({
@@ -106,7 +103,6 @@ export const mapFieldsPagSeguroCard = ({
     person,
     creditCard,
     itemsSale,
-    encrypted
 }: PropsCard): TPagSeguroCard => {
     const newP = {
         ...p,
@@ -118,7 +114,6 @@ export const mapFieldsPagSeguroCard = ({
             creditCard,
             person,
             operationSale,
-            encrypted,
             p.charges[0]
         )
     }

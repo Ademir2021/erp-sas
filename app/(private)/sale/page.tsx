@@ -24,7 +24,7 @@ declare global {
 export default function Sales() {
     const router = useRouter();
     const { user } = userAuth();
-    const [encrypted, setEncrypted] = useState('');
+    // const [encrypted, setEncrypted] = useState('');
     const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCardJSON as TPagSeguroCard);
     const [responsePagSeguroCard, setResponsePagSeguroCard] = useState<TPagSeguroResponseCard>({
         id: "", charges: [{
@@ -289,14 +289,13 @@ export default function Sales() {
                 operationSale,
                 creditCard,
                 person: sale.person! as TPerson,
-                itemsSale,
-                encrypted
+                itemsSale
             }))
     };
     useEffect(() => {
         getPagSeguroCard()
     }, [sale, operationSale, person, creditCard,
-        itemsSale, encrypted]
+        itemsSale]
     );
     const sdkPagSeguro = async () => {
         if (!window.PagSeguro || !publicKey) {
@@ -304,20 +303,19 @@ export default function Sales() {
             return;
         }
         try {
-            const { holder, number, ex_month,
-                ex_year, secure_code }: TCreditCart = creditCard;
             const encrypted = await window.PagSeguro.encryptCard({
                 publicKey: publicKey.public_key,
-                holder: holder,
-                number: number,
-                expMonth: ex_month,
-                expYear: ex_year,
-                securityCode: secure_code,
+                holder: creditCard.holder,
+                number: creditCard.number,
+                expMonth: creditCard.ex_month,
+                expYear: creditCard.ex_year,
+                securityCode: creditCard.secure_code,
             });
             if (encrypted) {
                 const encrypted_ = encrypted.encryptedCard
-                setEncrypted(encrypted_);
+                // setEncrypted(encrypted_);
                 getPagSeguroCard()
+                pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted_;
                 registerPagSeguroCard()
             }
             if (encrypted.hasErrors === true) {
@@ -341,7 +339,7 @@ export default function Sales() {
     useEffect(() => {
         getPagSeguroPix()
     }, [sale, operationSale, person, creditCard,
-        itemsSale, encrypted, cash]
+        itemsSale, cash]
     );
     async function registerPagSeguroPIX() {
         try {
@@ -401,6 +399,7 @@ export default function Sales() {
         e.preventDefault()
         sdkPagSeguro()
     };
+
     function handleSubmitPix(e: Event) {
         e.preventDefault()
         loadItemsSale(sale)
@@ -408,7 +407,7 @@ export default function Sales() {
         registerPagSeguroPIX()
     };
     return <>
-        {/* <p>{JSON.stringify(creditCard.payment)}</p> */}
+        {/* <p>{JSON.stringify(pagSeguroCard)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

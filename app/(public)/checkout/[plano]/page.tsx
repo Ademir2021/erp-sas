@@ -24,7 +24,6 @@ export default function CheckoutPage() {
 
   const [person, setPerson] = useState<TPerson | null>(null)
   const [msgCreditCard, setMsgCreditCard] = useState('')
-  const [encrypted, setEncrypted] = useState('')
   const [publicKey, setPublicKey] = useState<TPublicKey>({
     public_key: '', created_at: ''
   })
@@ -93,13 +92,12 @@ export default function CheckoutPage() {
         creditCard,
         person: person as TPerson,
         itemsSale: itemsSale as any,
-        encrypted
       })
     )
   };
   useEffect(() => {
     getPagSeguroCard()
-  }, [creditCard, person, encrypted]
+  }, [creditCard, person]
   );
 
   useEffect(() => {
@@ -127,8 +125,8 @@ export default function CheckoutPage() {
       });
       if (encrypted) {
         const updateEncriptedCard = encrypted.encryptedCard
-        setEncrypted(updateEncriptedCard)
         getPagSeguroCard()
+      pagSeguroCard.charges[0].payment_method.card = updateEncriptedCard
         registerPagSeguroCard()
       };
       if (encrypted.hasErrors === true) {
