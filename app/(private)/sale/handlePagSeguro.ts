@@ -149,6 +149,3 @@ export const mapFieldsPagSeguroPix = ({
     arrayItems(newP as any, itemsSale)
     return newP as TPagSeguroPix;
 }
-
-
-

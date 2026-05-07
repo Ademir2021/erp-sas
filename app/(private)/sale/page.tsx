@@ -256,25 +256,23 @@ export default function Sales() {
             if (!charge) {
                 throw new Error("Resposta inválida do PagSeguro");
             }
-            switch (charge.status) {
-                case "PAID":
-                    setMsgCreditCard(`Pagamento aprovado! ID: ${charge.id ? charge.id : 'N/A'}`);
-                    setInstallmentAccount(creditCard.installments);
-                    setResponsePagSeguroCard(data);
-                    handleSaveSale();
-                    break;
-                case "DECLINED":
-                    setMsgCreditCard("Pagamento recusado. Verifique os dados do cartão.");
-                    break;
-                case "CANCELED":
-                    setMsgCreditCard("Pagamento cancelado.");
-                    break;
-                case "AUTHORIZED":
-                    setMsgCreditCard("Pagamento autorizado, aguardando captura.");
-                    break;
-                default:
-                    setMsgCreditCard("Status desconhecido do pagamento.");
-                    console.warn("Status inesperado:", charge.status, data);
+            const msgBase = charge.status;
+            if (msgBase === "PAID") {
+                setMsgCreditCard(`Pagamento aprovado! ID: ${charge.id ? charge.id : 'N/A'}`);
+                setInstallmentAccount(creditCard.installments);
+                setResponsePagSeguroCard(data);
+                handleSaveSale();
+            } else if (msgBase === "DECLINED") {
+                setMsgCreditCard("Pagamento recusado. verifique os dados do cartão.");
+            } else if (msgBase === "CANCELED") {
+                setMsgCreditCard("Pagamento cancelado.");
+            } else if (msgBase === "AUTHORIZED") {
+                setMsgCreditCard("Pagamento autorizado, aguardando captura.");
+            } else if (msgBase === "PENDING") {
+                setMsgCreditCard("Pagamento pendente. aguardando processamento.");
+            } else {
+                setMsgCreditCard("Status desconhecido do pagamento.");
+                console.warn("Status inesperado:", msgBase, data);
             }
         } catch (error: any) {
             console.error("Erro geral:", error);
@@ -313,7 +311,6 @@ export default function Sales() {
             });
             if (encrypted) {
                 const encrypted_ = encrypted.encryptedCard
-                // setEncrypted(encrypted_);
                 getPagSeguroCard()
                 pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted_;
                 registerPagSeguroCard()
