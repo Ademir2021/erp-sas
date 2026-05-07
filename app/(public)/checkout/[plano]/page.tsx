@@ -159,22 +159,22 @@ export default function CheckoutPage() {
       if (!charge) {
         throw new Error("Resposta inválida do PagSeguro");
       }
-      const msgBase = charge.status;
-      if (msgBase === "PAID") {
+      const msgStatus = charge.status;
+      if (msgStatus === "PAID") {
         setMsgCreditCard(`Pagamento aprovado! ID: ${charge.id ? charge.id : 'N/A'}`);
         setResponsePagSeguroCard(data);
         clearPlano();
-      } else if (msgBase === "DECLINED") {
+      } else if (msgStatus === "DECLINED") {
         setMsgCreditCard("Pagamento recusado. verifique os dados do cartão.");
-      } else if (msgBase === "CANCELED") {
+      } else if (msgStatus === "CANCELED") {
         setMsgCreditCard("Pagamento cancelado.");
-      } else if (msgBase === "AUTHORIZED") {
+      } else if (msgStatus === "AUTHORIZED") {
         setMsgCreditCard("Pagamento autorizado, aguardando captura.");
-      } else if (msgBase === "PENDING") {
+      } else if (msgStatus === "PENDING") {
         setMsgCreditCard("Pagamento pendente. aguardando processamento.");
       } else {
         setMsgCreditCard("Status desconhecido do pagamento.");
-        console.warn("Status inesperado:", msgBase, data);
+        console.warn("Status inesperado:", msgStatus, data);
       }
     } catch (error: any) {
       console.error("Erro geral:", error);
