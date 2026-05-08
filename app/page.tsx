@@ -88,11 +88,12 @@ export default function RootLayout() {
             <Card key={index} {...card as CardProps} />
           ))}
         </div>
-
-        <Link href="/login" className="mt-6 text-white/80 text-2xl font-bold">
+          <a className="mt-3 bg-blue-800 hover:bg-blue-900
+           text-white py-2 px-9 rounded-lg cursor-pointer transition"
+           href="/login">
           Comece agora mesmo!
-        </Link>
+          </a>
       </main>
     </div>
   );
-}
+} 

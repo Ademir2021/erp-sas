@@ -16,15 +16,16 @@ import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 import { setDays } from "@/app/lib/momentDays"
 import { mapFieldsPagSeguroCard, mapFieldsPagSeguroPix } from "./handlePagSeguro"
 import { userAuth } from "@/app/lib/userAuth"
+
 declare global {
     interface Window {
         PagSeguro?: any;
     }
 }
+
 export default function Sales() {
     const router = useRouter();
     const { user } = userAuth();
-    // const [encrypted, setEncrypted] = useState('');
     const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCardJSON as TPagSeguroCard);
     const [responsePagSeguroCard, setResponsePagSeguroCard] = useState<TPagSeguroResponseCard>({
         id: "", charges: [{
@@ -164,6 +165,7 @@ export default function Sales() {
         operationSale,
         creditCard
     ]);
+
     useEffect(() => { // Se não for parcelado zera o Array
         if (operationSale.id === 3 || operationSale.id === 2) {
             setInstallmentAccount(1);
@@ -175,16 +177,19 @@ export default function Sales() {
             }));
         }
     }, [operationSale.id]);
+
     useEffect(() => { // Se for cartão de crédito, seta o número de parcelas selecionado
         if (operationSale.id === 2)
             setInstallmentAccount(creditCard.installments)
     }, [creditCard, operationSale])
+
     useEffect(() => {
         const script = document.createElement("script");
         script.src = process.env.NEXT_PUBLIC_SDK_PAGSEGURO as string;
         script.async = true;
         document.body.appendChild(script);
     }, []);
+
     useEffect(() => {
         function loadUser() {
             if (user) {
@@ -197,12 +202,14 @@ export default function Sales() {
         }
         loadUser()
     }, [user]);
+
     useEffect(() => {
         const token = user?.token as string
         loadHandle(token, setPersons, 'person', router)
         loadHandle(token, setOperationsSale, 'operationsale', router)
         loadHandle(token, setPublicKey, 'pagseguropublickey', router)
     }, [user]);
+
     useEffect(() => {
         async function searchItemsByName() {
             const token = user?.token
@@ -229,6 +236,7 @@ export default function Sales() {
         setItems([])
         searchItemsByName()
     }, [user, searchItemName])
+
     function loadItemsSale(sale: TSale | any) {
         if (itemsSale.length > 0) {
             sale.itemsSale = itemsSale.map(i => ({
@@ -239,6 +247,7 @@ export default function Sales() {
             }))
         };
     };
+
     async function registerPagSeguroCard() {
         try {
             const response = await fetch("/api/paymentcard", {
@@ -279,6 +288,7 @@ export default function Sales() {
             setMsgCreditCard(`Erro:${error}`);
         }
     };
+
     function getPagSeguroCard() {
         setPagSeguroCard(prev =>
             mapFieldsPagSeguroCard({
@@ -295,12 +305,12 @@ export default function Sales() {
     }, [sale, operationSale, person, creditCard,
         itemsSale]
     );
+
     const sdkPagSeguro = async () => {
         if (!window.PagSeguro || !publicKey) {
             setMsgCreditCard("SDK não carregado corretamente.");
             return;
-        }
-        try {
+        } try {
             const encrypted = await window.PagSeguro.encryptCard({
                 publicKey: publicKey.public_key,
                 holder: creditCard.holder,
@@ -322,6 +332,7 @@ export default function Sales() {
             setMsgCreditCard('ErroEncryptCard: ' + err)
         }
     };
+
     const getPagSeguroPix = () => {
         setPagSeguroPix(prev =>
             mapFieldsPagSeguroPix({
@@ -338,6 +349,7 @@ export default function Sales() {
     }, [sale, operationSale, person, creditCard,
         itemsSale, cash]
     );
+    
     async function registerPagSeguroPIX() {
         try {
             const response = await fetch("/api/paymentpix", {

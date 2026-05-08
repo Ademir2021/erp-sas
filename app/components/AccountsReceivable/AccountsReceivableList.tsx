@@ -2,6 +2,7 @@ import { DateFns } from "@/app/lib/dateFns"
 import { TAccountsReceivable, TReceipt } from "@/app/models/TAccountsReceivable"
 import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 import { txtValueReceived } from "@/app/(private)/accountsreceivable/fileTXT"
+import { userAuth } from "@/app/lib/userAuth"
 
 type Props = {
     accountsReceivable: TAccountsReceivable[]
@@ -14,6 +15,7 @@ export function AccountsReceivableList({
     accountsReceivable, setOpenAccount, handleSubmit, receipt }: Props) {
 
     const dateFns = new DateFns()
+      const { isAdmin, isUser } = userAuth()
 
     function updateAccountsReceivable(ar: TAccountsReceivable) {
         if (ar)
@@ -48,7 +50,9 @@ export function AccountsReceivableList({
                         <th className={`${globalStyles_th} text-left`}>TPayRecebido</th>
                         <th className={`${globalStyles_th} text-left`}>IDTipoOper</th>
                         <th className={`${globalStyles_th} text-left`}>DescrTipoOper</th>
-                        <th className={`${globalStyles_th} text-center`}>Receber</th>
+                        {isAdmin && (
+                            <th className={`${globalStyles_th} text-center`}>Receber</th>
+                        )}
                     </tr>
                 </thead>}
 
@@ -76,11 +80,11 @@ export function AccountsReceivableList({
                             <td className={`${globalStyles_td} text-left`}>{ar.descriptionTypeOperation}</td>
                             <td className={`${globalStyles_td} text-left`}>{ar.idTypeOperation}</td>
                             <td className={`${globalStyles_td} text-left`}>{ar.descriptionTypeOperation}</td>
-                            <td className={`${globalStyles_td} text-center`}><a href="#up-ar"
+                            {isAdmin && <td className={`${globalStyles_td} text-center`}><a href="#up-ar"
                                 onClick={() => updateAccountsReceivable(ar)}
                                 className={globalStyles_btn_list}
                             >Receber</a>
-                            </td>
+                            </td>}
                         </tr>
                     ))}
                 </tbody>

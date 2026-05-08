@@ -3,6 +3,7 @@ import { AccountsReceivableList } from "./AccountsReceivableList";
 import { useState } from "react";
 import ShowForm from "../ShowForm";
 import { globalStyles_form } from "../GlobalStyles";
+import { userAuth } from "@/app/lib/userAuth";
 
 type Props = {
     accountsReceivable: TAccountsReceivable[]
@@ -20,15 +21,16 @@ export default function AccountsReceivableForm({
 }: Props) {
 
     const [showForm, setShowForm] = useState(false)
+      const { isAdmin, isUser } = userAuth()
 
     const styles_input = "w-full p-2 border rounded-lg"
 
     return <>
-        <p className="text-xl font-bold text-center">Contas a Receber</p>
-        <ShowForm
+        <p className="text-xl font-bold text-center">Contas a Receber em aberto</p>
+        { isAdmin && <ShowForm
         showForm={showForm}
         setShowForm={setShowForm}
-        />
+        />}
         {showForm && <> {accountsReceivable.length > 0 ? <div className={`${globalStyles_form} max-w-xl mx-auto `}>
             <form className="flex flex-col items-center gap-4" onSubmit={handleSubmit}>
                 <label>Informe o Valor a Receber</label>

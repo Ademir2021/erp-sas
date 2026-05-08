@@ -2,7 +2,6 @@ import { TPagSeguroCard, TPagSeguroItems } from "@/app/models/TPagSeguroCard";
 import { TPagSeguroPix } from "@/app/models/TPagSeguroPix";
 import { TPerson } from "@/app/models/TPerson";
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale";
-import { ca } from "date-fns/locale";
 import { v4 as uuidv4 } from 'uuid';
 
 export function arrayItems(p: TPagSeguroCard, saleItens: TItemsSale[]) {

@@ -16,10 +16,10 @@ export async function loadHandle(
         });
 
         const data: TResponseMessage = await response.json()
-
-        if (data.error) {
-            throw new Error(`Erro: ${data.error}`)
-        };
+        
+                if (data.error) {
+                    throw new Error(`Erro: ${data.error}`)
+                };
 
         if (!response.ok) {
             router.push('/login')

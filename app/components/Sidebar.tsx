@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import Menu from "./Menu";
-import { LogoutButtonSocial } from "./LogoutButtonSocial";
 import Logo from "./Logo";
 import { userAuth } from "../lib/userAuth";
+import { LogoutButton } from "./LogoutButton";
 
 export default function Sidebar() {
 
@@ -26,9 +26,7 @@ overflow-y-auto transition-all duration-300">
 
         </div>
         {!collapsed && <Menu setCollapsed={setCollapsed} />}
-        {!collapsed && <div className="p-6">
-          {user ? <LogoutButtonSocial /> : <a href="/login">Fazer Login</a>}
-        </div>}
+        {!collapsed && <div className="p-6"></div>}
       </aside>
     </div>
   )
