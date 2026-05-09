@@ -13,6 +13,13 @@ import CreditCardForm from "@/app/components/Sale/CreditCardForm";
 import { v4 as uuidv4 } from 'uuid';
 import { TPerson } from "@/app/models/TPerson";
 import { mapFieldsPagSeguroCard } from "@/app/(private)/sale/handlePagSeguro";
+import PaypalCheckout from "../../../components/PaypalCheckout";
+// import { TPaypalErrorResponse } from "@/app/models/TPayPalErrorResponse"
+import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse"
+// import paymentPayPalJSON from '../../json/paymentPayPal.json'
+import orderPayPalJSON from '../../../json/orderPayPal.json'
+import responsePayPalJSON from '../../../json/responsePayPal.json'
+import { TResponsePayPal } from "@/app/models/TResponsePayPal"
 
 declare global {
   interface Window {
@@ -21,6 +28,11 @@ declare global {
 }
 
 export default function CheckoutPage() {
+
+  const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(orderPayPalJSON as TPayPalOrderResponse) // caputa o peido mas ainda não aprovado
+  const [responsePayPal, setResponsePayPal] = useState<TResponsePayPal>(responsePayPalJSON as TResponsePayPal)
+
+  const [msg, setMsg] = useState('')
 
   const [person, setPerson] = useState<TPerson | null>(null)
   const [msgCreditCard, setMsgCreditCard] = useState('')
@@ -140,7 +152,15 @@ export default function CheckoutPage() {
   function clearPlano() {
     localStorage.removeItem("url_plano");
     localStorage.removeItem("person");
+    router.push('/')
   }
+
+  useEffect(() => {
+    if (responsePayPal.status === "COMPLETED"){
+      clearPlano()
+      setMsg(responsePayPal.purchase_units[0].payments.captures[0].id!)
+    }
+  }, [responsePayPal])
 
   async function registerPagSeguroCard() {
     try {
@@ -193,18 +213,32 @@ export default function CheckoutPage() {
   }
 
   return (<>
-    {/* <p>{JSON.stringify(pagSeguroCard)}</p> */}
+    {/* <p>{JSON.stringify(responsePayPal)}</p> */}
     {!person && <PlanosChecKoutForm
       plano={plano}
       handlePagamento={handlePagamento}
     />}
-    {person && <CreditCardForm
+    {/* {person && <CreditCardForm
       creditCard={creditCard}
       setCreditCard={setCreditCard}
       msgCreditCard={msgCreditCard}
       handleSubmitCreditCard={handleSubmitCreditCard}
       plano={plano}
-    />}
+    />} */}
+    {person && <main className="p-10">
+      <p className="flex justify-center p-3 font-bold">Concluir Pagamento</p>
+      <PaypalCheckout
+        amount={Number(plano.preco).toFixed(2)}
+        onSuccess={(details) => {
+          setResponsePayPal(details);
+        }}
+        orderSuccess={(details) => {
+          setOrderPayPal(details)
+        }}
+        />
+        <span className="flex justify-center text-red-700"
+        >{msg && `Pagamento Confirmado: ${msg}`}</span>
+    </main>}
   </>
   );
 }

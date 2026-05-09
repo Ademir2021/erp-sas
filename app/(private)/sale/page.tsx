@@ -93,6 +93,7 @@ export default function Sales() {
     const [person, setPerson] = useState<TPerson | null>()
     const [installmentAccount, setInstallmentAccount] = useState(0)
     const [, setSaleAccountsReceivables] = useState<TAccountsReceivable[]>([])
+
     function handleItemAmount(): { handleItem: string; handleAmount: number } {
         if (searchItemName.includes('*')) {
             const [amount, item] = searchItemName.split('*');
@@ -108,11 +109,13 @@ export default function Sales() {
         }
     };
     const { handleAmount, handleItem } = handleItemAmount();
+
     useEffect(() => {
         if (!installmentAccount || installmentAccount <= 0) {
             setSaleAccountsReceivables([]);
             return;
         };
+
         function setObservationsAccounts() {
             if (qrcodePagSeguro?.qr_codes[0]?.amount?.value > 0) {
                 return "PIX"
@@ -438,7 +441,7 @@ export default function Sales() {
         registerPagSeguroPIX()
     };
     return <>
-        <p>{JSON.stringify(responsePayPal)}</p>
+        {/* <p>{JSON.stringify(responsePayPal)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
