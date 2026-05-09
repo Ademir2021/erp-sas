@@ -16,6 +16,10 @@ import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 import { setDays } from "@/app/lib/momentDays"
 import { mapFieldsPagSeguroCard, mapFieldsPagSeguroPix } from "./handlePagSeguro"
 import { userAuth } from "@/app/lib/userAuth"
+import { TPaypalErrorResponse } from "@/app/models/TPayPalErrorResponse"
+import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse"
+import paymentPayPalJSON from '../../json/paymentPayPal.json'
+import orderPayPalJSON from '../../json/orderPayPal.json'
 
 declare global {
     interface Window {
@@ -24,8 +28,13 @@ declare global {
 }
 
 export default function Sales() {
+
+    const [paymetPayPal, setPaymentPayPal] = useState<TPaypalErrorResponse>(paymentPayPalJSON as TPaypalErrorResponse);
+    const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(orderPayPalJSON as TPayPalOrderResponse) // caputa o peido mas ainda não aprovado
+
     const router = useRouter();
     const { user } = userAuth();
+
     const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCardJSON as TPagSeguroCard);
     const [responsePagSeguroCard, setResponsePagSeguroCard] = useState<TPagSeguroResponseCard>({
         id: "", charges: [{
@@ -248,6 +257,14 @@ export default function Sales() {
         };
     };
 
+    useEffect(() => {
+        if (paymetPayPal) {
+            if (paymetPayPal.details[0].issue === "COMPLETED") {
+                handleSaveSale()
+            }
+        }
+    }, [paymetPayPal])
+
     async function registerPagSeguroCard() {
         try {
             const response = await fetch("/api/paymentcard", {
@@ -349,7 +366,7 @@ export default function Sales() {
     }, [sale, operationSale, person, creditCard,
         itemsSale, cash]
     );
-    
+
     async function registerPagSeguroPIX() {
         try {
             const response = await fetch("/api/paymentpix", {
@@ -376,6 +393,7 @@ export default function Sales() {
             console.error("Erro geral:", error);
         }
     };
+
     async function saveSale(sale: TSale) {
         const res = await fetch('/api/sale', {
             method: 'POST',
@@ -416,7 +434,7 @@ export default function Sales() {
         registerPagSeguroPIX()
     };
     return <>
-        {/* <p>{JSON.stringify(pagSeguroCard)}</p> */}
+        <p>{JSON.stringify(orderPayPal)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
@@ -444,6 +462,8 @@ export default function Sales() {
             handleAmount={handleAmount}
             handleItem={handleItem}
             searchItemName={searchItemName}
+            setPaymentPayPal={setPaymentPayPal}
+            setOrderPayPal={setOrderPayPal}
         >
             {sale}
         </SaleForm>

@@ -1,0 +1,23 @@
+{
+    "name": "",
+    "details": [
+        {
+            "issue": "",
+            "description": ""
+        }
+    ],
+    "message": "",
+    "debug_id": "",
+    "links": [
+        {
+            "href": "",
+            "rel": "information_link",
+            "method": "GET"
+        },
+        {
+            "href": "",
+            "rel": "redirect",
+            "method": "GET"
+        }
+    ]
+}

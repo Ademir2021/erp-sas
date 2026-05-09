@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       body: JSON.stringify(pagSeguroCard)
     });
     const data = await response.json();
-    console.log("Response Data:", data);
+    console.log("Response Data:", data.charges[0]);
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(

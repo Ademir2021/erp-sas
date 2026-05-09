@@ -12,6 +12,7 @@ import CreditCardForm from "./CreditCardForm"
 import { TResponsePixQRCode } from '@/app/models/TPagSeguroPix';
 import { globalStyles_form, globalStylesTitle, globalStylesToggle } from '../GlobalStyles';
 import CashForm from './CashForm';
+import PaypalCheckout from "../PaypalCheckout";
 
 type Props = {
     children: TSale
@@ -41,6 +42,8 @@ type Props = {
     handleAmount: number
     handleItem: string
     searchItemName: string
+    setPaymentPayPal: Function
+    setOrderPayPal: Function
 }
 
 export default function SaleForm({
@@ -51,7 +54,7 @@ export default function SaleForm({
     creditCard, setCreditCard, handleSubmitCreditCard, person,
     setPerson, msgCreditCard, responseIdSale, handleSubmitPix,
     qrcode, setInstallmentAccount, cash, setCash, handleAmount,
-    handleItem, searchItemName }: Props) {
+    handleItem, searchItemName, setPaymentPayPal, setOrderPayPal }: Props) {
 
     const [step, setStep] = useState(false)
 
@@ -194,14 +197,31 @@ export default function SaleForm({
                     </select>
 
                     {/**Dados do cartão */}
-                    {operationSale.id === 2 && itemsSale.length > 0 && person &&
+                    {/* {operationSale.id === 2 && itemsSale.length > 0 && person &&
                         <> {cashForm}
                             <CreditCardForm
                                 creditCard={creditCard}
                                 setCreditCard={setCreditCard}
                                 handleSubmitCreditCard={handleSubmitCreditCard}
                                 msgCreditCard={msgCreditCard}
-                            /></>}
+                            /></>} */}
+
+                    {/**PayPal */}
+                    {operationSale.id === 2 && itemsSale.length > 0 && person &&
+                        <> {cashForm}
+                            <main className="p-10">
+                                <PaypalCheckout
+                                    amount={Number(totalSale - cash)}
+                                    onSuccess={(details) => {
+                                        setPaymentPayPal(details);
+                                    }}
+                                    orderSuccess={(details) => {
+                                        setOrderPayPal(details)
+                                    }}
+                                />
+                            </main>
+                        </>
+                    }
 
                     {/**Venda a prazo */}
                     {operationSale.id === 3 && person && itemsSale.length > 0 &&
