@@ -16,10 +16,12 @@ import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
 import { setDays } from "@/app/lib/momentDays"
 import { mapFieldsPagSeguroCard, mapFieldsPagSeguroPix } from "./handlePagSeguro"
 import { userAuth } from "@/app/lib/userAuth"
-import { TPaypalErrorResponse } from "@/app/models/TPayPalErrorResponse"
+// import { TPaypalErrorResponse } from "@/app/models/TPayPalErrorResponse"
 import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse"
-import paymentPayPalJSON from '../../json/paymentPayPal.json'
+// import paymentPayPalJSON from '../../json/paymentPayPal.json'
 import orderPayPalJSON from '../../json/orderPayPal.json'
+import responsePayPalJSON from '../../json/responsePayPal.json'
+import { TResponsePayPal } from "@/app/models/TResponsePayPal"
 
 declare global {
     interface Window {
@@ -29,9 +31,10 @@ declare global {
 
 export default function Sales() {
 
-    const [paymetPayPal, setPaymentPayPal] = useState<TPaypalErrorResponse>(paymentPayPalJSON as TPaypalErrorResponse);
+    // const [paymetPayPal, setPaymentPayPal] = useState<TPaypalErrorResponse>(paymentPayPalJSON as TPaypalErrorResponse);
     const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(orderPayPalJSON as TPayPalOrderResponse) // caputa o peido mas ainda não aprovado
-
+    const [responsePayPal, setResponsePayPal] = useState<TResponsePayPal>(responsePayPalJSON as TResponsePayPal)
+   
     const router = useRouter();
     const { user } = userAuth();
 
@@ -258,12 +261,13 @@ export default function Sales() {
     };
 
     useEffect(() => {
-        if (paymetPayPal) {
-            if (paymetPayPal.details[0].issue === "COMPLETED") {
+     
+        if (responsePayPal) {
+            if (responsePayPal.status === "COMPLETED") {
                 handleSaveSale()
             }
         }
-    }, [paymetPayPal])
+    }, [responsePayPal])
 
     async function registerPagSeguroCard() {
         try {
@@ -434,7 +438,7 @@ export default function Sales() {
         registerPagSeguroPIX()
     };
     return <>
-        <p>{JSON.stringify(orderPayPal)}</p>
+        <p>{JSON.stringify(responsePayPal)}</p>
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
@@ -462,7 +466,7 @@ export default function Sales() {
             handleAmount={handleAmount}
             handleItem={handleItem}
             searchItemName={searchItemName}
-            setPaymentPayPal={setPaymentPayPal}
+            setPaymentPayPal={setResponsePayPal}
             setOrderPayPal={setOrderPayPal}
         >
             {sale}

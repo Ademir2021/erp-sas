@@ -1,6 +1,6 @@
 export async function generateAccessToken() {
     const auth = Buffer.from(
-        `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_SECRET}`
+        `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
     ).toString("base64");
 
     const response = await fetch(
@@ -16,6 +16,6 @@ export async function generateAccessToken() {
     );
 
     const data = await response.json();
-console.log("Access Token Response:", data);
+// console.log("Access Token Response:", data);
     return data.access_token;
 }

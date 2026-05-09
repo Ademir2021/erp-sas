@@ -1,0 +1,98 @@
+{
+    "id": "",
+    "status": "",
+    "payment_source": {
+        "paypal": {
+            "email_address": "",
+            "account_id": "",
+            "account_status": "",
+            "name": {
+                "given_name": "",
+                "surname": ""
+            },
+            "tax_info": {
+                "tax_id": "",
+                "tax_id_type": ""
+            },
+            "address": {
+                "country_code": ""
+            }
+        }
+    },
+    "purchase_units": [
+        {
+            "reference_id": "",
+            "payments": {
+                "captures": [
+                    {
+                        "id": "",
+                        "status": "",
+                        "amount": {
+                            "currency_code": "BRL",
+                            "value": ""
+                        },
+                        "final_capture": true,
+                        "seller_protection": {
+                            "status": "",
+                            "dispute_categories": [
+                                "",
+                                ""
+                            ]
+                        },
+                        "seller_receivable_breakdown": {
+                            "gross_amount": {
+                                "currency_code": "",
+                                "value": ""
+                            },
+                            "paypal_fee": {
+                                "currency_code": "",
+                                "value": ""
+                            },
+                            "net_amount": {
+                                "currency_code": "",
+                                "value": ""
+                            }
+                        },
+                        "links": [
+                            {
+                                "href": "",
+                                "rel": "self",
+                                "method": "GET"
+                            },
+                            {
+                                "href": "",
+                                "rel": "refund",
+                                "method": "POST"
+                            },
+                            {
+                                "href": "",
+                                "rel": "up",
+                                "method": "GET"
+                            }
+                        ],
+                        "create_time": "",
+                        "update_time": ""
+                    }
+                ]
+            }
+        }
+    ],
+    "payer": {
+        "name": {
+            "given_name": "",
+            "surname": ""
+        },
+        "email_address": "",
+        "payer_id": "",
+        "address": {
+            "country_code": ""
+        }
+    },
+    "links": [
+        {
+            "href": "",
+            "rel": "self",
+            "method": "GET"
+        }
+    ]
+}

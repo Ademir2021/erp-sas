@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
     const data = await response.json();
     
-    console.log("Response body:", data);
+    console.log("Response body:", body);
 
     return NextResponse.json(data);
 }

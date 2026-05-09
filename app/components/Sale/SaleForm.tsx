@@ -211,7 +211,7 @@ export default function SaleForm({
                         <> {cashForm}
                             <main className="p-10">
                                 <PaypalCheckout
-                                    amount={Number(totalSale - cash)}
+                                    amount={Number(totalSale - cash).toFixed(2)}
                                     onSuccess={(details) => {
                                         setPaymentPayPal(details);
                                     }}
