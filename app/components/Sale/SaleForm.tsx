@@ -8,7 +8,7 @@ import { TItem } from "@/app/models/TItem"
 import { ItemsSaleList } from "./ItemsSaleList"
 import { TPerson } from "@/app/models/TPerson"
 import { useEffect, useState } from "react"
-import CreditCardForm from "./CreditCardForm"
+// import CreditCardForm from "./CreditCardForm"
 import { TResponsePixQRCode } from '@/app/models/TPagSeguroPix';
 import { globalStyles_form, globalStylesTitle, globalStylesToggle } from '../GlobalStyles';
 import CashForm from './CashForm';
