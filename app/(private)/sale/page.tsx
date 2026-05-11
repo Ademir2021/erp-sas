@@ -35,7 +35,7 @@ export default function Sales() {
     // const [paymetPayPal, setPaymentPayPal] = useState<TPaypalErrorResponse>(paymentPayPalJSON as TPaypalErrorResponse);
     const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(orderPayPalJSON as TPayPalOrderResponse) // caputa o peido mas ainda não aprovado
     const [responsePayPal, setResponsePayPal] = useState<TResponsePayPal>(responsePayPalJSON as TResponsePayPal)
-   
+
     const router = useRouter();
     const { user } = userAuth();
 
@@ -126,15 +126,20 @@ export default function Sales() {
             };
             return "CREDIÁRIO LOJA"
         };
+
         function setIdTypeOperationAccounts() {
-            if (qrcodePagSeguro?.id !== "") {
-                return qrcodePagSeguro.id
-            };
-            if (responsePagSeguroCard?.id !== "") {
-                return responsePagSeguroCard.id
-            };
+            const qrcodeID = qrcodePagSeguro?.id as any
+            const resPagSeguroCardID = responsePagSeguroCard?.id as any
+            const resPayPalID = responsePayPal?.purchase_units[0]?.payments?.captures[0]?.id as any
+            if (qrcodeID)
+                return qrcodeID
+            if (resPagSeguroCardID)
+                return resPagSeguroCardID
+            if (resPayPalID)
+                return resPayPalID
             return `ID:${operationSale.id.toString()} - ${operationSale.description}`
         };
+
         const newAccountsReceivable: TAccountsReceivable[] = Array.from(
             { length: installmentAccount },
             (_, i) => {
@@ -179,7 +184,8 @@ export default function Sales() {
         qrcodePagSeguro,
         responsePagSeguroCard,
         operationSale,
-        creditCard
+        creditCard,
+        responsePayPal
     ]);
 
     useEffect(() => { // Se não for parcelado zera o Array
@@ -265,7 +271,6 @@ export default function Sales() {
     };
 
     useEffect(() => {
-     
         if (responsePayPal) {
             if (responsePayPal.status === "COMPLETED") {
                 handleSaveSale()
