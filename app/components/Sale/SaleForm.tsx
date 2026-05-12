@@ -13,6 +13,7 @@ import { TResponsePixQRCode } from '@/app/models/TPagSeguroPix';
 import { globalStyles_form, globalStylesTitle, globalStylesToggle } from '../GlobalStyles';
 import CashForm from './CashForm';
 import PaypalCheckout from "../PaypalCheckout";
+import { userAuth } from '@/app/lib/userAuth';
 
 type Props = {
     children: TSale
@@ -55,6 +56,8 @@ export default function SaleForm({
     setPerson, msgCreditCard, responseIdSale, handleSubmitPix,
     qrcode, setInstallmentAccount, cash, setCash, handleAmount,
     handleItem, searchItemName, setPaymentPayPal, setOrderPayPal }: Props) {
+
+    const { isUser, isAdmin } = userAuth()
 
     const [step, setStep] = useState(false)
 
@@ -164,15 +167,18 @@ export default function SaleForm({
                         <option disabled value="">
                             Selecione uma Operação de Venda ...
                         </option>
-                        {operationsSale.map((operationSale) => (
+                        {isAdmin ? operationsSale.map((operationSale) => (
                             <option
                                 key={operationSale.id}
                                 value={operationSale.id}
                             >
                                 {operationSale.description}
                             </option>
-                        ))}
+
+                        )) : <option value={2}
+                        >Venda com Cartão Débito/Crédito</option>}
                     </select>
+
                     <label className={`${globalStylesTitle}`}>Selecionar o Comprador</label>
                     <select
                         className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -208,7 +214,7 @@ export default function SaleForm({
 
                     {/**PayPal */}
                     {operationSale.id === 2 && itemsSale.length > 0 && person &&
-                        <> {cashForm}
+                        <> {isAdmin && cashForm}
                             <main className="p-10">
                                 <PaypalCheckout
                                     amount={Number(totalSale - cash).toFixed(2)}

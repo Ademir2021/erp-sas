@@ -156,7 +156,7 @@ export default function CheckoutPage() {
   }
 
   useEffect(() => {
-    if (responsePayPal.status === "COMPLETED"){
+    if (responsePayPal.status === "COMPLETED") {
       clearPlano()
       setMsg(responsePayPal.purchase_units[0].payments.captures[0].id!)
     }
@@ -227,17 +227,26 @@ export default function CheckoutPage() {
     />} */}
     {person && <main className="p-10">
       <p className="flex justify-center p-3 font-bold">Concluir Pagamento</p>
-      <PaypalCheckout
-        amount={Number(plano.preco).toFixed(2)}
-        onSuccess={(details) => {
-          setResponsePayPal(details);
-        }}
-        orderSuccess={(details) => {
-          setOrderPayPal(details)
-        }}
+      <span className="flex m-2 text-gray-400" >
+        {`Valor do Plano contratado: ${Number(plano.preco).toFixed(2)}`}</span>
+      <div className="max-w-md mx-auto">
+        <PaypalCheckout
+          amount={Number(plano.preco).toFixed(2)}
+          onSuccess={(details) => {
+            setResponsePayPal(details);
+          }}
+          orderSuccess={(details) => {
+            setOrderPayPal(details)
+          }}
         />
         <span className="flex justify-center text-red-700"
         >{msg && `Pagamento Confirmado: ${msg}`}</span>
+        <div className="flex justify-end">
+          <button className="cursor-pointer text-[12px]
+        text-gray-500 font-semibold m-2"
+            onClick={() => clearPlano()}>Cancelar</button>
+        </div>
+      </div>
     </main>}
   </>
   );
