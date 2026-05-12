@@ -48,6 +48,8 @@ export default function PersonForm({
   persons,
   url_plano }: Props) {
 
+  const [cityInput, setCityInput] = useState("");
+
   const [showForm, setShowForm] = useState(false)
   const [step, setStep] = useState(1)
 
@@ -88,6 +90,14 @@ export default function PersonForm({
     console.log("Dados finais:", data)
     // alert("Cadastro realizado com sucesso 🚀")
   }
+
+  const formatCEP = (value: any) => {
+    return value
+      .replace(/\D/g, "")
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2-$3")
+      .slice(0, 10);
+  };
 
   function formatCPF(value: string | undefined | null) {
     if (!value) return ""
@@ -135,11 +145,11 @@ export default function PersonForm({
   }
 
   const steps = [
-  { label: <OpenInNewIcon fontSize="large" titleAccess="Tipo de Pessoa" />, step: 1 },
-  { label: <PersonAddAlt1Icon fontSize="large" titleAccess="Dados da Pessoa"/>, step: 2 },
-  { label: <AddIcCallIcon fontSize="large" titleAccess="Dados de Contatos"  />, step: 3 },
-  { label: <PlaceIcon fontSize="large" titleAccess="Dados de Localidade" />, step: 4 },
-];
+    { label: <OpenInNewIcon fontSize="large" titleAccess="Tipo de Pessoa" />, step: 1 },
+    { label: <PersonAddAlt1Icon fontSize="large" titleAccess="Dados da Pessoa" />, step: 2 },
+    { label: <AddIcCallIcon fontSize="large" titleAccess="Dados de Contatos" />, step: 3 },
+    { label: <PlaceIcon fontSize="large" titleAccess="Dados de Localidade" />, step: 4 },
+  ];
 
   return <>
     {persons.length !== 0 && <ShowForm
@@ -150,20 +160,20 @@ export default function PersonForm({
       {/* STEP INDICATOR */}
 
 
-<div className="flex justify-between mb-1">
-  {steps.map((item) => (
-    <button
-      key={item.step}
-      onClick={() => setStep(item.step)}
-      className={`cursor-pointer transition-colors
-        ${step === item.step
-          ? "text-blue-600"
-          : "text-gray-400 hover:text-gray-600"
-        }`}
-    >
-      {item.label}
-    </button>
-  ))}
+      <div className="flex justify-between mb-1">
+        {steps.map((item) => (
+          <button
+            key={item.step}
+            onClick={() => setStep(item.step)}
+            className={`cursor-pointer transition-colors
+${step === item.step
+                ? "text-blue-600"
+                : "text-gray-400 hover:text-gray-600"
+              }`}
+          >
+            {item.label}
+          </button>
+        ))}
       </div>
       {children.id != 0 ? <> <b>Atualizar Registro</b>
         <div>{"ID:" + String(children.id).padStart(9, '0') + " - " + children.name} </div> </> :
@@ -421,30 +431,49 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             placeholder="Complemento"
             className="w-full p-3 border rounded-lg"
           />
-          <label>Cidade</label>
-          <select
+          <label>
+            Cidade/Cep,{" "}
+            {children.address.zipCode && (
+              <span className="text-gray-300">
+                {`${children.address.zipCode?.city?.name || ''} - 
+CEP ${formatCEP(children.address.zipCode?.code) || '?'}`}
+              </span>
+            )}
+          </label>
+          <input
+            list="cities"
             className={globalStyles_select}
-            value={children.address.zipCode?.id || ""}
-            name="id"
+            value={cityInput}
+            placeholder="Digite a cidade..."
             onChange={(e) => {
-              const selected = zipcodes.find(g => g.id === Number(e.target.value))
-              setChildren({
-                ...children,
-                address: {
-                  ...children.address,
-                  zipCode: selected as TZipCode
-                }
-              })
+              const value = e.target.value;
+              setCityInput(value);
+              const selected = zipcodes.find(
+                z => z.city?.name?.toLowerCase() === value.toLowerCase()
+              );
+              if (selected) {
+                setChildren({
+                  ...children,
+                  address: {
+                    ...children.address,
+                    zipCode: selected as TZipCode
+                  }
+                });
+              }
             }}
-          >
-            <option disabled value="">
-              Selecione uma Cidade ...
-            </option>
+          />
+          <datalist id="cities">
             {zipcodes.map((zipcode) => (
-              <option key={zipcode.id}
-                value={zipcode.id}>{zipcode.city?.name + " - " + zipcode.city?.state.acronym}</option>
+              <option
+                key={zipcode.id}
+                value={zipcode.city?.name}
+              >{`${zipcode.city?.name} - 
+${zipcode.city?.state?.acronym} - 
+${zipcode?.code}`}</option>
             ))}
-          </select>
+          </datalist>
+
+
         </>}
 
         {/* BOTÕES */}
@@ -453,9 +482,9 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             <button type="button"
               onClick={() => setStep(step - 1)}
               className="px-2 py-2 cursor-pointer bg-blue-600 text-white rounded-lg">
-              <ArrowBackIosIcon titleAccess="Voltar"/>
+              <ArrowBackIosIcon titleAccess="Voltar" />
             </button>
-             <button type="button"
+            <button type="button"
               onClick={() => setStep(1)}
               className="px-2 py-2 cursor-pointer bg-blue-600 text-white rounded-lg">
               <RestoreIcon titleAccess="Inicio" />
@@ -465,14 +494,14 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             <button type="button"
               onClick={() => setStep(step + 1)}
               className="px-2 py-2 cursor-pointer bg-blue-600 text-white rounded-lg">
-              <ArrowForwardIosIcon titleAccess="Próximo"/>
+              <ArrowForwardIosIcon titleAccess="Próximo" />
             </button>
           ) : (
             <button
               type="submit"
               onClick={handleSubmit_}
               className="px-4 cursor-pointer py-2 bg-green-600 text-white rounded-lg">
-              {children.id === 0 ? <DoneIcon titleAccess="Finalizar" /> : <CheckIcon titleAccess="Concluir"/>}
+              {children.id === 0 ? <DoneIcon titleAccess="Finalizar" /> : <CheckIcon titleAccess="Concluir" />}
             </button>
           )}
         </div>
