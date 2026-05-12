@@ -226,10 +226,10 @@ export default function CheckoutPage() {
       plano={plano}
     />} */}
     {person && <main className="p-10">
+      <div className="max-w-md mx-auto">
       <p className="flex justify-center p-3 font-bold">Concluir Pagamento</p>
       <span className="flex m-2 text-gray-400" >
         {`Valor do Plano contratado: ${Number(plano.preco).toFixed(2)}`}</span>
-      <div className="max-w-md mx-auto">
         <PaypalCheckout
           amount={Number(plano.preco).toFixed(2)}
           onSuccess={(details) => {

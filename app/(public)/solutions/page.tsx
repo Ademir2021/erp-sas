@@ -30,7 +30,7 @@ export default function Solutions() {
 
         <button
           onClick={() => router.push(rota)}
-          className="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
+          className="mt-4 cursor-pointer bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
         >
           Contratar
         </button>

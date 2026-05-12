@@ -172,7 +172,7 @@ ${step === index + 1 ? "text-blue-600" : "text-gray-400"}`}>
                   typePerson: TypePerson.FISICA
                 })
               }}
-              className={`flex-1 p-3 rounded-lg border 
+              className={`flex-1 p-3 rounded-lg border cursor-pointer
 ${tipoPessoa === "pf" ? "bg-blue-600 text-white" : ""}`}
             >
               Pessoa Física
@@ -186,7 +186,7 @@ ${tipoPessoa === "pf" ? "bg-blue-600 text-white" : ""}`}
                   typePerson: TypePerson.JURIDICA
                 })
               }}
-              className={`flex-1 p-3 rounded-lg border 
+              className={`flex-1 p-3 rounded-lg border cursor-pointer
 ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             >
               Pessoa Jurídica
@@ -258,7 +258,7 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
             <button
               type="button"
               onClick={handleBuscarCNPJ}
-              className="bg-gray-200 p-2 rounded-lg">
+              className="bg-gray-700 cursor-pointer p-2 rounded-lg">
               Buscar CNPJ
             </button>
 
