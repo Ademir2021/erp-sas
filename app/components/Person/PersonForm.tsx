@@ -13,6 +13,16 @@ import { PersonList } from "./PersonList"
 import ShowForm from "../ShowForm"
 import { globalStyles_form, globalStyles_select } from "../GlobalStyles"
 
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import AddIcCallIcon from '@mui/icons-material/AddIcCall';
+import PlaceIcon from '@mui/icons-material/Place';
+import DoneIcon from '@mui/icons-material/Done';
+import CheckIcon from '@mui/icons-material/Check';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import RestoreIcon from '@mui/icons-material/Restore';
+
 type FormData = z.infer<typeof cadastroSchema>
 
 type Props = {
@@ -124,6 +134,13 @@ export default function PersonForm({
       /></>
   }
 
+  const steps = [
+  { label: <OpenInNewIcon fontSize="large" titleAccess="Tipo de Pessoa" />, step: 1 },
+  { label: <PersonAddAlt1Icon fontSize="large" titleAccess="Dados da Pessoa"/>, step: 2 },
+  { label: <AddIcCallIcon fontSize="large" titleAccess="Dados de Contatos"  />, step: 3 },
+  { label: <PlaceIcon fontSize="large" titleAccess="Dados de Localidade" />, step: 4 },
+];
+
   return <>
     {persons.length !== 0 && <ShowForm
       showForm={showForm}
@@ -131,14 +148,22 @@ export default function PersonForm({
     />}
     {(showForm || persons.length === 0) && <div id="up-person" className={`${globalStyles_form} max-w-xl mx-auto`}>
       {/* STEP INDICATOR */}
-      <div className="flex justify-between mb-8">
-        {["Tipo", "Dados", "Contato", "Endereço"].map((item, index) => (
-          <div key={index}
-            className={`flex-1 text-center font-semibold 
-${step === index + 1 ? "text-blue-600" : "text-gray-400"}`}>
-            {item}
-          </div>
-        ))}
+
+
+<div className="flex justify-between mb-1">
+  {steps.map((item) => (
+    <button
+      key={item.step}
+      onClick={() => setStep(item.step)}
+      className={`cursor-pointer transition-colors
+        ${step === item.step
+          ? "text-blue-600"
+          : "text-gray-400 hover:text-gray-600"
+        }`}
+    >
+      {item.label}
+    </button>
+  ))}
       </div>
       {children.id != 0 ? <> <b>Atualizar Registro</b>
         <div>{"ID:" + String(children.id).padStart(9, '0') + " - " + children.name} </div> </> :
@@ -424,25 +449,30 @@ ${tipoPessoa === "pj" ? "bg-blue-600 text-white" : ""}`}
 
         {/* BOTÕES */}
         <div className="flex justify-between">
-          {step > 1 && (
+          {step > 1 && (<>
             <button type="button"
               onClick={() => setStep(step - 1)}
-              className="px-4 py-2 border rounded-lg">
-              Voltar
+              className="px-2 py-2 cursor-pointer bg-blue-600 text-white rounded-lg">
+              <ArrowBackIosIcon titleAccess="Voltar"/>
             </button>
-          )}
+             <button type="button"
+              onClick={() => setStep(1)}
+              className="px-2 py-2 cursor-pointer bg-blue-600 text-white rounded-lg">
+              <RestoreIcon titleAccess="Inicio" />
+            </button>
+          </>)}
           {step < 4 ? (
             <button type="button"
               onClick={() => setStep(step + 1)}
-              className="px-4 py-2 cursor-pointer bg-blue-600 text-white rounded-lg">
-              Próximo
+              className="px-2 py-2 cursor-pointer bg-blue-600 text-white rounded-lg">
+              <ArrowForwardIosIcon titleAccess="Próximo"/>
             </button>
           ) : (
             <button
               type="submit"
               onClick={handleSubmit_}
               className="px-4 cursor-pointer py-2 bg-green-600 text-white rounded-lg">
-              {children.id === 0 ? "Finalizar" : "Atualizar"}
+              {children.id === 0 ? <DoneIcon titleAccess="Finalizar" /> : <CheckIcon titleAccess="Concluir"/>}
             </button>
           )}
         </div>
