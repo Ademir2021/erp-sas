@@ -1,8 +1,9 @@
 import { TItem } from "@/app/models/TItem";
 import { TItemsSale } from "@/app/models/TSale";
-import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles";
+import { globalStyles_color_th, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles";
 import { useEffect, useState } from "react";
 import Pagination from '../Pagination/Pagination';
+import AddIcon from '@mui/icons-material/Add';
 
 type Props = {
     items: TItem[]
@@ -57,14 +58,15 @@ export default function ITemsSaleForm({
             <table className={globalStyles_table_list}>
                 {items.length > 0 && <thead className={globalStyles_thead_list}>
                     <tr>
-                        <th className={`${styles_th} text-center`}>ID</th>
-                        <th className={`${styles_th} text-left`}>Descrição</th>
+                        <th className={`${styles_th} text-center ${globalStyles_color_th}`}>ID</th>
+                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Descrição</th>
                         {/* <th className={`${styles_th} text-left`}>Preço min</th> */}
-                        <th className={`${styles_th} text-left`}>Valor</th>
-                        <th className={`${styles_th} text-left`}>Código de barras</th>
-                        <th className={`${styles_th} text-left`}>Sub grupo</th>
-                        <th className={`${styles_th} text-left`}>Grupo</th>
-                        <th className={`${styles_th} text-center`}>Inserir</th>
+                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Valor</th>
+                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Código de barras</th>
+                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Sub grupo</th>
+                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Grupo</th>
+                        <th className={`${styles_th} text-center ${globalStyles_color_th}`}>
+                            <AddIcon fontSize='inherit' titleAccess="Adicionar Items"/></th>
                     </tr>
                 </thead>}
                 <tbody className={globalStyles_tbody_list}>
@@ -72,7 +74,7 @@ export default function ITemsSaleForm({
                         <tr key={item.id} className={globalStyles_tr}>
                             <td className={`${styles_td} text-center`}>{item.id}</td>
                             <td className={`${styles_td} text-left`}>
-                                <a className="font-bold text-blue-500 hover:underline"
+                                <a className="font-normal text-green-400 hover:underline"
                                     href="##" onClick={() => insertItem(item)}>
                                     {item.name} </a> </td>
                             <td className={`${styles_td} text-left text-lg text-gray-300`}>
@@ -81,10 +83,10 @@ export default function ITemsSaleForm({
                             <td className={`${styles_td} text-left`}>{item.subGroup.group.name}</td>
                             <td className={`${styles_td} text-left`}>{item.subGroup.name}</td>
                             <td className={`${styles_td} text-center`}>
-                                <a className={globalStyles_btn_list}
+                                <a className={'cursor-pointer'}
                                     href="#up-item"
                                     onClick={() => insertItem(item)}>
-                                    Inserir</a></td>
+                                    <AddIcon fontSize='inherit' titleAccess="Adicionar"/></a></td>
                         </tr>
                     ))}
                 </tbody>

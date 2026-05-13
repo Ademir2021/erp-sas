@@ -1,5 +1,6 @@
 import { TItemsSale } from "@/app/models/TSale"
-import { globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
+import { globalStyles_color_th, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 type Props = {
     itemsSale: TItemsSale[]
@@ -27,18 +28,19 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
             )
         );
     };
-
+    
     return <>
         <div className={globalStyles_overflow}>
             <table className={globalStyles_table_list}>
                 {itemsSale.length > 0 && <thead className={globalStyles_thead_list}>
                     <tr>
-                        <th className={`${styles_th} text-center`}>ID</th>
-                        <th className={`${styles_th} text-left`}>Descrição</th>
-                        <th className={`${styles_th} text-left`}>Quant</th>
-                        <th className={`${styles_th} text-left`}>Preço</th>
-                        <th className={`${styles_th} text-left`}>TItem</th>
-                        <th className={`${styles_th} text-center`}>X</th>
+                        <th className={`${styles_th} text-center ${globalStyles_color_th}`}>ID</th>
+                        <th className={`${styles_th} text-left  ${globalStyles_color_th}`}>Descrição</th>
+                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Quant</th>
+                        <th className={`${styles_th} text-left  ${globalStyles_color_th}`}>Preço</th>
+                        <th className={`${styles_th} text-left  ${globalStyles_color_th}`}>TItem</th>
+                        <th className={`${styles_th} text-center  ${globalStyles_color_th}`}>
+                            <DeleteForeverIcon titleAccess="Remover Item"/></th>
                     </tr>
                 </thead>}
                 <tbody className={globalStyles_tbody_list}>
@@ -60,8 +62,8 @@ export function ItemsSaleList({ itemsSale, setItemsSale }: Props) {
                             <td className={`${styles_td} text-left`}>{(item.amount * item.item.priceMax).toFixed(2)}</td>
                             <td className={`${styles_td} text-center`}><a href="#up-item"
                                 onClick={() => removeItem(item)}
-                                className="px-1 py-1 text-[10px] font-medium text-white bg-red-600 rounded-md hover:bg-blue-700 transition"
-                            >X</a>
+                                className="px-0 py-1 rounded-md hover:bg-red-700 transition"
+                            ><DeleteForeverIcon titleAccess="Remover"/></a>
                             </td>
                         </tr>
                     ))}

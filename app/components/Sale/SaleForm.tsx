@@ -2,7 +2,6 @@
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import SearchIcon from '@mui/icons-material/Search';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
@@ -142,7 +141,7 @@ export default function SaleForm({
                 setItemsSale={setItemsSale}
             />
             <div>
-                <label className={`${globalStylesTitle}`}>Buscar</label>
+                <label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
                 <input
                     className="mb-3 w-full p-3 border rounded-lg"
                     value={searchItemName !== "!" ? searchItemName : ""}
@@ -162,7 +161,7 @@ export default function SaleForm({
                     {/**Operações de Venda */}
                     <label className={`${globalStylesTitle}`}>Operações de Vendas</label>
                     <select
-                        className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-2 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                         value={children.operationSale?.id || ''}
                         onChange={(e) => {
                             const selectedId = Number(e.target.value);
@@ -190,7 +189,7 @@ export default function SaleForm({
 
                     <label className={`${globalStylesTitle}`}>Selecionar o Comprador</label>
                     <select
-                        className="w-full p-3 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-2 border bg-gray-500 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                         value={children.person.id || ''}
                         name="id"
                         onChange={(e) => {
