@@ -472,8 +472,6 @@ ${zipcode.city?.state?.acronym} -
 ${zipcode?.code}`}</option>
             ))}
           </datalist>
-
-
         </>}
 
         {/* BOTÕES */}

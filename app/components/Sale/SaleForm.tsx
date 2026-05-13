@@ -1,6 +1,8 @@
 'use client'
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import SearchIcon from '@mui/icons-material/Search';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
@@ -123,11 +125,18 @@ export default function SaleForm({
 
     return <>
         <div id="up-sale" className={`${globalStyles_form}`}>
-            <div>
-                <h1 className={`${globalStylesTitle} justify-center `}>Vendas</h1>
-                {<p className="flex justify-center font-semibold text-3xl bg-white/2 mb-2 p-2 text-center rounded-b-none shadow-md">
-                    Total {totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}</p>}
+
+            <div className="flex items-center gap-3 bg-zinc-900 p-3 rounded-xl shadow-lg">
+                <ShoppingCartCheckoutIcon
+                    sx={{ fontSize: 50 }}
+                    titleAccess="Checkout"
+                    className="text-green-400"
+                />
+                <span className="text-3xl font-extrabold text-green-400 tracking-wide">
+                    {totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}
+                </span>
             </div>
+
             <ItemsSaleList
                 itemsSale={itemsSale}
                 setItemsSale={setItemsSale}
