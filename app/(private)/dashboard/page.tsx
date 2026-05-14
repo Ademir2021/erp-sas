@@ -4,6 +4,7 @@ import { globalStyles_login_btn } from "@/app/components/GlobalStyles";
 import { userAuth } from "@/app/lib/userAuth";
 import Link from "next/link";
 import { useRouter } from 'next/navigation'
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 
 
 export default function Dashboard() {
@@ -38,14 +39,20 @@ export default function Dashboard() {
                   {userRole.join(" • ")}
                 </span>
               </p>
-            </div>
+              
             <button
-              className={`
-          ${globalStyles_login_btn} m-12`}
+              className='cursor-pointer mt-16 text-blue-400 hover:text-blue-600'
               onClick={() => router.push("/person")}
             >
-              Dados de Cadastro
+              <AppRegistrationIcon
+              fontSize='large'
+              titleAccess="Registrar Dados"
+              />
             </button>
+            <span className="m-12 text-gray-500" > {" | "} <a className="text-blue-400 hover:text-blue-600"
+             title="centroserra@gmail.com"
+             href="http://malito:centroserra@gmail.com">Fale conosco.</a></span>
+            </div>
 
           </div>
         </div>
