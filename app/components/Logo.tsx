@@ -1,6 +1,12 @@
-export default function Logo(){
+export default function Logo() {
     return (
-        <p className="ml-10 text-xl font-semibold tracking-[5px]"
-        >ERP-SAS</p>
+        <div className="ml-7 bg-transparent">
+        <img
+        src="/logos/logo_erpsas.png"
+        alt="ERP-SAS"
+        width={'160'}
+        height={'auto'}
+        />
+        </div>
     )
 }
