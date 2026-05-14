@@ -1,10 +1,14 @@
 'use client'
 
+import { globalStyles_login_btn } from "@/app/components/GlobalStyles";
 import { userAuth } from "@/app/lib/userAuth";
 import Link from "next/link";
+import { useRouter } from 'next/navigation'
 
 
 export default function Dashboard() {
+
+  const router = useRouter()
 
   const { user } = userAuth();
 
@@ -15,12 +19,36 @@ export default function Dashboard() {
       <h1 className="text-xl font-bold mb-4">Dashboard</h1>
 
       {user ? <>
-        <p>
-          Bem-vindo: <span className="font-semibold">{user.login}</span>
-        </p>
-        <p>
-          Perfil: <span className="font-semibold">{userRole.join(" , ")}</span>
-        </p>
+        <div className="mb-4 rounded-xl border border-gray-800
+  bg-gradient-to-2 from-black to-gray-900 p-4 shadow-md">
+          <div className="flex items-center justify-between flex-wrap gap-3">
+
+            <div>
+              <p className="text-sm text-gray-400">
+                Bem-vindo
+              </p>
+
+              <h2 className="text-lg font-bold text-white">
+                {user.login}
+              </h2>
+
+              <p className="text-sm text-gray-300 mt-1">
+                Perfil:
+                <span className="ml-2 inline-block rounded-md bg-gray-800 px-2 py-1 text-xs font-semibold text-cyan-400">
+                  {userRole.join(" • ")}
+                </span>
+              </p>
+            </div>
+            <button
+              className={`
+          ${globalStyles_login_btn} m-12`}
+              onClick={() => router.push("/person")}
+            >
+              Dados de Cadastro
+            </button>
+
+          </div>
+        </div>
       </> : (
         <p>
           Olá, favor efetuar login para acessar:{" "}
