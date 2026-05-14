@@ -3,12 +3,9 @@
 import { useState } from "react";
 import Menu from "./Menu";
 import Logo from "./Logo";
-import { userAuth } from "../lib/userAuth";
-import { LogoutButton } from "./LogoutButton";
 
 export default function Sidebar() {
 
-  const { user } = userAuth()
   const [collapsed, setCollapsed] = useState(true);
 
   return (
