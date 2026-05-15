@@ -62,8 +62,8 @@ export default function ITemsSaleForm({
                         <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Descrição</th>
                         {/* <th className={`${styles_th} text-left`}>Preço min</th> */}
                         <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Valor</th>
-                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Código de barras</th>
-                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Sub grupo</th>
+                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>C-Barras</th>
+                        <th className={`${styles_th} text-left ${globalStyles_color_th}`}>S-Grupo</th>
                         <th className={`${styles_th} text-left ${globalStyles_color_th}`}>Grupo</th>
                         <th className={`${styles_th} text-center ${globalStyles_color_th}`}>
                             <AddIcon fontSize='inherit' titleAccess="Adicionar Items"/></th>
