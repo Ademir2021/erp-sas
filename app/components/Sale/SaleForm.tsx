@@ -122,6 +122,18 @@ export default function SaleForm({
         setSearchITemName('!');
     }
 
+    function creditInstallment(i: number) {
+        const val = Number(totalSale - children.discount - cash)
+        if (val > 99) {
+            if (i == 1)
+                return ` ${i} x | Pagamento único
+            R$${(val).toFixed(2)} BRL`
+            if (i > 1)
+                return `${val.toFixed(2)} Parcelado em ${i}
+            x de R$${(val / i).toFixed(2)} BRL`
+        }
+    }
+
     return <>
         <div id="up-sale" className={`${globalStyles_form}`}>
 
@@ -246,14 +258,14 @@ export default function SaleForm({
                                 defaultValue=""
                             >
                                 <option disabled value="">
-                                    Parcelamento até em 6 vezes ...
+                                    Parcela em até 6 vezes a partir de R$100.00 ...
                                 </option>
-                                <option value="1">1x - Sem Juros</option>
-                                <option value="2">2x - Juros de 5%</option>
-                                <option value="3">3x - Juros de 10%</option>
-                                <option value="4">4x - Juros de 15%</option>
-                                <option value="5">5x - Juros de 20%</option>
-                                <option value="6">6x - Juros de 25%</option>
+                                <option value="1">{creditInstallment(1)}</option>
+                                <option value="2">{creditInstallment(2)}</option>
+                                <option value="3">{creditInstallment(3)}</option>
+                                <option value="4">{creditInstallment(4)}</option>
+                                <option value="5">{creditInstallment(5)}</option>
+                                <option value="6">{creditInstallment(6)}</option>
                             </select>
                             {children.accountsReceivable?.length as any > 0 ? <>
                                 {cashForm}
