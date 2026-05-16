@@ -88,7 +88,7 @@ export default function SaleForm({
         if (amountOwed > 0)
             return `Pagar com PIX: R$${Number(amountOwed).toFixed(2)}`
         if (amountOwed < 0)
-            return `Troco: R$ ${Math.abs(amountOwed).toFixed(2)}`
+            return `Desconto concedido: R$ ${Math.abs(amountOwed).toFixed(2)}`
     }
 
     function finalizeOrder(title: string) {
@@ -313,8 +313,10 @@ export default function SaleForm({
                 className="flex justify-center text-green-500"
                 target="_blank"
                 rel="noopener noreferrer">Imprimir Venda</a>}
+            
+            {/**Gerar PIX */}
             <div className="flex justify-center mt-6 mb-4">
-                {qrcode.qr_codes[0].text ? (
+                {qrcode.qr_codes[0].text && (
                     <div className="bg-gray-800 p-4 rounded-2xl shadow-lg w-full max-w-md text-center">
                         {/* Título */}
                         <h2 className="text-white text-lg font-semibold mb-3">
@@ -338,12 +340,7 @@ export default function SaleForm({
                             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
                         >Copiar código PIX
                         </button>
-                    </div>) : (
-                    itemsSale.length > 0 &&
-                    person &&
-                    operationSale.id === 1 && (
-                        <p className="text-red-500 text-center">
-                            Gere o PIX para visualizar o QR Code</p>))}
+                    </div>)}
             </div>
             {/**PIX */}
             {qrcode.qr_codes[0].amount.value > 0 && (
