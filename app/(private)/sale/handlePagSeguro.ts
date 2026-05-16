@@ -53,7 +53,7 @@ const mapQrCode = (
         type: "PIX",
         amount: {
             currency: "BRL",
-            value: Math.round(Number(sale.tSale - cash) * 100)
+            value: Math.round(Number(sale.tSale - cash - sale.discount) * 100)
         },
         expiration_date: expiration_date_qrcode,
         links: [{ href: "https://meusite.com/notificacoes" }]

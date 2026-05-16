@@ -18,7 +18,7 @@ export default function CashmovementList({ cashmovements }: Props) {
                         <th className={`${globalStyles_th} text-center`}>ID</th>
                         <th className={`${globalStyles_th} text-left`}>Valor</th>
                         <th className={`${globalStyles_th} text-left`}>Descrição</th>
-                        <th className={`${globalStyles_th} text-left`}>Data Moviemnto</th>
+                        <th className={`${globalStyles_th} text-left`}>Data Movimento</th>
                         <th className={`${globalStyles_th} text-center`}>D/C</th>
                         <th className={`${globalStyles_th} text-center`}>Saldo</th>
                         <th className={`${globalStyles_th} text-center`}>ID Conta</th>

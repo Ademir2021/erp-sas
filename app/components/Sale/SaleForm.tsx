@@ -83,7 +83,13 @@ export default function SaleForm({
 
     const cashForm = <CashForm cash={cash} setCash={setCash} sale={children} setSale={setChildren} />
 
-    const vallorCash = cash - totalSale
+    function valPixCash() {
+        const amountOwed = totalSale - cash - children.discount
+        if (amountOwed > 0)
+            return `Pagar com PIX: R$${Number(amountOwed).toFixed(2)}`
+        if (amountOwed < 0)
+            return `Troco: R$ ${Math.abs(amountOwed).toFixed(2)}`
+    }
 
     function finalizeOrder(title: string) {
         return <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
@@ -284,7 +290,7 @@ export default function SaleForm({
                 {operationSale.id === 1 && itemsSale.length > 0 && person && <>
                     {cashForm}
                     <p className='flex justify-center p-1 text-green-500 '>
-                        {vallorCash < 0 ? "Receber no PIX : " : "Troco : "} {cash > 0 ? Number(vallorCash).toFixed(2) : '0.00'}</p>
+                        {valPixCash()}</p>
                     <div className="flex justify-center gap-2.5 mt-4">
                         <a className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
                             onClick={handleSubmitPix}
