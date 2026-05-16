@@ -35,34 +35,34 @@ export default function Menu({ setCollapsed }: Props) {
         </li>{hr}
         {isAdmin && <>
           {<div><a href='##' onClick={() => (setShowForm(prev => !prev))}>CADASTROS</a></div>}
-          <div className="flex justify-end absolute top-61 right-[30]"> <ShowForm
+          <div className="flex justify-end absolute top-57 right-[30]"> <ShowForm
             showForm={showForm}
             setShowForm={setShowForm}
-          /></div>{hr}</>} {showForm && <>
+          /></div>{!showForm && hr}</>} {showForm && <>
             <li> <Link
               href="/generic"
               className={styles_links}
               onClick={() => setCollapsed(prev => !prev)}
             >+ ARQUIVOS</Link>
-            </li>{hr}
+            </li>
             <li> <Link
               href="##"
               className={styles_links}
               onClick={() => setCollapsed(prev => !prev)}
             >+ FILIAIS</Link>
-            </li>{hr}
+            </li>
             <li> <Link
               href="##"
               className={styles_links}
               onClick={() => setCollapsed(prev => !prev)}
             >+ CONFIGURAÇÕES FISCAIS</Link>
-            </li>{hr}
+            </li>
             <li> <Link
               href="operationsale"
               className={styles_links}
               onClick={() => setCollapsed(prev => !prev)}
             >+ OPERAÇÕES DE VENDAS</Link>
-            </li>{hr}
+            </li>{showForm && hr}
           </>}
         {isUser && <><li>
           <Link

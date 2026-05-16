@@ -223,7 +223,7 @@ export default function SaleForm({
                     {/**PayPal */}
                     {operationSale.id === 2 && itemsSale.length > 0 && person &&
                         <> {isAdmin && cashForm}
-                            <main className="p-10">
+                            <main className="mt-3">
                                 <PaypalCheckout
                                     amount={Number(totalSale - cash).toFixed(2)}
                                     onSuccess={(details) => {
