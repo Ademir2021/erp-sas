@@ -63,7 +63,7 @@ export default function Sales() {
     const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
     const [persons, setPersons] = useState<TPerson[]>([])
     const [responseIdSale, setResponseIdSale] = useState(0)
-    const [searchItemName, setSearchITemName] = useState('!')
+    const [searchItemName, setSearchITemName] = useState("")
     const [items, setItems] = useState<TItem[]>([])
     const [itemsSale, setItemsSale] = useState<TItemsSale[]>([])
     const [sale, setSale] = useState<TSale>({

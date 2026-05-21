@@ -97,8 +97,8 @@ export default function SaleForm({
         >{title}</a>
     }
 
-    function addItemInput() {
-        if (!handleItem || items?.length === 0) return;
+    const addItemInput = () => {
+        if (items?.length === 0) return;
         setItemsSale((prev: TItemsSale[]) => {
             const item = items[0];
             const amountToAdd = handleAmount || 1;
@@ -114,19 +114,16 @@ export default function SaleForm({
                         tItem: newAmount * i.price
                     };
                 });
-
-            }
-
+            };
             const newItem: TItemsSale = {
                 item,
                 amount: amountToAdd,
                 price: item.priceMax,
                 tItem: amountToAdd * item.priceMax
             };
-
             return [...prev, newItem];
         });
-        setSearchITemName('!');
+        setSearchITemName("");
     }
 
     function creditInstallment(i: number) {
@@ -161,40 +158,16 @@ export default function SaleForm({
             />
             <div>
                 <label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
-
                 <input
                     className="mb-3 w-full p-3 border rounded-lg"
-                    value={searchItemName !== "!" ? searchItemName : ""}
-                    type="text"
-                    placeholder="Item ..."
-                    autoFocus
-                    onChange={(e) => {
-                        setSearchITemName(e.target.value);
-                    }}
-                    onKeyUp={(e) => {
-                        if (e.key === "Enter") {
-                            e.preventDefault();
-                            if (searchItemName.trim() !== "") {
-                                addItemInput();
-                            }
-                        }
-                    }}
-                />
-
-                {/* <input
-                    className="mb-3 w-full p-3 border rounded-lg"
-                    value={searchItemName !== "!" ? searchItemName : ""}
-                    type="text"
+                    value={searchItemName || ''}
+                    type="search"
                     placeholder="Item ..."
                     onChange={(e) => setSearchITemName(e.target.value)}
                     onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                            e.preventDefault();
+                        if (e.key == "Enter")
                             addItemInput();
-                        }
-                    }}
-                    autoFocus
-                /> */}
+                    }} />
             </div>
 
             {/**Step Toggle */}
