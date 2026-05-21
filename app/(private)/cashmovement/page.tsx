@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from 'next/navigation'
 import { TCashMovement } from "@/app/models/TCashMovement"
-import { TUser } from "@/app/models/TUser"
-import { getUser } from "@/app/lib/auth"
 import { loadHandle } from "@/app/lib/handleApi"
 import CashmovementForm from "@/app/components/Cashmovement/CashmovementForm"
 import { userAuth } from "@/app/lib/userAuth"

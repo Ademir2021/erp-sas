@@ -2,8 +2,8 @@ import { TAccountsReceivable, TReceipt } from '@/app/models/TAccountsReceivable'
 import { v4 as uuidv4 } from 'uuid';
 
 function bodyReceipt(rec: TAccountsReceivable | any, receipt: TReceipt) {
-    const line = "=".repeat(50);
-    const divider = "-".repeat(50);
+    const line = "=".repeat(43);
+    const divider = "-".repeat(43);
     const formatMoney = (value: number = 0) =>
         value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     const safe = (value: any, fallback = "N/A") =>
@@ -25,14 +25,14 @@ Data.......: ${new Date().toLocaleDateString('pt-BR')}
 Valor......: ${formatMoney(receipt?.receipt)}
 
 ${divider}
-Descrição..: ${safe(rec?.descriptionTypeOperation || rec?.observations)}
+Descricao..: ${safe(rec?.descriptionTypeOperation || rec?.observations)}
 ${divider}
 
 Cliente....: ${safe(rec?.payer?.name)}
 Documento..: ${safe(rec?.payer?.cpf || rec?.payer?.cnpj)}
 
 ${line}
-          Obrigado pela preferência!
+          Obrigado pela preferencia!
 ${line}
 `;
     return receiptTXT.trim();

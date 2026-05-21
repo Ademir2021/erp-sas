@@ -114,6 +114,7 @@ export default function SaleForm({
                         tItem: newAmount * i.price
                     };
                 });
+
             }
 
             const newItem: TItemsSale = {
@@ -160,15 +161,42 @@ export default function SaleForm({
             />
             <div>
                 <label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
+
                 <input
                     className="mb-3 w-full p-3 border rounded-lg"
                     value={searchItemName !== "!" ? searchItemName : ""}
-                    type='search'
+                    type="text"
                     placeholder="Item ..."
-                    onChange={(e) => setSearchITemName(e.target.value.toString())}
-                    onKeyDown={(e) => { if (e.key === 'Enter') { addItemInput(); } }} autoFocus
+                    autoFocus
+                    onChange={(e) => {
+                        setSearchITemName(e.target.value);
+                    }}
+                    onKeyUp={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (searchItemName.trim() !== "") {
+                                addItemInput();
+                            }
+                        }
+                    }}
                 />
+
+                {/* <input
+                    className="mb-3 w-full p-3 border rounded-lg"
+                    value={searchItemName !== "!" ? searchItemName : ""}
+                    type="text"
+                    placeholder="Item ..."
+                    onChange={(e) => setSearchITemName(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            addItemInput();
+                        }
+                    }}
+                    autoFocus
+                /> */}
             </div>
+
             {/**Step Toggle */}
             <button className={`${globalStylesToggle} cursor-pointer`} onClick={() => setStep(!step)}>
                 {step ? <ExpandLessIcon fontSize="large" /> : <ArrowForwardIosIcon fontSize='small' />}
@@ -309,11 +337,11 @@ export default function SaleForm({
             {/**Mensagens*/}
             {msg && <p className=" flex justify-center mt-3 text-green-300 ">{msg}</p>}
             {responseIdSale > 0 && <a
-                href={`${process.env.NEXT_PUBLIC_API_NOTA}/${responseIdSale}/pdf`}
+                href={`${process.env.NEXT_PUBLIC_API_CUPOM}/${responseIdSale}/pdf`}
                 className="flex justify-center text-green-500"
                 target="_blank"
                 rel="noopener noreferrer">Imprimir Venda</a>}
-            
+
             {/**Gerar PIX */}
             <div className="flex justify-center mt-6 mb-4">
                 {qrcode.qr_codes[0].text && (

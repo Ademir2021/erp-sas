@@ -1,8 +1,8 @@
 
 import { TLogin } from "@/app/models/TUser"
 import Link from "next/link"
-import Logo from "../Logo"
 import { globalStyles_login_btn, globalStyles_login_div, globalStyles_login_div_hight, globalStyles_login_div_left, globalStyles_login_input, globalStyles_login_main } from "../GlobalStyles"
+import LogoCompany from "../LogoCompany"
 
 type Props = {
     children: TLogin
@@ -22,7 +22,7 @@ export default function LoginForm({
             <main className={`${globalStyles_login_main}`}>
                 {/* Lateral Esquerdo*/}
                 <div className={`${globalStyles_login_div_left}`}>
-                    <div className="text-center text-blue-400"><Logo /></div>
+                    <div className="bg-transparent mb-3"><LogoCompany /></div>
                     <p className="font-normal  text-lg ml-12">Entre com sua Conta!</p>
                     <span className="text-center">Gerencie a gestão de sua Empresa com a <br />
                         segurança que só o ERP-SAS te oferece.</span>
