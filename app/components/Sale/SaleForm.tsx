@@ -158,16 +158,22 @@ export default function SaleForm({
             />
             <div>
                 <label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
-                <input
-                    className="mb-3 w-full p-3 border rounded-lg"
-                    value={searchItemName || ''}
-                    type="search"
-                    placeholder="Item ..."
-                    onChange={(e) => setSearchITemName(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key == "Enter")
-                            addItemInput();
-                    }} />
+                <form onSubmit={(e) => {
+                    e.preventDefault()
+                    addItemInput()
+                }}>
+                    <input
+                        className="mb-3 w-full p-3 border rounded-lg"
+                        value={searchItemName || ''}
+                        type="search"
+                        placeholder="Item ..."
+                        onChange={(e) => setSearchITemName(e.target.value)}
+                    // onKeyDown={(e) => {
+                    //     if (e.key == "Enter")
+                    //         addItemInput();
+                    // }}
+                    />
+                </form>
             </div>
 
             {/**Step Toggle */}

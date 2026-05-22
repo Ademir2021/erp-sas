@@ -1,4 +1,5 @@
 import Link from "next/link";
+import TerminalIcon from '@mui/icons-material/Terminal';
 
 type CardProps = {
   title: string;
@@ -68,18 +69,67 @@ export default function RootLayout() {
   return (
     <div className="flex text-white">
       <main
-        className="min-h-screen flex flex-col max-w-7xl w-full mx-auto items-center justify-center px-4 py-10 bg-cover bg-center mt-12"
+        className="min-h-screen flex flex-col max-w-7xl w-full
+        mx-auto items-center justify-center px-4 py-10
+        bg-cover bg-center mt-12"
         style={{ backgroundImage: "url('/bg/bg-home.jpg')" }}
       >
         {/* Header */}
-        <div className="text-center text-black/90 mb-10 max-w-2xl">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            Soluções e segurança para sua Empresa ou Negócio.
+        <div className="text-center max-w-3xl mx-auto mb-14 px-4">
+          <span
+            className="
+        inline-flex items-center gap-3
+        mb-5 px-5 py-2.5
+        rounded-full
+        bg-white/80
+        border border-zinc-200
+        text-zinc-800 text-sm font-semibold
+        shadow-xl
+        backdrop-blur-md
+    "
+          >
+            <span className="flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+            </span>
+
+            Segurança • Tecnologia • Performance
+          </span>
+
+          <h1 className="text-4xl md:text-6xl font-extrabold
+          leading-tight tracking-tight">
+            <span className="text-zinc-900">
+              Soluções inteligentes
+            </span>{" "}
+
+            <span className="text-blue-600">
+              para proteger e impulsionar
+            </span>{" "}
+
+            <span className="text-zinc-900">
+              seu negócio.
+            </span>
           </h1>
-          <p className="text-black/90 text-lg">
-            Mais segurança, mais eficiência e mais produtividade para o seu negócio.
-            Conheça nossas soluções e serviços personalizados.
-          </p>
+
+          {/* Botões */}
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+
+            <Link className="cursor-pointer px-6 py-3 rounded-2xl
+            bg-black text-white font-semibold hover:scale-105
+            transition duration-300 shadow-lg"
+              href="/solutions"
+            > Conhecer Soluções ? {<TerminalIcon titleAccess="Saiba mais ..." />}
+            </Link>
+
+            <a className="px-6 py-3 rounded-2xl border border-zinc-300
+            bg-white text-zinc-800 font-semibold hover:bg-zinc-400 transition duration-300"
+              href="https://wa.me/5544988521033?text=Olá,%20gostaria%20de%20falar%20com%20um%20especialista."
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Falar com Especialista ? : )
+            </a>
+          </div>
         </div>
 
         {/* Cards */}
@@ -88,11 +138,11 @@ export default function RootLayout() {
             <Card key={index} {...card as CardProps} />
           ))}
         </div>
-          <a className="mt-3 bg-blue-800 hover:bg-blue-900
-           text-white py-2 px-9 rounded-lg cursor-pointer transition"
-           href="/login">
-          Comece agora mesmo!
-          </a>
+        <a className="mt-3 bg-blue-800 hover:bg-blue-900
+           text-white py-3 px-9 rounded-3xl cursor-pointer transition"
+          href="/login">
+          Comece agora mesmo ! ...
+        </a>
       </main>
     </div>
   );
