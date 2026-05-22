@@ -97,7 +97,7 @@ export default function SaleForm({
         >{title}</a>
     }
 
-    const addItemInput = () => {
+    const addItemInput = async () => {
         if (items?.length === 0) return;
         setItemsSale((prev: TItemsSale[]) => {
             const item = items[0];
@@ -156,29 +156,23 @@ export default function SaleForm({
                 itemsSale={itemsSale}
                 setItemsSale={setItemsSale}
             />
-            <div>
-                <label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
-                <form
-                    onSubmit={(e) => {
-                        e.preventDefault();
-
-                        if (!searchItemName?.trim()) return;
-
-                        setTimeout(() => {
-                            addItemInput();
-                        }, 300); // 900ms pode ficar lento
-                    }}
-                >
-                    <input
-                        className="mb-3 w-full p-3 border rounded-lg"
-                        value={searchItemName || ""}
-                        type="search"
-                        placeholder="Item ..."
-                        autoFocus
-                        onChange={(e) => setSearchITemName(e.target.value)}
-                    />
-                </form>
-            </div>
+            <label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
+            <form onSubmit={async (e) => {
+                e.preventDefault();
+                if (!searchItemName?.trim()) return;
+                setTimeout(async () => {
+                    await addItemInput();
+                }, 16);
+            }} >
+                <input
+                    className="mb-3 w-full p-3 border rounded-lg"
+                    value={searchItemName || ""}
+                    type="search"
+                    placeholder="Item ..."
+                    autoFocus
+                    onChange={(e) => setSearchITemName(e.target.value)}
+                />
+            </form>
 
             {/**Step Toggle */}
             <button className={`${globalStylesToggle} cursor-pointer`} onClick={() => setStep(!step)}>
