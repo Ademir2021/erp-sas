@@ -158,20 +158,24 @@ export default function SaleForm({
             />
             <div>
                 <label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
-                <form onSubmit={(e) => {
-                    e.preventDefault()
-                    addItemInput()
-                }}>
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+
+                        if (!searchItemName?.trim()) return;
+
+                        setTimeout(() => {
+                            addItemInput();
+                        }, 300); // 900ms pode ficar lento
+                    }}
+                >
                     <input
                         className="mb-3 w-full p-3 border rounded-lg"
-                        value={searchItemName || ''}
+                        value={searchItemName || ""}
                         type="search"
                         placeholder="Item ..."
+                        autoFocus
                         onChange={(e) => setSearchITemName(e.target.value)}
-                    // onKeyDown={(e) => {
-                    //     if (e.key == "Enter")
-                    //         addItemInput();
-                    // }}
                     />
                 </form>
             </div>
