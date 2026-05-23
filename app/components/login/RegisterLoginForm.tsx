@@ -119,14 +119,26 @@ export default function RegisterLoginForm({
             {step === 3 && (
               <>
                 <label>Senha</label>
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="relative left-70 top-16 -translate-y-1/2
-                text-blue-400 cursor-pointer">
-                  {showPassword ? <VisibilityIcon titleAccess='Visualizar senha' />
-                    : <DisabledVisibleIcon titleAccess='Ocultar senha' />}
-                </button>
+                <div className="relative w-full">
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-3.5 translate-y-1/2
+                     text-blue-400 hover:text-blue-600
+                     transition-colors cursor-pointer">
+                    {showPassword ? (
+                      <VisibilityIcon
+                        fontSize="small"
+                        titleAccess="Visualizar senha"
+                      />
+                    ) : (
+                      <DisabledVisibleIcon
+                        fontSize="small"
+                        titleAccess="Ocultar senha"
+                      />
+                    )}
+                  </button>
+                </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
