@@ -4,12 +4,15 @@ import { TUser, UserRole } from "@/app/models/TUser"
 import Link from "next/link"
 import { useState } from "react"
 import { globalStyles_login_btn, globalStyles_login_div, globalStyles_login_div_hight, globalStyles_login_div_left, globalStyles_login_input, globalStyles_login_main } from '../GlobalStyles';
+import { userAuth } from '@/app/lib/userAuth';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DisabledVisibleIcon from '@mui/icons-material/DisabledVisible';
 
 type Props = {
   children: TUser
   handleChange: any
-  handleSubmit:Function | any
-  msg:string
+  handleSubmit: Function | any
+  msg: string
 }
 
 export default function RegisterLoginForm({
@@ -18,6 +21,11 @@ export default function RegisterLoginForm({
   handleSubmit,
   msg
 }: Props) {
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const { isAdmin } = userAuth();
+
   const [step, setStep] = useState(1)
 
   const steps = [
@@ -31,9 +39,9 @@ export default function RegisterLoginForm({
       setStep(step + 1)
     }
   }
- const back =<>  {step !== 1 && <button  onClick={()=>setStep(1)}
-          className="flex cursor-pointer ">
-            <KeyboardReturnIcon titleAccess='Voltar'/></button>}</>
+  const back = <>  {step !== 1 && <button onClick={() => setStep(1)}
+    className="flex cursor-pointer ">
+    <KeyboardReturnIcon titleAccess='Voltar' /></button>}</>
   return (
     <div className={`${globalStyles_login_div}`}>
       <main className={`${globalStyles_login_main}`}>
@@ -70,8 +78,8 @@ export default function RegisterLoginForm({
               </div>
             )
           })}
-         {back}
-          </div>
+          {back}
+        </div>
 
         {/* Lado Direito */}
         <div className={`${globalStyles_login_div_hight}`}>
@@ -102,7 +110,7 @@ export default function RegisterLoginForm({
                   name="role"
                   onChange={handleChange}>
                   <option disabled value=''>Selecione o Privilégio ...</option>
-                  <option>{UserRole.ADMIN}</option>
+                  {isAdmin && <option>{UserRole.ADMIN}</option>}
                   <option>{UserRole.USER}</option>
                 </select>
               </>
@@ -111,13 +119,21 @@ export default function RegisterLoginForm({
             {step === 3 && (
               <>
                 <label>Senha</label>
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="relative left-70 top-16 -translate-y-1/2
+                text-blue-400 cursor-pointer">
+                  {showPassword ? <VisibilityIcon titleAccess='Visualizar senha' />
+                    : <DisabledVisibleIcon titleAccess='Ocultar senha' />}
+                </button>
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   onChange={handleChange}
                   value={children.password}
                   placeholder="Digite sua senha"
-                 className={`${globalStyles_login_input}`}
+                  className={`${globalStyles_login_input}`}
                 />
               </>
             )}
@@ -125,14 +141,14 @@ export default function RegisterLoginForm({
           {msg && <p className="text-red-600 mt-2 text-center">{msg}</p>}
           {msg && back}
           <button
-           onClick= {step !==3 ? nextStep : handleSubmit}
+            onClick={step !== 3 ? nextStep : handleSubmit}
             className={`${globalStyles_login_btn}`}
           >
             {step === 3 ? "Finalizar" : "Próximo"}
           </button>
           <p className="m-2 text-center text-blue-600">
             <Link className=" text-end" href={'/login'}>Logar</Link>
-            </p>
+          </p>
         </div>
       </main>
     </div>
