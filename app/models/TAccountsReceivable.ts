@@ -14,6 +14,7 @@ export type TAccountsReceivable = { // Contas a Receber
     receivedValue: number // valor recebido do Titulo
     balance: number // saldo do Titulo 
     dueDate: Date // data de vencimento
+    cancel:boolean
     description: string // descrição do Titulo
     situation: TSituationAccountsReceivable
     observations: string

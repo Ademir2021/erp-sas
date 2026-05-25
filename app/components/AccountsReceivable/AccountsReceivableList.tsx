@@ -41,6 +41,7 @@ export function AccountsReceivableList({
                         <th className={`${globalStyles_th} text-center`}>Situação</th>
                         <th className={`${globalStyles_th} text-left`}>Saldo</th>
                         <th className={`${globalStyles_th} text-left`}>DRecebimento</th>
+                        <th className={`${globalStyles_th} text-center`}>Cancelada</th>
                         <th className={`${globalStyles_th} text-left`}>Descrição</th>
                         <th className={`${globalStyles_th} text-left`}>Observação</th>
                         <th className={`${globalStyles_th} text-left`}>Juros</th>
@@ -71,6 +72,7 @@ export function AccountsReceivableList({
                             <td className={`${globalStyles_td} text-left`}>{ar.situation}</td>
                             <td className={`${globalStyles_td} text-left`}>{ar.balance}</td>
                             <td className={`${globalStyles_td} text-left`}>{ar.dueDate as any}</td>
+                            <td className={`${globalStyles_td} text-left`}>{ar.cancel ? "Sim" : "Não"}</td>
                             <td className={`${globalStyles_td} text-left`}>{ar.description}</td>
                             <td className={`${globalStyles_td} text-left`}>{ar.observations}</td>
                             <td className={`${globalStyles_td} text-left`}>{ar.lateFee.toFixed(2)}</td>

@@ -63,4 +63,5 @@ export type TSaleResponse = {
     totalSale: number
     discount: number
     totalNote: number
+    cancel:boolean
 }
