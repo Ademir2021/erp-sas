@@ -44,7 +44,7 @@ export default function AccountsReceivable() {
                     interest
                 };
             })
-            .filter((c) => c.situation !== "CHARGE" && c.balance > 0);
+            .filter((c) => c.situation !== "CHARGE" && c.balance > 0 && c.cancel === false);
     };
 
     useEffect(() => {

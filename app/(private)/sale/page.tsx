@@ -156,6 +156,7 @@ export default function Sales() {
                     receivedValue: 0,
                     balance: VALUE,
                     dueDate: setDays(i) as any,
+                    cancel:false,
                     description: '',
                     situation: 'OPEN',
                     observations: setObservationsAccounts(),
