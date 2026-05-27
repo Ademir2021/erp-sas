@@ -22,6 +22,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import RestoreIcon from '@mui/icons-material/Restore';
+import LegalNoticeLGPD from "./LegalNoticeLGPD"
 
 type FormData = z.infer<typeof cadastroSchema>
 
@@ -155,7 +156,7 @@ export default function PersonForm({
     {persons.length !== 0 && <ShowForm
       showForm={showForm}
       setShowForm={setShowForm}
-    />}
+      />}
     {(showForm || persons.length === 0) && <div id="up-person" className={`${globalStyles_form} max-w-xl mx-auto`}>
       {/* STEP INDICATOR */}
 
@@ -163,17 +164,18 @@ export default function PersonForm({
       <div className="flex justify-between mb-1">
         {steps.map((item) => (
           <button
-            key={item.step}
-            onClick={() => setStep(item.step)}
-            className={`cursor-pointer transition-colors
-${step === item.step
-                ? "text-blue-600"
-                : "text-gray-400 hover:text-gray-600"
-              }`}
-          >
+          key={item.step}
+          onClick={() => setStep(item.step)}
+          className={`cursor-pointer transition-colors
+            ${step === item.step
+              ? "text-blue-600"
+              : "text-gray-400 hover:text-gray-600"
+            }`}
+            >
             {item.label}
           </button>
         ))}
+        <LegalNoticeLGPD />
       </div>
       {children.id != 0 ? <> <b>Atualizar Registro</b>
         <div>{"ID:" + String(children.id).padStart(9, '0') + " - " + children.name} </div> </> :
