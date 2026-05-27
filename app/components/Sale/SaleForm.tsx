@@ -58,7 +58,7 @@ export default function SaleForm({
     qrcode, setInstallmentAccount, cash, setCash, handleAmount,
     handleItem, searchItemName, setPaymentPayPal, setOrderPayPal }: Props) {
 
-    const { isUser, isAdmin } = userAuth()
+    const { isAdmin } = userAuth()
 
     const [step, setStep] = useState(false)
 
@@ -248,7 +248,7 @@ export default function SaleForm({
                         <> {isAdmin && cashForm}
                             <main className="mt-3">
                                 <PaypalCheckout
-                                    amount={Number(totalSale - cash).toFixed(2)}
+                                    amount={Number(totalSale - cash - children.discount).toFixed(2)}
                                     onSuccess={(details) => {
                                         setPaymentPayPal(details);
                                     }}
