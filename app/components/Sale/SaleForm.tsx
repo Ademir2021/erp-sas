@@ -20,6 +20,7 @@ type Props = {
     children: TSale
     setSearchITemName: Function
     items: TItem[]
+    setItems: Function
     itemsSale: TItemsSale[]
     setItemsSale: Function
     handleSubmit: any
@@ -50,7 +51,7 @@ type Props = {
 
 export default function SaleForm({
     children, setSearchITemName,
-    items, itemsSale, setItemsSale,
+    items, setItems, itemsSale, setItemsSale,
     handleSubmit, msg, setChildren, persons,
     operationsSale, setOperationSale, operationSale,
     creditCard, setCreditCard, handleSubmitCreditCard, person,
@@ -58,7 +59,7 @@ export default function SaleForm({
     qrcode, setInstallmentAccount, cash, setCash, handleAmount,
     handleItem, searchItemName, setPaymentPayPal, setOrderPayPal }: Props) {
 
-    const { isAdmin } = userAuth()
+    const { isUser, isAdmin } = userAuth()
 
     const [step, setStep] = useState(false)
 
@@ -138,6 +139,12 @@ export default function SaleForm({
         }
     }
 
+    useEffect(() => {
+        if (operationSale.id === 2) {
+            setItems([])
+        }
+    }, [operationSale.id])
+
     return <>
         <div id="up-sale" className={`${globalStyles_form}`}>
 
@@ -152,27 +159,27 @@ export default function SaleForm({
                 </span>
             </div>
 
-            <ItemsSaleList
+            {operationSale.id !== 2 && <ItemsSaleList
                 itemsSale={itemsSale}
                 setItemsSale={setItemsSale}
-            />
-            <label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
-            <form onSubmit={async (e) => {
-                e.preventDefault();
-                if (!searchItemName?.trim()) return;
-                setTimeout(async () => {
-                    await addItemInput();
-                }, 16);
-            }} >
-                <input
-                    className="mb-3 w-full p-3 border rounded-lg"
-                    value={searchItemName || ""}
-                    type="search"
-                    placeholder="Item ..."
-                    autoFocus
-                    onChange={(e) => setSearchITemName(e.target.value)}
-                />
-            </form>
+            />}
+            {operationSale.id !== 2 && <><label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
+                <form onSubmit={async (e) => {
+                    e.preventDefault();
+                    if (!searchItemName?.trim()) return;
+                    setTimeout(async () => {
+                        await addItemInput();
+                    }, 16);
+                }} >
+                    <input
+                        className="mb-3 w-full p-3 border rounded-lg"
+                        value={searchItemName || ""}
+                        type="search"
+                        placeholder="Item ..."
+                        autoFocus
+                        onChange={(e) => setSearchITemName(e.target.value)}
+                    />
+                </form></>}
 
             {/**Step Toggle */}
             <button className={`${globalStylesToggle} cursor-pointer`} onClick={() => setStep(!step)}>
@@ -206,8 +213,11 @@ export default function SaleForm({
                                 {operationSale.description}
                             </option>
 
-                        )) : <option value={2}
-                        >Venda com Cartão Débito/Crédito</option>}
+                        )) : isUser && <> <option value={2}
+                        >Pagar Cartão Débito/Crédito</option>
+                            <option value={5}
+                            >Comprar +</option></>
+                        }
                     </select>
 
                     <label className={`${globalStylesTitle}`}>Selecionar o Comprador</label>

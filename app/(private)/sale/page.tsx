@@ -449,6 +449,7 @@ export default function Sales() {
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
+            setItems={setItems}
             itemsSale={itemsSale}
             setItemsSale={setItemsSale}
             handleSubmit={hanldeSubmit}

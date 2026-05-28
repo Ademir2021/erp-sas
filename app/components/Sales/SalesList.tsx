@@ -3,6 +3,7 @@ import { DateFns } from "@/app/lib/dateFns"
 import { TSaleResponse } from "@/app/models/TSale"
 import { globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 import FreeCancellationIcon from '@mui/icons-material/FreeCancellation';
+import { userAuth } from '@/app/lib/userAuth';
 
 type Props = {
     sales: TSaleResponse[]
@@ -12,6 +13,8 @@ type Props = {
 export default function SalesList({ sales, cancelSale }: Props) {
 
     const dateFns = new DateFns()
+
+     const {isUser, isAdmin } = userAuth()
 
     return <>
         <div className={globalStyles_overflow}>
@@ -25,7 +28,7 @@ export default function SalesList({ sales, cancelSale }: Props) {
                         <th className={`${globalStyles_th} text-left`}>TNota</th>
                         <th className={`${globalStyles_th} text-left`}>CFOP</th>
                         <th className={`${globalStyles_th} text-left`}>Operação</th>
-                        <th className={`${globalStyles_th} text-center bg-gray-600`}><FreeCancellationIcon titleAccess='Cancela Nota'/></th>
+                        {isAdmin && <th className={`${globalStyles_th} text-center bg-gray-600`}><FreeCancellationIcon titleAccess='Cancela Nota'/></th>}
                         <th className={`${globalStyles_th} text-center bg-gray-700`}><PictureAsPdfIcon titleAccess='Imprimir' /></th>
                         <th className={`${globalStyles_th} text-center bg-gray-800`}><PictureAsPdfIcon titleAccess='Imprimir' /></th>
                     </tr>
@@ -40,7 +43,7 @@ export default function SalesList({ sales, cancelSale }: Props) {
                             <td className={`${globalStyles_td} text-left`}>{`R$ ${sale.totalNote.toFixed(2)}`}</td>
                             <td className={`${globalStyles_td} text-left`}>{sale.operationSale.cfop}</td>
                             <td className={`${globalStyles_td} text-left`}>{sale.operationSale.description}</td>
-                            <td className={`${globalStyles_td} text-center`}>
+                            {isAdmin && <td className={`${globalStyles_td} text-center`}>
                                 <button
                                     type="button"
                                     onClick={() => {
@@ -62,7 +65,7 @@ export default function SalesList({ sales, cancelSale }: Props) {
                                     {sale.cancel ? "Cancelada"
                                     : 'Cancelar'}
                                 </button>
-                            </td>
+                            </td>}
                             <td className={`${globalStyles_td} text-center`}><a href={`${process.env.NEXT_PUBLIC_API_NOTA}/${sale.id}/pdf`}>Nota</a></td>
                             <td className={`${globalStyles_td} text-center`}><a href={`${process.env.NEXT_PUBLIC_API_CUPOM}/${sale.id}/pdf`}>Cupom</a></td>
                         </tr>
