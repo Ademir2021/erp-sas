@@ -2,6 +2,8 @@
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import CreditScoreIcon from '@mui/icons-material/CreditScore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
@@ -60,9 +62,7 @@ export default function SaleForm({
     handleItem, searchItemName, setPaymentPayPal, setOrderPayPal }: Props) {
 
     const { isUser, isAdmin } = userAuth()
-
     const [step, setStep] = useState(false)
-
     const totalSale = itemsSale.reduce(
         (total, i) => total + i.amount * i.price,
         0
@@ -140,7 +140,7 @@ export default function SaleForm({
     }
 
     useEffect(() => {
-        if (operationSale.id === 2) {
+        if (operationSale.id !== 5) {
             setItems([])
         }
     }, [operationSale.id])
@@ -159,11 +159,11 @@ export default function SaleForm({
                 </span>
             </div>
 
-            {operationSale.id !== 2 && <ItemsSaleList
+            {operationSale.id === 5 && <ItemsSaleList
                 itemsSale={itemsSale}
                 setItemsSale={setItemsSale}
             />}
-            {operationSale.id !== 2 && <><label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
+            {operationSale.id == 5 && <><label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
                 <form onSubmit={async (e) => {
                     e.preventDefault();
                     if (!searchItemName?.trim()) return;
@@ -212,12 +212,12 @@ export default function SaleForm({
                             >
                                 {operationSale.description}
                             </option>
-
-                        )) : isUser && <> <option value={2}
-                        >Pagar Cartão Débito/Crédito</option>
-                            <option value={5}
-                            >Comprar +</option></>
-                        }
+                        )) : isUser && (
+                            <> <option value={2}
+                            >💳 Pagar Cartão Débito ou Crédito</option>
+                                <option className='bg-gray-50' value={5}
+                                >🛒 Comprar +</option></>
+                        )}
                     </select>
 
                     <label className={`${globalStylesTitle}`}>Selecionar o Comprador</label>
