@@ -1,10 +1,9 @@
 'use client'
 
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import CreditScoreIcon from '@mui/icons-material/CreditScore';
+import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
 import { TItem } from "@/app/models/TItem"
@@ -148,22 +147,34 @@ export default function SaleForm({
     return <>
         <div id="up-sale" className={`${globalStyles_form}`}>
 
-            <div className="flex items-center gap-3 bg-zinc-900 p-3 rounded-xl shadow-lg">
-                <ShoppingCartCheckoutIcon
-                    sx={{ fontSize: 50 }}
-                    titleAccess="Checkout"
-                    className="text-green-400"
-                />
-                <span className="text-3xl font-extrabold text-green-400 tracking-wide">
-                    {totalSale !== 0 ? `R$ ${totalSale.toFixed(2)}` : "R$ 0,00"}
-                </span>
+            <div className="flex items-center gap-4 bg-zinc-900 p-4 rounded-xl shadow-lg">
+                <div className="flex items-center justify-center w-14 h-14 bg-blue-500/20 rounded-full">
+                    <ChecklistRtlIcon
+                        sx={{ fontSize: 32 }}
+                        titleAccess="Checkout"
+                        className="text-blue-400"
+                    />
+                </div>
+
+                <div className="flex flex-col">
+                    <span className="text-sm text-zinc-400 uppercase tracking-wider">
+                        Total da Venda
+                    </span>
+
+                    <span className="text-3xl font-extrabold text-green-400">
+                        {totalSale.toLocaleString("pt-BR", {
+                            style: "currency",
+                            currency: "BRL",
+                        })}
+                    </span>
+                </div>
             </div>
 
             {operationSale.id === 5 && <ItemsSaleList
                 itemsSale={itemsSale}
                 setItemsSale={setItemsSale}
             />}
-            {operationSale.id == 5 && <><label className={`${globalStylesTitle} text-green-400`}>Buscar</label>
+            {operationSale.id == 5 && <><label className={`${globalStylesTitle} text-white`}>Buscar</label>
                 <form onSubmit={async (e) => {
                     e.preventDefault();
                     if (!searchItemName?.trim()) return;

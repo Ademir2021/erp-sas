@@ -74,7 +74,7 @@ export default function ITemsSaleForm({
                         <tr key={item.id} className={globalStyles_tr}>
                             <td className={`${styles_td} text-center`}>{item.id}</td>
                             <td className={`${styles_td} text-left`}>
-                                <a className="font-normal text-green-400 hover:underline"
+                                <a className="hover:underline cursor-pointer"
                                     href="##" onClick={() => insertItem(item)}>
                                     {item.name} </a> </td>
                             <td className={`${styles_td} text-left text-lg text-gray-300`}>
