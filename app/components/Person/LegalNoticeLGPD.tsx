@@ -40,7 +40,7 @@ export default function LegalNoticeLGPD() {
 
         <button
           onClick={handleAccept}
-          className="bg-blue-600 hover:bg-blue-700 transition px-5 py-2 rounded-lg font-semibold"
+          className="cursor-pointer bg-blue-600 hover:bg-blue-700 transition px-5 py-2 rounded-lg font-semibold"
         >
           Aceitar
         </button>

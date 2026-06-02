@@ -380,6 +380,58 @@ export default function SaleForm({
                 msg={msg}
                 handleAmount={handleAmount}
             />
+            <div className="bg-zinc-900 text-gray-200 rounded-xl p-5 shadow-lg border border-zinc-700 max-w-3xl">
+                <h2 className="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2">
+                    📋 Help do Checkout
+                </h2>
+
+                <div className="space-y-3 text-sm md:text-base">
+                    <div className="flex items-start gap-2">
+                        <span className="text-yellow-400 font-bold">⌨️ F5</span>
+                        <span>Limpar tela.</span>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                        <span>📦</span>
+                        <span>
+                            No campo <strong>Itens</strong>, informe a descrição,
+                            código ou código de barras do produto.
+                        </span>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                        <span>🔢</span>
+                        <span>
+                            Para vender múltiplas unidades, utilize o formato:
+                            <strong className="text-green-400"> Quantidade * Item</strong>
+                            <span className="ml-1">(Ex.: 3*Arroz)</span>
+                        </span>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                        <span>💰</span>
+                        <span>
+                            Utilize a operação
+                            <strong className="text-blue-400"> Vender + </strong>
+                            e selecione a forma de pagamento para finalizar a venda.
+                        </span>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                        <span>🛠️</span>
+                        <span>
+                            Em caso de dúvidas, entre em contato com o suporte técnico.
+                        </span>
+                    </div>
+                </div>
+
+                <div className="mt-5 pt-4 border-t border-zinc-700">
+                    <span className="text-gray-400">Operador:</span>
+                    <span className="ml-2 font-semibold text-yellow-400">
+                        {person?.name || "Não definido"}
+                    </span>
+                </div>
+            </div>
         </div>
     </>
 }
