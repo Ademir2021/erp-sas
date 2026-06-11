@@ -8,8 +8,8 @@ export default function Perfil() {
     const { user } = userAuth() as any;
     return (
         <main className={`${globalStyles_form}`} >
-            <h1 className="text-2xl mb-3 font-bold">Perfil.</h1>
-            <hr className="my-6 h-px border-0 bg-gradient-to-r from-transparent via-zinc-500 to-transparent" />
+            <h1 className="text-2xl font-bold">Perfil do Usuário</h1>
+         <div className="my-8 h-px bg-gray-800 from-transparent via-zinc-500 to-transparent" />
             {user && (
         <div className="bg-zinc-900 border border-zinc-700 rounded-2xl p-6 shadow-xl max-w-xl mx-auto">
     <div className="flex items-center gap-4 mb-6">

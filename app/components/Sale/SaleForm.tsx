@@ -404,7 +404,7 @@ export default function SaleForm({
                         <span>
                             Para vender múltiplas unidades, utilize o formato:
                             <strong className="text-green-400"> Quantidade * Item</strong>
-                            <span className="ml-1">(Ex.: 3*Arroz)</span>
+                            <span className="ml-1">(Ex.: 3*Mouse)</span>
                         </span>
                     </div>
 
@@ -412,7 +412,7 @@ export default function SaleForm({
                         <span>💰</span>
                         <span>
                             Utilize a operação
-                            <strong className="text-blue-400"> Vender + </strong>
+                            <strong className="text-blue-400"> Comprar + </strong>
                             e selecione a forma de pagamento para finalizar a venda.
                         </span>
                     </div>

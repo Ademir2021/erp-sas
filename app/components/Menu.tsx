@@ -4,6 +4,8 @@ import ShowForm from './ShowForm'
 import { useState } from 'react'
 import LanguageIcon from '@mui/icons-material/Language';
 
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+
 type Props = {
   setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -82,9 +84,9 @@ export default function Menu({ setCollapsed }: Props) {
         <li>
           <Link
             href="/sale"
-            className={styles_links}
+            className={`${styles_links} text-green-800 font-normal bg-amber-500`}
             onClick={() => setCollapsed(prev => !prev)}
-          >VENDER</Link>
+          ><ShoppingCartCheckoutIcon titleAccess='Comprar/Vender'/>Checkout - Comprar/Vender</Link>
         </li>{hr}
         {isUser && <> <li>
           <Link
