@@ -3,7 +3,6 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
 import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
 import ITemsSaleForm from "./ItemsSaleForm"
 import { TItem } from "@/app/models/TItem"
