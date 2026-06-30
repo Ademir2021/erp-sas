@@ -65,6 +65,7 @@ export default function SaleForm({
         (total, i) => total + i.amount * i.price,
         0
     );
+    const [help, setHelp] = useState(false)
 
     useEffect(() => {
         setChildren((prev: TSale) => ({
@@ -159,7 +160,6 @@ export default function SaleForm({
                     <span className="text-sm text-zinc-400 uppercase tracking-wider">
                         Total da Venda
                     </span>
-
                     <span className="text-3xl font-extrabold text-green-400">
                         {totalSale.toLocaleString("pt-BR", {
                             style: "currency",
@@ -167,6 +167,10 @@ export default function SaleForm({
                         })}
                     </span>
                 </div>
+                        <button onClick={() => setHelp(!help)}
+                        className="flex-1 text-end font-bold text-blue-400 hover:text-blue-300 cursor-pointer">
+                            Ajuda !
+                        </button>
             </div>
 
             {operationSale.id === 5 && <ItemsSaleList
@@ -379,7 +383,13 @@ export default function SaleForm({
                 msg={msg}
                 handleAmount={handleAmount}
             />
-            <div className="bg-zinc-900 text-gray-200 rounded-xl p-5 shadow-lg border border-zinc-700 max-w-3xl">
+            {help && <div className="bg-zinc-900 text-gray-200 rounded-xl p-5 shadow-lg border border-zinc-700 max-w-3xl">
+                <div className="flex justify-end">
+                    <button
+                        onClick={() => setHelp(false)}
+                        className="text-gray-400 cursor-pointer hover:text-gray-300"
+                    >x</button>
+                </div>
                 <h2 className="text-xl font-bold text-blue-400 mb-4 flex items-center gap-2">
                     📋 Help do Checkout
                 </h2>
@@ -430,7 +440,7 @@ export default function SaleForm({
                         {person?.name || "Não definido"}
                     </span>
                 </div>
-            </div>
+            </div>}
         </div>
     </>
 }
