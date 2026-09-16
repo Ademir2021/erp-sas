@@ -32,12 +32,12 @@ Você pode conferir o [repositório do Next.js no GitHub](https://github.com/ver
 A maneira mais fácil de fazer o deploy da sua aplicação Next.js é utilizar a [Plataforma Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme), criada pelos desenvolvedores do Next.js.
 
 ## Deploy oficial do projeto com docker
-Instale o git e docker em seu Sistema Operacional
-Solicite a build do ERP-SAS-BUILD E API-ERP-BUILD que contem toda automação para uso em produção.
-A build pode ser solicitada entrando em contato com o email do desenvolvedor: 📧 centroserra@gmail.com.
-Dentro deste projeto execute o script de criação\atualização da build `./create-build.sh`
-Agora entre na build ERP-SAS-BUILD e execute o script `up-docker-api.sh` que será criado os container
+- Instale o git e docker em seu Sistema Operacional
+- Solicite a build do ERP-SAS-BUILD E API-ERP-BUILD que contem toda automação para uso em produção.
+- A build pode ser solicitada entrando em contato com o email do desenvolvedor: 📧 centroserra@gmail.com.
+- Dentro deste projeto execute o script de criação\atualização da build `./create-build.sh`
+- Agora entre na build ERP-SAS-BUILD e execute o script `up-docker-api.sh` que será criado os container
 para o devido funcionamento em Produção.
-Acessondo http://localhost:3000 vc tera acesso ao Sistema em produção.
+- Acessando http://localhost:3000 vc tera acesso ao Sistema em produção.
 
 Consulte nos por email [centroserra@gmail.com] para mais detalhes.
