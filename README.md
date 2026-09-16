@@ -1,8 +1,15 @@
-Este é um projeto [Next.js](https://nextjs.org) inicializado com [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Primeiros Passos
 
-Primeiro, execute o servidor de desenvolvimento:
+- Baixar o projeto:
+
+`git clonehttps://github.com/Ademir2021/erp-sas.git`
+
+- Instale o projeto na sua maquina:
+
+`cd erp-sas`
+`npm install`
+
+- Execute o servidor de desenvolvimento:
 
 ```bash
 npm run dev
