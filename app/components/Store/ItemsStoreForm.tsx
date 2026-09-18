@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { TItem } from "@/app/models/TItem";
 import { TItemsSale } from "@/app/models/TSale";
 import { useParams, useRouter } from "next/navigation";
@@ -17,7 +18,7 @@ export default function ITemsStoreForm({
 }: Props) {
 
     const [currentPage, setCurrentPage] = useState(1)
-    const itemsPerPage = 6
+    const itemsPerPage = 36
     const totalPages = Math.ceil(items.length / itemsPerPage)
     const indexOfLastItem = currentPage * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
@@ -29,7 +30,7 @@ export default function ITemsStoreForm({
         setCurrentPage(1)
     }, [items])
 
-      const router = useRouter()
+    const router = useRouter()
 
     function insertItem(item: TItem) {
         router.push(`/checkoutstore/${item.id}`)
@@ -47,11 +48,13 @@ export default function ITemsStoreForm({
                                 className='bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition duration-300 flex flex-col items-center justify-center'>
                                 <ul className=''>
                                     <li className='mb-3'>
-                                        {item.imagem ? (
-                                            <img src={item.imagem} alt={item.imagem} className='w-8 h-8 rounded-full' />
-                                        ) : (
-                                            <div className='w-8 h-8 bg-gray-300 rounded-full' />
-                                        )}
+                                       <Image
+                                                                               src={`/imgs/items/${item.id}/${item.imagem}.png`}
+                                                                               alt={item.imagem}
+                                                                               width={500}
+                                                                               height={500}
+                                                                               className="w-full max-w-md h-auto object-contain"
+                                                                           />
                                     </li>
                                     <li className=''>
                                         {item.name} </li>

@@ -5,7 +5,7 @@ import StoreForm from "@/app/components/Store/StoreForm"
 import { TItem } from "@/app/models/TItem"
 import { userAuth } from "@/app/lib/userAuth"
 
-export default function Store(){
+export default function Store() {
 
        const [searchItemName, setSearchITemName] = useState("")
         const [items, setItems] = useState<TItem[]>([])

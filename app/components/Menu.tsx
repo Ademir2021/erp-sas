@@ -29,13 +29,13 @@ export default function Menu({ setCollapsed }: Props) {
       </li>
       <ul className="flex font-normal text-[14px] flex-col gap-3" >
         <li>
-                 <li>
-          <Link
-            href="/store"
-            className={styles_links}
-            onClick={() => setCollapsed(prev => !prev)}
-          >LOJA VIRTUAL</Link>
-        </li>{hr}
+          <li>{hr}
+            <Link
+              href="/store"
+              className={styles_links}
+              onClick={() => setCollapsed(prev => !prev)}
+            >LOJA VIRTUAL</Link>
+          </li>{hr}
           <Link
             href="/dashboard"
             className={styles_links}
@@ -93,7 +93,7 @@ export default function Menu({ setCollapsed }: Props) {
             href="/sale"
             className={`${styles_links} text-green-800 font-normal bg-amber-500`}
             onClick={() => setCollapsed(prev => !prev)}
-          ><ShoppingCartCheckoutIcon titleAccess='Comprar/Vender'/>Checkout - Comprar/Vender</Link>
+          ><ShoppingCartCheckoutIcon titleAccess='Comprar/Vender' />Checkout - Comprar/Vender</Link>
         </li>{hr}
         {isUser && <> <li>
           <Link

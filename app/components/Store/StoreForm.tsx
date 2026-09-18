@@ -19,10 +19,10 @@ export default function StoreForm({searchItemName,
 console.log(items)
     return(
         <>
-         <main className="min-h-screen bg-gray-900 text-white p-10">
-            <div className="text-3xl font-bold text-center mb-10">
+         <main className="min-h-screen bg-gray-900 text-white p-6">
+            <div className="text-center mb-3">
                   <input
-                        className="mb-3 w-full p-3 border rounded-lg"
+                        className="mb-3 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         value={searchItemName || ""}
                         type="search"
                         placeholder="Buscar Produtos ..."
