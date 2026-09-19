@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { TItem } from "@/app/models/TItem";
 import CheckoutStoreForm from "@/app/components/Store/CheckoutStoreForm";
 import { userAuth } from "@/app/lib/userAuth";
@@ -10,11 +10,19 @@ import { userAuth } from "@/app/lib/userAuth";
 export default function CheckoutStorePage() {
 
     const { user } = userAuth();
-
     const [items, setItems] = useState<TItem[]>([])
-
+    const [item] = useState<TItem>({
+        name: "Item não encontrado",
+        priceMax: 0,
+        imagem: "N/A",
+        subGroup: {
+            name: "N/A",
+            group: {
+                name: "N/A"
+            }
+        }
+    } as any)
     const params = useParams();
-    const router = useRouter();
     const res = params.id as keyof typeof items;
 
     useEffect(() => {
@@ -44,21 +52,9 @@ export default function CheckoutStorePage() {
         searchItemsByName()
     }, [user, res])
 
-    // console.log("params", res)
     return (
-        <>
-            {/* <p>{JSON.stringify(items[0])}</p> */}
-            <CheckoutStoreForm
-                item={items[0] || {
-                    name: "Item não encontrado",
-                    priceMax: 0,
-                    imagem: "N/A",
-                    subGroup: {
-                        name: "N/A",
-                        group: {
-                            name: "N/A"
-                        }}
-                }} />
-        </>
+        <CheckoutStoreForm
+            item={items[0] || item}
+        />
     )
 }

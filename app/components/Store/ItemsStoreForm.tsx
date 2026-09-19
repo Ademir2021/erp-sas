@@ -38,23 +38,23 @@ export default function ITemsStoreForm({
 
     return (
         <>
-            <div className="bg-white p-1 rounded-2xl shadow-lg hover:scale-105 transition duration-300 flex flex-col justify-between">
-                <main className="min-h-screen bg-gray-900 text-white p-2 rounded-2xl shadow-lg">
+            <div className="bg-transparent p-1 rounded-2xl shadow-lg flex flex-col justify-between">
+                <main className="min-h-screen bg-gray-900 text-white p-1 rounded-2xl shadow-lg">
                     <div className="grid md:grid-cols-6 gap-2">
                         {currentItems.map((item: TItem) => (
                             <a href="#"
                                 key={item.id}
                                 onClick={() => insertItem(item)}
-                                className='bg-gray-800 p-2 rounded-lg shadow-md hover:scale-105 transition duration-300 flex flex-col items-center justify-center'>
+                                className='bg-gray-600 p-2 rounded-lg shadow-md hover:scale-105 transition duration-300 flex flex-col items-center justify-center'>
                                 <ul className=''>
                                     <li className='mb-3'>
                                        <Image
-                                                                               src={`/imgs/items/${item.id}/${item.imagem}.png`}
-                                                                               alt={item.imagem}
-                                                                               width={500}
-                                                                               height={500}
-                                                                               className="w-full max-w-md h-auto object-contain"
-                                                                           />
+                                        src={`/imgs/items/${item.id}/${item.imagem}.png`}
+                                        alt={item.imagem}
+                                        width={500}
+                                        height={500}
+                                        className="w-full max-w-md h-auto object-contain"
+                                        />
                                     </li>
                                     <li className=''>
                                         {item.name} </li>
