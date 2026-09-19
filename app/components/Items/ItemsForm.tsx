@@ -18,6 +18,8 @@ type Props = {
     msg: string
     handleSubmit: any
     items: TItem[]
+    images: File[]
+    setImages: Function
 }
 
 export default function ItemsForm({
@@ -32,21 +34,25 @@ export default function ItemsForm({
     unitMeasures,
     msg,
     handleSubmit,
-    items
+    items,
+    images,
+    setImages
 }: Props) {
-      const [showForm, setShowForm] = useState(false)
+    const [showForm, setShowForm] = useState(false)
+
+  
 
     return <>
-    <ShowForm
-    showForm={showForm}
-    setShowForm={setShowForm}
-    />
+        <ShowForm
+            showForm={showForm}
+            setShowForm={setShowForm}
+        />
         {showForm && <div className={`${globalStyles_form} max-w-xl mx-auto`}>
-            <CloseForm setCloseForm={setShowForm}/>
+            <CloseForm setCloseForm={setShowForm} />
             <form id="up-item" className="space-y-4 mt-[-28]">
                 <p className="font-bold">{children.id === 0 ?
-                "Registar Item" :
-                "Atualizar Item :" + children.id}</p>
+                    "Registar Item" :
+                    "Atualizar Item :" + children.id}</p>
                 <input className="w-full p-3 border rounded-lg"
                     type="text"
                     name='name'
@@ -75,13 +81,52 @@ export default function ItemsForm({
                     onChange={handleChange}
                     placeholder="Código de barras"
                 />
-                <input className="w-full p-3 border rounded-lg"
+
+                <div className="space-y-2">
+
+                    <label className="font-semibold">
+                        Imagens do Item
+                    </label>
+
+                    <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                        className="w-full p-3 border rounded-lg"
+                        onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            setImages(files);
+                        }}
+                    />
+
+                    {images.length > 0 && (
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+                            {images.map((image, index) => (
+                                <div
+                                    key={index}
+                                    className="border rounded-lg p-2 bg-gray-50"
+                                >
+                                    <img
+                                        src={URL.createObjectURL(image)}
+                                        alt={`Imagem ${index + 1}`}
+                                        className="w-full h-32 object-contain rounded"
+                                    />
+                                    <p className="text-xs text-gray-600 mt-1 truncate">
+                                        {image.name}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* <input className="w-full p-3 border rounded-lg"
                     type="text"
                     name='imagem'
                     value={children.imagem}
                     onChange={handleChange}
                     placeholder="Nome da imagem (jpg, png)"
-                />
+                /> */}
                 <label>Marcas dos Items</label>
                 <select
                     className={globalStyles_select}
@@ -214,7 +259,7 @@ export default function ItemsForm({
                 </select>
                 <p className="text-gray-300 ">{msg && msg}</p>
                 <a
-                href="#up-item"
+                    href="#up-item"
                     type="submit"
                     onClick={handleSubmit}
                     className="px-4 py-2 bg-green-600 text-white rounded-lg"

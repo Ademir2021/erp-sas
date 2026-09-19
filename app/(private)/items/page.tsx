@@ -36,6 +36,8 @@ export default function Items() {
         }
     const [item, setItem] = useState<TItem>(initialItem)
 
+      const [images, setImages] = useState<File[]>([]);
+
     const handleChange = (e: any) => {
         const { name, value } = e.target
         setItem({ ...item, [name]: value })
@@ -128,6 +130,8 @@ export default function Items() {
             msg={msg}
             handleSubmit={handleSubmit}
             items={items}
+            images={images}
+            setImages={setImages}
         >
             {item}
         </ItemsForm>
