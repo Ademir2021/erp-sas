@@ -13,6 +13,14 @@ export type TItem = {
     typeItem: TTypeItem
     itemClass: TItemClass
     unitMeasure: TUnitMeasure
+    images?: File[]
+}
+
+export type TResponseImages = {
+    id:number
+    fileName:string
+    filePath:string
+    idItem:number
 }
 
 export type TBrand = {

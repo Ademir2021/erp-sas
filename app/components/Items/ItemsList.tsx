@@ -1,4 +1,4 @@
-import { TItem } from "@/app/models/TItem"
+import { TItem, TResponseImages } from "@/app/models/TItem"
 import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
 import { useEffect, useState } from "react"
 import Pagination from "../Pagination/Pagination"
@@ -6,13 +6,15 @@ import Pagination from "../Pagination/Pagination"
 type Props = {
     items: TItem[]
     setChildren: Function
-     setShowForm: React.Dispatch<React.SetStateAction<boolean>>
+    setShowForm: React.Dispatch<React.SetStateAction<boolean>>
+    responseImages:TResponseImages[]
 }
 
 export default function ItemsList({
     items,
     setChildren,
-    setShowForm
+    setShowForm,
+    responseImages
 }: Props) {
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -30,7 +32,7 @@ export default function ItemsList({
     function updateList(item: TItem) {
         setChildren(item)
         setShowForm(true)
-        
+
     }
 
     return <>
@@ -39,6 +41,7 @@ export default function ItemsList({
                 <thead className={globalStyles_thead_list}>
                     <tr>
                         <th className={`${globalStyles_th} text-center`}>ID</th>
+                        <th className={`${globalStyles_th} text-center`}>IMG</th>
                         <th className={`${globalStyles_th} text-left`}>Descrição</th>
                         <th className={`${globalStyles_th} text-left`}>Preço min</th>
                         <th className={`${globalStyles_th} text-left`}>Preço max</th>
@@ -52,6 +55,7 @@ export default function ItemsList({
                     {currentItems.map((item: TItem) => (
                         <tr key={item.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{item.id}</td>
+                            <td className={`${globalStyles_td} text-center`}>{responseImages[0].filePath}</td>
                             <td className={`${globalStyles_td} text-left`}>{item.name}</td>
                             <td className={`${globalStyles_td} text-left`}>{item.priceMin}</td>
                             <td className={`${globalStyles_td} text-left`}>{item.priceMax}</td>

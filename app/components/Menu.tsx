@@ -28,14 +28,14 @@ export default function Menu({ setCollapsed }: Props) {
         />
       </li>
       <ul className="flex font-normal text-[14px] flex-col gap-3" >
-        <li>
-          <li>{hr}
+        <li>{hr}
             <Link
               href="/store"
               className={styles_links}
               onClick={() => setCollapsed(prev => !prev)}
             >LOJA VIRTUAL</Link>
           </li>{hr}
+          <li>
           <Link
             href="/dashboard"
             className={styles_links}

@@ -1,4 +1,4 @@
-import { TItem, TBrand, TsubGroup, TTaxGroup, TTypeItem, TItemClass, TUnitMeasure } from "@/app/models/TItem"
+import { TItem, TBrand, TsubGroup, TTaxGroup, TTypeItem, TItemClass, TUnitMeasure, TResponseImages } from "@/app/models/TItem"
 import ItemsList from "./ItemsList"
 import { useState } from "react"
 import ShowForm from "../ShowForm"
@@ -20,6 +20,7 @@ type Props = {
     items: TItem[]
     images: File[]
     setImages: Function
+     responseImages:TResponseImages[]
 }
 
 export default function ItemsForm({
@@ -36,11 +37,11 @@ export default function ItemsForm({
     handleSubmit,
     items,
     images,
-    setImages
+    setImages,
+    responseImages
 }: Props) {
-    const [showForm, setShowForm] = useState(false)
 
-  
+    const [showForm, setShowForm] = useState(false)
 
     return <>
         <ShowForm
@@ -83,11 +84,9 @@ export default function ItemsForm({
                 />
 
                 <div className="space-y-2">
-
                     <label className="font-semibold">
                         Imagens do Item
                     </label>
-
                     <input
                         type="file"
                         accept="image/jpeg,image/png,image/webp"
@@ -96,9 +95,12 @@ export default function ItemsForm({
                         onChange={(e) => {
                             const files = Array.from(e.target.files || []);
                             setImages(files);
+                            setChildren(prev => ({
+                                ...prev,
+                                images: files
+                            }));
                         }}
                     />
-
                     {images.length > 0 && (
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
                             {images.map((image, index) => (
@@ -120,13 +122,14 @@ export default function ItemsForm({
                     )}
                 </div>
 
-                {/* <input className="w-full p-3 border rounded-lg"
+                <input className="w-full p-3 border rounded-lg"
                     type="text"
                     name='imagem'
                     value={children.imagem}
                     onChange={handleChange}
                     placeholder="Nome da imagem (jpg, png)"
-                /> */}
+                />
+
                 <label>Marcas dos Items</label>
                 <select
                     className={globalStyles_select}
@@ -272,6 +275,7 @@ export default function ItemsForm({
             items={items}
             setChildren={setChildren}
             setShowForm={setShowForm}
+            responseImages={responseImages}
         />
     </>
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ItemsForm from "@/app/components/Items/ItemsForm";
-import { TBrand, TItem, TItemClass, TsubGroup, TTaxGroup, TTypeItem, TUnitMeasure } from "@/app/models/TItem";
+import { TBrand, TItem, TItemClass, TResponseImages, TsubGroup, TTaxGroup, TTypeItem, TUnitMeasure } from "@/app/models/TItem";
 import { useRouter } from 'next/navigation'
 import { loadHandle } from "@/app/lib/handleApi";
 import { TResponseMessage } from "@/app/models/TMessage";
@@ -20,23 +20,25 @@ export default function Items() {
     const [typeItems, setTypeItems] = useState<TTypeItem[]>([])
     const [itemsClasses, setItemsClasses] = useState<TItemClass[]>([])
     const [unitMeasures, setUnitMeasures] = useState<TUnitMeasure[]>([])
-    const initialItem:TItem = {
-            id: 0,
-            name: '',
-            priceMax: 0,
-            priceMin: 0,
-            barCode: '',
-            imagem: '',
-            brand: { id: 0, name: '' },
-            subGroup: { id: 0, name: '', group: { id: 0, name: '' } },
-            taxGroup: { id: 0, name: '', taxationTable: { id: 0, name: '' } },
-            typeItem: { id: 0, name: '' },
-            itemClass: { id: 0, name: '' },
-            unitMeasure: { id: 0, name: '' }
-        }
+    const [responseImages, setResponseImages] = useState<TResponseImages[]>([])
+    console.log(responseImages)
+    const initialItem: TItem = {
+        id: 0,
+        name: '',
+        priceMax: 0,
+        priceMin: 0,
+        barCode: '',
+        imagem: '',
+        brand: { id: 0, name: '' },
+        subGroup: { id: 0, name: '', group: { id: 0, name: '' } },
+        taxGroup: { id: 0, name: '', taxationTable: { id: 0, name: '' } },
+        typeItem: { id: 0, name: '' },
+        itemClass: { id: 0, name: '' },
+        unitMeasure: { id: 0, name: '' },
+        images: []
+    }
     const [item, setItem] = useState<TItem>(initialItem)
-
-      const [images, setImages] = useState<File[]>([]);
+    const [images, setImages] = useState<File[]>([]);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
@@ -44,7 +46,7 @@ export default function Items() {
     }
 
     function clearFields() {
-        setItem({...initialItem})
+        setItem({ ...initialItem })
     }
 
     useEffect(() => {
@@ -56,6 +58,7 @@ export default function Items() {
         loadHandle(token, setItemsClasses, 'itemsclasses', router)
         loadHandle(token, setUnitMeasures, 'unitmeasures', router)
         loadHandle(token, setItems, 'item', router)
+        loadHandle(token, setResponseImages, 'images', router)
     }, [user]);
 
     async function updateItem(item: TItem) {
@@ -73,20 +76,62 @@ export default function Items() {
         router.refresh()
     }
 
+
     async function saveItem(item: TItem) {
-        const res = await fetch('/api/item', {
-            method: 'POST',
-            body: JSON.stringify(item),
-        })
-        const resp: TResponseMessage = await res.json()
-        if (!res.ok) {
-            setMsg(`Erro ao registrar Item: ${resp?.details}`)
-            return
+        try {
+            const formData = new FormData();
+            // Cria uma cópia do item sem as imagens
+            const itemData = {
+                ...item,
+                images: undefined,
+            };
+            // Adiciona o Item como JSON
+            formData.append(
+                "item",
+                new Blob(
+                    [JSON.stringify(itemData)],
+                    {
+                        type: "application/json",
+                    }
+                )
+            );
+            // Adiciona todas as imagens
+            if (item.images && item.images.length > 0) {
+                item.images.forEach((image) => {
+                    formData.append("images", image);
+                });
+            }
+            // Envia para a API Next.js
+            const res = await fetch("/api/item", {
+                method: "POST",
+                body: formData,
+            });
+
+            const resp: TResponseMessage = await res.json();
+            if (!res.ok) {
+                setMsg(
+                    `Erro ao registrar Item: ${resp?.details || resp?.error || "Erro desconhecido"
+                    }`
+                );
+                return;
+            }
+            setMsg(
+                `${resp.data.message} Name: ${resp.data.name} : ${resp.success}`
+            );
+            router.push("/items");
+            router.refresh();
+
+        } catch (error) {
+            console.error("Erro ao salvar item:", error);
+            setMsg(
+                `Erro ao registrar Item: ${error instanceof Error
+                    ? error.message
+                    : "Erro desconhecido"
+                }`
+            );
         }
-        router.push('/items')
-        setMsg(`${resp.data.message} Name: ${resp.data.name} : ${resp.success}`)
-        router.refresh()
     }
+
 
     function valFields(item: TItem) {
         const missing: string[] = [];
@@ -132,6 +177,7 @@ export default function Items() {
             items={items}
             images={images}
             setImages={setImages}
+            responseImages={responseImages}
         >
             {item}
         </ItemsForm>
