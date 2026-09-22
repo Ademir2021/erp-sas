@@ -55,12 +55,18 @@ transition cursor-pointer">
                                     <div className="grid-cols-1 lg:grid-cols-3 gap-6" >
                                         {itemImages.length > 0 ?
                                             itemImages.map((img) => (
-                                                <a href="###" onClick={() => setImageSelected(img.fileName)}>
+                                                <button className="cursor-pointer"
+                                                    key={img.id}
+                                                    type="button"
+                                                    onMouseEnter={() => setImageSelected(img.fileName)}
+                                                >
                                                     <img
                                                         src={`${process.env.NEXT_PUBLIC_URL}/imgs/items/${img.idItem}/${img.fileName}`}
                                                         alt={item.name}
+                                                        width={50}
+                                                        height={50}
                                                         className="w-16 h-16 mb-1 object-contain mx-auto rounded border"
-                                                    /></a>
+                                                    /></button>
                                             )) :
                                             <span>Sem images</span>}
 
