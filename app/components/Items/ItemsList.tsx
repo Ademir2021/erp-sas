@@ -7,7 +7,7 @@ type Props = {
     items: TItem[]
     setChildren: Function
     setShowForm: React.Dispatch<React.SetStateAction<boolean>>
-    responseImages:TResponseImages[]
+    responseImages: TResponseImages[]
 }
 
 export default function ItemsList({
@@ -55,7 +55,22 @@ export default function ItemsList({
                     {currentItems.map((item: TItem) => (
                         <tr key={item.id} className={globalStyles_tr}>
                             <td className={`${globalStyles_td} text-center`}>{item.id}</td>
-                            <td className={`${globalStyles_td} text-center`}>{responseImages[0].filePath}</td>
+                            <td className={`${globalStyles_td} text-center`}>
+                                {(() => {
+                                    const image = responseImages.find(
+                                        (img) => img.idItem === item.id
+                                    );
+                                    return image ? (
+                                        <img
+                                            src={`${process.env.NEXT_PUBLIC_URL}/imgs/items/${image.idItem}/${image.fileName}`}
+                                            alt={item.name}
+                                            className="w-16 h-16 object-contain mx-auto rounded border"
+                                        />
+                                    ) : (
+                                        <span>Sem imagem</span>
+                                    );
+                                })()}
+                            </td>
                             <td className={`${globalStyles_td} text-left`}>{item.name}</td>
                             <td className={`${globalStyles_td} text-left`}>{item.priceMin}</td>
                             <td className={`${globalStyles_td} text-left`}>{item.priceMax}</td>

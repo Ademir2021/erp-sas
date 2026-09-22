@@ -95,7 +95,7 @@ export default function ItemsForm({
                         onChange={(e) => {
                             const files = Array.from(e.target.files || []);
                             setImages(files);
-                            setChildren(prev => ({
+                            setChildren((prev: TItem) => ({
                                 ...prev,
                                 images: files
                             }));

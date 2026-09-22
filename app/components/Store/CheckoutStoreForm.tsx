@@ -1,19 +1,25 @@
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
-import { TItem } from "@/app/models/TItem";
+import { useRouter } from "next/navigation";
+import { TItem, TResponseImages } from "@/app/models/TItem";
 import { useState } from "react";
 
 type Props = {
     item: TItem
+    responseImages: TResponseImages[]
 }
 
-export default function CheckoutStorePage({ item }: Props) {
+export default function CheckoutStorePage({ item, responseImages }: Props) {
 
     const [amount, setAmount] = useState(1);
     const router = useRouter();
-
     function buyNow() { alert("Comprar agora") }
     function addToCart() { alert("Adicionar ao carrinho") }
+
+    const itemImages = responseImages.filter(
+        (img) => img.idItem === item.id
+    );
+
+    const [imageSelected, setImageSelected] = useState("")
 
     return (
         <>
@@ -23,18 +29,14 @@ export default function CheckoutStorePage({ item }: Props) {
                         type="button"
                         onClick={() => router.back()}
                         className=" text-blue-500 hover:text-blue-800
-                         transition cursor-pointer">
+transition cursor-pointer">
                         Voltar</button>
                     <span className="text-gray-400">›</span>
-                    <span
-                        className="text-blue-400"
-                    >
-                        {item.subGroup.group.name}
-                    </span>
+                    <span className="text-blue-400">
+                        {item.subGroup.group.name}</span>
                     <span className="text-gray-400">›</span>
                     <span className="text-blue-400">
-                        {item.subGroup.name}
-                    </span>
+                        {item.subGroup.name}</span>
                 </nav>
             </div>
             <main className="min-h-screen bg-gray-300 text-gray-900 py-8 px-4">
@@ -46,16 +48,29 @@ export default function CheckoutStorePage({ item }: Props) {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* PRODUTO */}
                         <div className="lg:col-span-2 bg-white rounded-lg shadow-sm p-6">
+                            {/*  IMAGES ITEMS */}
                             <div className="flex flex-col md:flex-row gap-8">
                                 {/* IMAGEM */}
                                 <div className="w-full md:w-1/2 flex items-center justify-center">
-                                    <Image
-                                        src={`/imgs/items/${item.id}/${item.imagem}.png`}
+                                    <div className="grid-cols-1 lg:grid-cols-3 gap-6" >
+                                        {itemImages.length > 0 ?
+                                            itemImages.map((img) => (
+                                                <a href="###" onClick={() => setImageSelected(img.fileName)}>
+                                                    <img
+                                                        src={`${process.env.NEXT_PUBLIC_URL}/imgs/items/${img.idItem}/${img.fileName}`}
+                                                        alt={item.name}
+                                                        className="w-16 h-16 mb-1 object-contain mx-auto rounded border"
+                                                    /></a>
+                                            )) :
+                                            <span>Sem images</span>}
+
+                                    </div>
+                                    {itemImages.length > 0 ? <Image
+                                        src={`/imgs/items/${item.id}/${imageSelected || itemImages[0].fileName}`}
                                         alt={item.imagem}
-                                        width={500}
-                                        height={500}
-                                        className="w-full max-w-md h-auto object-contain"
-                                    />
+                                        width={200}
+                                        height={100}
+                                        className="w-full max-w-md h-auto object-contain" /> : <p>Sem Imagem</p>}
                                 </div>
                                 {/* INFORMAÇÕES */}
                                 <div className="flex-1">
@@ -63,15 +78,12 @@ export default function CheckoutStorePage({ item }: Props) {
                                         {item.name}
                                     </h2>
                                     <div className="border-b pb-5">
-                                        <span className="text-sm text-gray-500">
-                                            Preço
-                                        </span>
+                                        <span className="text-sm text-gray-500">Preço</span>
                                         <div className="text-3xl font-semibold mt-1">
                                             R$ {item.priceMax.toFixed(2)}
                                         </div>
                                         <p className="text-sm text-green-600 mt-2">
-                                            Em até 12x sem juros
-                                        </p>
+                                            Em até 12x sem juros</p>
                                     </div>
                                     {/* QUANTIDADE */}
                                     <div className="mt-5">
@@ -81,24 +93,14 @@ export default function CheckoutStorePage({ item }: Props) {
                                         <div className="flex items-center mt-2">
                                             <button
                                                 className="w-10 h-10 border rounded-l-md hover:bg-gray-100 cursor-pointer"
-                                                onClick={() => setAmount(Math.max(1, amount - 1))}
-                                            >
-                                                -
-                                            </button>
-
-                                            <div className="w-12 h-10 border-t border-b flex items-center justify-center">
-                                                {amount}
-                                            </div>
-
+                                                onClick={() => setAmount(Math.max(1, amount - 1))}>-</button>
+                                            <div className="w-12 h-10 border-t border-b flex items-center justify-center">{amount}</div>
                                             <button
                                                 className="w-10 h-10 border rounded-r-md hover:bg-gray-100 cursor-pointer"
-                                                onClick={() => setAmount(amount + 1)}
-                                            >
-                                                +
+                                                onClick={() => setAmount(amount + 1)}>+
                                             </button>
                                         </div>
                                     </div>
-
                                     {/* ENTREGA */}
                                     <div className="mt-6">
                                         <p className="font-medium">🚚 Entrega</p>
@@ -134,31 +136,30 @@ export default function CheckoutStorePage({ item }: Props) {
                             {/* BOTÃO COMPRAR */}
                             <button
                                 className="
-                        cursor-pointer
-                        w-full
-                        mt-6
-                        bg-blue-600
-                        hover:bg-blue-700
-                        text-white
-                        font-semibold
-                        py-3
-                        rounded-md
-                        transition"
+cursor-pointer
+w-full
+mt-6
+bg-blue-600
+hover:bg-blue-700
+text-white
+font-semibold
+py-3
+rounded-md
+transition"
                                 onClick={() => buyNow()}
                             >Comprar agora</button>
-
                             {/* CARRINHO */}
                             <button
                                 className="
-                        w-full
-                        mt-3
-                        bg-blue-100
-                        hover:bg-blue-200
-                        text-blue-700
-                        font-semibold
-                        py-3
-                        rounded-md
-                        transition"
+w-full
+mt-3
+bg-blue-100
+hover:bg-blue-200
+text-blue-700
+font-semibold
+py-3
+rounded-md
+transition"
                                 onClick={() => addToCart()}>
                                 Adicionar ao carrinho
                             </button>

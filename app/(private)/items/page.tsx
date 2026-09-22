@@ -21,7 +21,6 @@ export default function Items() {
     const [itemsClasses, setItemsClasses] = useState<TItemClass[]>([])
     const [unitMeasures, setUnitMeasures] = useState<TUnitMeasure[]>([])
     const [responseImages, setResponseImages] = useState<TResponseImages[]>([])
-    console.log(responseImages)
     const initialItem: TItem = {
         id: 0,
         name: '',
@@ -75,7 +74,6 @@ export default function Items() {
         setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
         router.refresh()
     }
-
 
     async function saveItem(item: TItem) {
         try {
@@ -132,7 +130,6 @@ export default function Items() {
         }
     }
 
-
     function valFields(item: TItem) {
         const missing: string[] = [];
         if (item.name === "") missing.push('Nome');
@@ -163,6 +160,7 @@ export default function Items() {
     }
 
     return <>
+    {/* <span>{JSON.stringify(item.images)}</span> */}
         <ItemsForm
             handleChange={handleChange}
             setChildren={setItem}

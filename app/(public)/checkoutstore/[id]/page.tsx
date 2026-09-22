@@ -2,15 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { TItem } from "@/app/models/TItem";
+import { TItem, TResponseImages } from "@/app/models/TItem";
 import CheckoutStoreForm from "@/app/components/Store/CheckoutStoreForm";
 import { userAuth } from "@/app/lib/userAuth";
+import { useRouter } from 'next/navigation';
+import { loadHandle } from "@/app/lib/handleApi";
 
 
 export default function CheckoutStorePage() {
-
+    const router = useRouter()
     const { user } = userAuth();
     const [items, setItems] = useState<TItem[]>([])
+    const [responseImages, setResponseImages] = useState<TResponseImages[]>([])
     const [item] = useState<TItem>({
         name: "Item não encontrado",
         priceMax: 0,
@@ -24,6 +27,11 @@ export default function CheckoutStorePage() {
     } as any)
     const params = useParams();
     const res = params.id as keyof typeof items;
+
+    useEffect(() => {
+        const token = user?.token as string
+        loadHandle(token, setResponseImages, 'images', router)
+    }, [user]);
 
     useEffect(() => {
         async function searchItemsByName() {
@@ -55,6 +63,7 @@ export default function CheckoutStorePage() {
     return (
         <CheckoutStoreForm
             item={items[0] || item}
+            responseImages={responseImages}
         />
     )
 }
