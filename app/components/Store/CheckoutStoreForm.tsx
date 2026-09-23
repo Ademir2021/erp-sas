@@ -61,10 +61,8 @@ transition cursor-pointer">
                                                     onMouseEnter={() => setImageSelected(img.fileName)}
                                                 >
                                                     <img
-                                                        src={`${process.env.NEXT_PUBLIC_URL}/imgs/items/${img.idItem}/${img.fileName}`}
+                                                        src={`${process.env.NEXT_PUBLIC_URL}/${img.filePath}/${img.idItem}/${img.fileName}`}
                                                         alt={item.name}
-                                                        width={50}
-                                                        height={50}
                                                         className="w-16 h-16 mb-1 object-contain mx-auto rounded border"
                                                     /></button>
                                             )) : <span>Sem images</span>}

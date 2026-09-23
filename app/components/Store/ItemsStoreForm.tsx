@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { TItem, TResponseImages } from "@/app/models/TItem";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -51,17 +50,15 @@ export default function ITemsStoreForm({
                                     className='bg-gray-50 text-black p-2 rounded-lg shadow-md hover:scale-105 transition duration-300 flex flex-col items-center justify-center'>
                                     <ul className=''>
                                         <li className='mb-3'>
-                                            <Image
-                                                src={`/imgs/items/${image[0]?.idItem}/${image[0]?.fileName}`}
+                                            <img
+                                                src={`${process.env.NEXT_PUBLIC_URL}/${image[0]?.filePath}/${image[0]?.idItem}/${image[0]?.fileName}`}
                                                 alt={item.imagem}
-                                                width={500}
-                                                height={500}
                                                 className="w-full max-w-md h-auto object-contain rounded-lg"
                                             />
                                         </li>
-                                        <li className=''>
+                                        <li className='flex text-gray-700 '>
                                             {item.name} </li>
-                                        <li className=''>
+                                        <li className='flex p-1 m-1 text-blue-700'>
                                             R$ {item.priceMax.toFixed(2)}</li>
                                     </ul>
                                 </button>

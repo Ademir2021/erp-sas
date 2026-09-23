@@ -61,7 +61,7 @@ export default function ItemsList({
                                     );
                                     return image ? (
                                         <img
-                                            src={`${process.env.NEXT_PUBLIC_URL}/imgs/items/${image.idItem}/${image.fileName}`}
+                                            src={`${process.env.NEXT_PUBLIC_URL}/${image.filePath}/${image.idItem}/${image.fileName}`}
                                             alt={item.name}
                                             className="w-16 h-16 object-contain mx-auto rounded border"
                                         />
