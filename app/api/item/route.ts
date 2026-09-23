@@ -3,11 +3,10 @@ import { loadToken } from '@/app/lib/endPoint'
 import { TItem } from '@/app/models/TItem'
 import { NextResponse } from 'next/server'
 
-
 export async function POST(request: Request) {
 
   try {
-    
+
     // Recebe multipart/form-data
     const formData = await request.formData();
     // Recupera o JSON do Item
@@ -103,7 +102,28 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const item: TItem = await request.json()
+
+  // Recebe multipart/form-data
+  const formData = await request.formData();
+  // Recupera o JSON do Item
+  const itemBlob = formData.get("item");
+
+  if (!(itemBlob instanceof Blob)) {
+    return NextResponse.json(
+      {
+        error: "Item não encontrado na requisição"
+      },
+      { status: 400 }
+    );
+  }
+
+  // Converte Blob para texto
+  const itemJson = await itemBlob.text();
+  // Converte JSON para objeto
+  const item: TItem = JSON.parse(itemJson);
+  // Recupera as imagens
+  const images = formData.getAll("images");
+
   const token = await loadToken();
   if (!item.id) {
     return NextResponse.json(
@@ -123,20 +143,42 @@ export async function PUT(request: Request) {
       { status: 401 }
     )
   }
+
+  // Novo FormData para enviar ao Spring Boot
+    const springFormData = new FormData();
+    // Item como JSON
+    springFormData.append(
+      "item",
+      new Blob(
+        [JSON.stringify(item)],
+        {
+          type: "application/json"
+        }
+      )
+    );
+    // Imagens
+    images.forEach((image) => {
+      if (image instanceof File) {
+        springFormData.append("images", image, image.name);
+      }
+    });
+
   const apiResponse = await fetch(`${API_URL}/item/${item.id}`, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
       Authorization: `Bearer ${token.token}`
     },
-    body: JSON.stringify(item)
+    body: springFormData
   })
+
   const data = await apiResponse.json()
   if (!apiResponse.ok) {
     return NextResponse.json(data, { status: apiResponse.status })
   }
   return NextResponse.json({ success: true, data })
 }
+
 export async function GET(request: Request) {
   try {
     const authHeader = request.headers.get("authorization")

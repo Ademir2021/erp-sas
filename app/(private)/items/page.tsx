@@ -60,21 +60,6 @@ export default function Items() {
         loadHandle(token, setResponseImages, 'images', router)
     }, [user]);
 
-    async function updateItem(item: TItem) {
-        const res = await fetch('/api/item', {
-            method: 'PUT',
-            body: JSON.stringify(item),
-        })
-        const resp: TResponseMessage = await res.json()
-        if (!res.ok) {
-            setMsg(`Erro ao atualizar Item: ${resp.error}`)
-            return
-        }
-        router.push('/items')
-        setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
-        router.refresh()
-    }
-
     function formDataImages(item: TItem) {
         const formData = new FormData();
         const itemData = {
@@ -98,6 +83,24 @@ export default function Items() {
         return formData;
     }
 
+
+    async function updateItem(item: TItem) {
+        const formData = formDataImages(item)
+        const res = await fetch('/api/item', {
+            method: 'PUT',
+            body: formData,
+        })
+        const resp: TResponseMessage = await res.json()
+        if (!res.ok) {
+            setMsg(`Erro ao atualizar Item: ${resp.error}`)
+            return
+        }
+        router.push('/items')
+        setMsg(`${resp.data.message} ID: ${resp.data.id} : ${resp.success}`)
+        router.refresh()
+    }
+
+    
     async function saveItem(item: TItem) {
         try {
             const formData = formDataImages(item)
