@@ -1,4 +1,4 @@
-import { TItem } from "@/app/models/TItem"
+import { TItem, TResponseImages } from "@/app/models/TItem"
 import ITemsStoreForm from "./ItemsStoreForm"
 
 type Props ={
@@ -6,12 +6,14 @@ type Props ={
     items: TItem[]
     setSearchITemName:Function
     setItemsSale:Function
+    responseImages:TResponseImages[]
 }
 
 export default function StoreForm({searchItemName,
     items,
     setSearchITemName,
-    setItemsSale
+    setItemsSale,
+    responseImages
 }:Props) {
 
     const handleAmount = 1
@@ -19,13 +21,15 @@ export default function StoreForm({searchItemName,
 console.log(items)
     return(
         <>
-         <main className="min-h-screen bg-gray-900 text-white p-6">
+         <main className="min-h-screen bg-gray-300 text-white p-6">
             <div className="text-center mb-3">
                   <input
-                        className="mb-3 w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        className="mb-3 w-full p-2 border text-black
+                        border-gray-400 rounded-b-sm focus:outline-none focus:ring-2
+                        focus:ring-blue-100 focus:border-blue-500"
                         value={searchItemName || ""}
                         type="search"
-                        placeholder="Buscar Produtos ..."
+                        placeholder="Buscar produtos marcas e muito mais ..."
                         autoFocus
                         onChange={(e) => setSearchITemName(e.target.value)}
                     />
@@ -36,6 +40,7 @@ console.log(items)
                 setItemsSale={setItemsSale}
                 msg={'msg'}
                 handleAmount={handleAmount}
+                responseImages={responseImages}
             />
              
         </main>

@@ -8,7 +8,6 @@ import { userAuth } from "@/app/lib/userAuth";
 import { useRouter } from 'next/navigation';
 import { loadHandle } from "@/app/lib/handleApi";
 
-
 export default function CheckoutStorePage() {
     const router = useRouter()
     const { user } = userAuth();

@@ -32,7 +32,6 @@ export default function ItemsList({
     function updateList(item: TItem) {
         setChildren(item)
         setShowForm(true)
-
     }
 
     return <>

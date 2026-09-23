@@ -1,20 +1,19 @@
 import Image from "next/image";
-import { TItem } from "@/app/models/TItem";
-import { TItemsSale } from "@/app/models/TSale";
-import { useParams, useRouter } from "next/navigation";
+import { TItem, TResponseImages } from "@/app/models/TItem";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Pagination from '../Pagination/Pagination';
-// import AddIcon from '@mui/icons-material/Add';
 
 type Props = {
     items: TItem[]
     setItemsSale: Function
     msg: string
     handleAmount: number
+    responseImages: TResponseImages[]
 }
 
 export default function ITemsStoreForm({
-    items, setItemsSale, msg, handleAmount
+    items, setItemsSale, msg, handleAmount, responseImages
 }: Props) {
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -39,30 +38,35 @@ export default function ITemsStoreForm({
     return (
         <>
             <div className="bg-transparent p-1 rounded-2xl shadow-lg flex flex-col justify-between">
-                <main className="min-h-screen bg-gray-900 text-white p-1 rounded-2xl shadow-lg">
-                    <div className="grid md:grid-cols-6 gap-2">
-                        {currentItems.map((item: TItem) => (
-                            <a href="#"
-                                key={item.id}
-                                onClick={() => insertItem(item)}
-                                className='bg-gray-600 p-2 rounded-lg shadow-md hover:scale-105 transition duration-300 flex flex-col items-center justify-center'>
-                                <ul className=''>
-                                    <li className='mb-3'>
-                                       <Image
-                                        src={`/imgs/items/${item.id}/${item.imagem}.png`}
-                                        alt={item.imagem}
-                                        width={500}
-                                        height={500}
-                                        className="w-full max-w-md h-auto object-contain"
-                                        />
-                                    </li>
-                                    <li className=''>
-                                        {item.name} </li>
-                                    <li className=''>
-                                        R$ {item.priceMax.toFixed(2)}</li>
-                                </ul>
-                            </a>
-                        ))}
+                <main className="min-h-screen bg-gray-400 text-white p-1 rounded-2xl shadow-lg">
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-1">
+                        {currentItems.map((item: TItem) => {
+                            const image: TResponseImages[] = responseImages.filter(
+                                (img) => img.idItem === item.id
+                            );
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => insertItem(item)}
+                                    className='bg-gray-50 text-black p-2 rounded-lg shadow-md hover:scale-105 transition duration-300 flex flex-col items-center justify-center'>
+                                    <ul className=''>
+                                        <li className='mb-3'>
+                                            <Image
+                                                src={`/imgs/items/${image[0]?.idItem}/${image[0]?.fileName}`}
+                                                alt={item.imagem}
+                                                width={500}
+                                                height={500}
+                                                className="w-full max-w-md h-auto object-contain rounded-lg"
+                                            />
+                                        </li>
+                                        <li className=''>
+                                            {item.name} </li>
+                                        <li className=''>
+                                            R$ {item.priceMax.toFixed(2)}</li>
+                                    </ul>
+                                </button>
+                            )
+                        })}
                     </div>
                 </main>
             </div>

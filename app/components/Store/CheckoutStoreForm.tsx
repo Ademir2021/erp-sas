@@ -67,9 +67,7 @@ transition cursor-pointer">
                                                         height={50}
                                                         className="w-16 h-16 mb-1 object-contain mx-auto rounded border"
                                                     /></button>
-                                            )) :
-                                            <span>Sem images</span>}
-
+                                            )) : <span>Sem images</span>}
                                     </div>
                                     {itemImages.length > 0 ? <Image
                                         src={`/imgs/items/${item.id}/${imageSelected || itemImages[0].fileName}`}
