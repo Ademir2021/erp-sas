@@ -75,36 +75,36 @@ export default function Items() {
         router.refresh()
     }
 
+    function formDataImages(item: TItem) {
+        const formData = new FormData();
+        const itemData = {
+            ...item,
+            images: undefined,
+        };
+        formData.append(
+            "item",
+            new Blob(
+                [JSON.stringify(itemData)],
+                {
+                    type: "application/json",
+                }
+            )
+        );
+        if (item.images && item.images.length > 0) {
+            item.images.forEach((image) => {
+                formData.append("images", image);
+            });
+        }
+        return formData;
+    }
+
     async function saveItem(item: TItem) {
         try {
-            const formData = new FormData();
-            // Cria uma cópia do item sem as imagens
-            const itemData = {
-                ...item,
-                images: undefined,
-            };
-            // Adiciona o Item como JSON
-            formData.append(
-                "item",
-                new Blob(
-                    [JSON.stringify(itemData)],
-                    {
-                        type: "application/json",
-                    }
-                )
-            );
-            // Adiciona todas as imagens
-            if (item.images && item.images.length > 0) {
-                item.images.forEach((image) => {
-                    formData.append("images", image);
-                });
-            }
-            // Envia para a API Next.js
+            const formData = formDataImages(item)
             const res = await fetch("/api/item", {
                 method: "POST",
                 body: formData,
             });
-
             const resp: TResponseMessage = await res.json();
             if (!res.ok) {
                 setMsg(
@@ -160,7 +160,7 @@ export default function Items() {
     }
 
     return <>
-    {/* <span>{JSON.stringify(item.images)}</span> */}
+        {/* <span>{JSON.stringify(item.images)}</span> */}
         <ItemsForm
             handleChange={handleChange}
             setChildren={setItem}

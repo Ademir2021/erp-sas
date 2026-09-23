@@ -3,12 +3,16 @@ import { loadToken } from '@/app/lib/endPoint'
 import { TItem } from '@/app/models/TItem'
 import { NextResponse } from 'next/server'
 
+
 export async function POST(request: Request) {
+
   try {
+    
     // Recebe multipart/form-data
     const formData = await request.formData();
     // Recupera o JSON do Item
     const itemBlob = formData.get("item");
+
     if (!(itemBlob instanceof Blob)) {
       return NextResponse.json(
         {
@@ -17,18 +21,16 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
     // Converte Blob para texto
     const itemJson = await itemBlob.text();
-    console.log("JSON recebido:");
-    console.log(itemJson);
     // Converte JSON para objeto
     const item: TItem = JSON.parse(itemJson);
-    console.log("ITEM:");
-    console.log(item);
     // Recupera as imagens
     const images = formData.getAll("images");
-    console.log("Quantidade de imagens:", images.length);
+
     const token = await loadToken();
+
     if (!item.name) {
       return NextResponse.json(
         {
@@ -37,6 +39,7 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
     if (!token.token) {
       return NextResponse.json(
         {
@@ -45,6 +48,7 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
+
     // Novo FormData para enviar ao Spring Boot
     const springFormData = new FormData();
     // Item como JSON
@@ -63,7 +67,7 @@ export async function POST(request: Request) {
         springFormData.append("images", image, image.name);
       }
     });
-    console.log("Enviando para Spring Boot...");
+
     const apiResponse = await fetch(`${API_URL}/item`, {
       method: "POST",
       headers: {
@@ -93,40 +97,32 @@ export async function POST(request: Request) {
           error instanceof Error
             ? error.message
             : "Erro interno ao processar item"
-      },
-      {
-        status: 500
-      }
+      }, { status: 500 }
     );
   }
 }
 
 export async function PUT(request: Request) {
-
   const item: TItem = await request.json()
   const token = await loadToken();
-
   if (!item.id) {
     return NextResponse.json(
       { error: 'ID é obrigatório para atualização' },
       { status: 400 }
     )
   }
-
   if (!item.name) {
     return NextResponse.json(
       { error: 'Favor preencher todos os campos' },
       { status: 400 }
     )
   }
-
   if (!token.token) {
     return NextResponse.json(
       { error: 'Token não encontrado' },
       { status: 401 }
     )
   }
-
   const apiResponse = await fetch(`${API_URL}/item/${item.id}`, {
     method: "PUT",
     headers: {
@@ -135,16 +131,12 @@ export async function PUT(request: Request) {
     },
     body: JSON.stringify(item)
   })
-
   const data = await apiResponse.json()
-
   if (!apiResponse.ok) {
     return NextResponse.json(data, { status: apiResponse.status })
   }
-
   return NextResponse.json({ success: true, data })
 }
-
 export async function GET(request: Request) {
   try {
     const authHeader = request.headers.get("authorization")
@@ -168,10 +160,8 @@ export async function GET(request: Request) {
         { status: response.status }
       )
     }
-    
     const data = await response.json()
     return NextResponse.json(data)
-
   } catch (error) {
     console.error("Erro na API /items:", error)
     return NextResponse.json(
