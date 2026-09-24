@@ -51,7 +51,7 @@ export default function ITemsStoreForm({
                                     <ul className=''>
                                         <li className='mb-3'>
                                             <img
-                                                src={`${process.env.NEXT_PUBLIC_URL}/${image[0]?.filePath}/${image[0]?.idItem}/${image[0]?.fileName}`}
+                                                src={`${process.env.NEXT_PUBLIC_API_IMG}/${item.id}/${image[0]?.fileName}`}
                                                 alt={item.imagem}
                                                 className="w-full max-w-md h-auto object-contain rounded-lg"
                                             />

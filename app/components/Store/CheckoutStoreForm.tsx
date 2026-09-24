@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { TItem, TResponseImages } from "@/app/models/TItem";
 import { useState } from "react";
@@ -61,18 +60,17 @@ transition cursor-pointer">
                                                     onMouseEnter={() => setImageSelected(img.fileName)}
                                                 >
                                                     <img
-                                                        src={`${process.env.NEXT_PUBLIC_URL}/${img.filePath}/${img.idItem}/${img.fileName}`}
+                                                        src={`${process.env.NEXT_PUBLIC_API_IMG}/${img.idItem}/${img.fileName}`}
                                                         alt={item.name}
                                                         className="w-16 h-16 mb-1 object-contain mx-auto rounded border"
+                                                      
                                                     /></button>
                                             )) : <span>Sem images</span>}
                                     </div>
-                                    {itemImages.length > 0 ? <Image
-                                        src={`/imgs/items/${item.id}/${imageSelected || itemImages[0].fileName}`}
+                                    {itemImages.length > 0 ? <img
+                                        src={`${process.env.NEXT_PUBLIC_API_IMG}/${item.id}/${imageSelected || itemImages[0].fileName}`}
                                         alt={item.imagem}
-                                        width={200}
-                                        height={100}
-                                        className="w-full max-w-md h-auto object-contain" /> : <p>Sem Imagem</p>}
+                                        className="w-75  max-w-md h-75 object-contain" /> : <p>Sem Imagem</p>}
                                 </div>
                                 {/* INFORMAÇÕES */}
                                 <div className="flex-1">
