@@ -53,10 +53,10 @@ export default function ITemsStoreForm({
                                             <img
                                                 src={`${process.env.NEXT_PUBLIC_API_IMG}/${item.id}/${image[0]?.fileName}`}
                                                 alt={item.imagem}
-                                                className="w-full max-w-md h-auto object-contain rounded-lg"
+                                                className="min-w-24 max-w-26 h-auto object-contain rounded-lg"
                                             />
                                         </li>
-                                        <li className='flex text-gray-700 '>
+                                        <li className='flex  text-xs m-1 text-gray-800 '>
                                             {item.name} </li>
                                         <li className='flex p-1 m-1 text-blue-700'>
                                             R$ {item.priceMax.toFixed(2)}</li>

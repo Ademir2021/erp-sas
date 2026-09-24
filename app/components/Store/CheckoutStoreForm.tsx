@@ -50,27 +50,75 @@ transition cursor-pointer">
                             {/*  IMAGES ITEMS */}
                             <div className="flex flex-col md:flex-row gap-8">
                                 {/* IMAGEM */}
-                                <div className="w-full md:w-1/2 flex items-center justify-center">
-                                    <div className="grid-cols-1 lg:grid-cols-3 gap-6" >
-                                        {itemImages.length > 0 ?
+                                <div className="w-full md:w-1/2 flex flex-col lg:flex-row items-center justify-center gap-4">
+
+                                    {/* Miniaturas */}
+                                    <div className="
+w-full lg:w-auto
+grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-1
+gap-2
+justify-items-center
+order-2 lg:order-1
+">
+                                        {itemImages.length > 0 ? (
                                             itemImages.map((img) => (
-                                                <button className="cursor-pointer"
+                                                <button
                                                     key={img.id}
                                                     type="button"
+                                                    className="
+cursor-pointer
+w-16 h-16
+p-1
+rounded-md
+border
+hover:border-blue-500
+transition
+"
                                                     onMouseEnter={() => setImageSelected(img.fileName)}
+                                                    onClick={() => setImageSelected(img.fileName)}
                                                 >
                                                     <img
                                                         src={`${process.env.NEXT_PUBLIC_API_IMG}/${img.idItem}/${img.fileName}`}
                                                         alt={item.name}
-                                                        className="w-16 h-16 mb-1 object-contain mx-auto rounded border"
-                                                      
-                                                    /></button>
-                                            )) : <span>Sem images</span>}
+                                                        className="
+w-full
+h-full
+object-contain
+"
+                                                    />
+                                                </button>
+                                            ))
+                                        ) : (
+                                            <span>Sem imagens</span>
+                                        )}
                                     </div>
-                                    {itemImages.length > 0 ? <img
-                                        src={`${process.env.NEXT_PUBLIC_API_IMG}/${item.id}/${imageSelected || itemImages[0].fileName}`}
-                                        alt={item.imagem}
-                                        className="w-75  max-w-md h-75 object-contain" /> : <p>Sem Imagem</p>}
+
+                                    {/* Imagem principal */}
+                                    <div className="
+w-full
+flex
+items-center
+justify-center
+order-1 lg:order-2
+">
+                                        {itemImages.length > 0 ? (
+                                            <img
+                                                src={`${process.env.NEXT_PUBLIC_API_IMG}/${item.id}/${imageSelected || itemImages[0].fileName}`}
+                                                alt={item.imagem}
+                                                className="
+w-full
+max-w-[500px]
+h-auto
+max-h-[500px]
+object-contain
+rounded-lg
+"
+                                            />
+                                        ) : (
+                                            <p>Sem Imagem</p>
+                                        )}
+                                    </div>
+
                                 </div>
                                 {/* INFORMAÇÕES */}
                                 <div className="flex-1">
