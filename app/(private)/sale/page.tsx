@@ -445,7 +445,7 @@ export default function Sales() {
         registerPagSeguroPIX()
     };
     return <>
-        {/* <p>{JSON.stringify(responsePayPal)}</p> */}
+        {/* <p>{JSON.stringify(itemsSale)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}
