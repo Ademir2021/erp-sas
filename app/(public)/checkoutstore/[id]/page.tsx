@@ -83,6 +83,7 @@ export default function CheckoutStorePage() {
     const newItemSale: TItemsSale = {
       item: {
         id: items[0]?.id,
+        name:items[0]?.name
       } as any,
       amount: amount,
       price: items[0].priceMax,
@@ -105,6 +106,7 @@ export default function CheckoutStorePage() {
 
   function buyNow() {
     handleItemsSale();
+    router.push('/checkoutstep')
   }
 
   function addToCart() {

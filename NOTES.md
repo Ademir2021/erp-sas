@@ -15,3 +15,24 @@ node_modules (ou rodar npm install lá)
 `npm install --production`
 `npm run build` no projeto
 `npm start` na build
+
+## ItemsSold
+itemsSale
+   ↓
+ItemsInTheCard
+   ↓
+paymentMethod
+   ├── pix
+   │    ↓
+   │ completeSale
+   │
+   └── card
+        ↓
+     completeSale
+        ↓
+   ┌────┴────┐
+   ↓         ↓
+ sucesso    erro
+   ↓         ↓
+complete   saleNotCompleted
+                
