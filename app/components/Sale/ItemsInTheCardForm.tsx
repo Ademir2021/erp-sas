@@ -74,7 +74,7 @@ export default function ItemsInTheCardForm({
       <div className="w-full p-4">
         {/* Cabeçalho */}
         <div className="mb-6">
-          <h2 className="text-2xl font-bold">Itens no Carrinho</h2>
+          <h2 className="text-2xl font-bold">Items no Carrinho</h2>
           <p className="text-sm text-gray-500">
             Confira os produtos antes de escolher a forma de pagamento.
           </p>

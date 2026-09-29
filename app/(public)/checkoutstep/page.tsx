@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 import CheckoutStepForm from "@/app/components/Sale/ChecKoutStepForm";
@@ -13,20 +12,21 @@ import { TResponsePayPal } from "@/app/models/TResponsePayPal";
 import { TItemsSale, TSale } from "@/app/models/TSale";
 import { TUser, UserRole } from "@/app/models/TUser";
 import { useRouter } from "next/navigation";
-
 import orderPayPalJSON from "../../json/orderPayPal.json";
 import responsePayPalJSON from "../../json/responsePayPal.json";
+import { TAccountsReceivable } from "@/app/models/TAccountsReceivable";
+import { setDays } from "@/app/lib/momentDays";
 
 export default function CheckoutStep() {
-  const { user } = userAuth();
-  const router = useRouter();
-
   const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(
     orderPayPalJSON as TPayPalOrderResponse,
   ); // captura o pedido mas ainda não aprovado
   const [responsePayPal, setResponsePayPal] = useState<TResponsePayPal>(
     responsePayPalJSON as TResponsePayPal,
   );
+
+  const { user } = userAuth();
+  const router = useRouter();
 
   const [msg, setMsg] = useState("");
   const [responseIdSale, setResponseIdSale] = useState(0);
@@ -51,7 +51,7 @@ export default function CheckoutStep() {
     discount: 0,
     itemsSale: [],
     operationSale: {
-      id: 0,
+      id: 2,
       description: "",
       type: "",
       controlsStock: false,
@@ -68,41 +68,28 @@ export default function CheckoutStep() {
     accountsReceivable: [],
   });
 
+  const quantityTotal = itemsSale.reduce(
+    (total, item) => total + item.amount,
+    0,
+  );
+
+  const totalSale = itemsSale.reduce(
+    (total, item: any) => total + item.tItem,
+    0,
+  );
+
+  useEffect(() => {
+    const token = user?.token as string;
+    loadHandle(token, setResponseImages, "images", router);
+    loadHandle(token, setPersons, "person", router);
+  }, [user]);
+
   useEffect(() => {
     const savedItems = localStorage.getItem("itemsSale");
     if (savedItems) {
       setItemsSale(JSON.parse(savedItems));
     }
   }, []);
-
-  useEffect(() => {
-    setSale((prev) => ({
-      ...prev,
-      itemsSale,
-    }));
-  }, [itemsSale]);
-
-  useEffect(() => {
-    function loadUser() {
-      if (user) {
-        const userSale: TUser = {
-          id: user.id,
-          login: user.login,
-        } as any;
-        setSale({ ...sale, user: userSale });
-      }
-    }
-    loadUser();
-  }, [user]);
-
-  useEffect(() => {
-    if (person) {
-      const personSale: TPerson = {
-        id: person.id,
-      } as any;
-      setSale({ ...sale, person: personSale });
-    }
-  }, [person]);
 
   useEffect(() => {
     if (itemsSale.length > 0) {
@@ -113,20 +100,34 @@ export default function CheckoutStep() {
   }, [itemsSale]);
 
   useEffect(() => {
-    const token = user?.token as string;
-    loadHandle(token, setResponseImages, "images", router);
-    loadHandle(token, setPersons, "person", router);
-  }, [user]);
+    setSale((prev) => ({
+      ...prev,
+      itemsSale,
+    }));
+  }, [itemsSale, sale]);
 
-    const quantityTotal = itemsSale.reduce(
-    (total, item) => total + item.amount,
-    0,
-  );
+  useEffect(() => {
+    if (!sale.user.id)
+      setSale(
+        (prev) =>
+          ({
+            ...prev,
+            user: {
+              id: user?.id,
+              login: user?.login,
+            },
+          }) as any,
+      );
+  }, [sale]);
 
-  const totalSale = itemsSale.reduce(
-    (total, item: any) => total + item.tItem,
-    0,
-  );
+  useEffect(() => {
+    if (person?.id) {
+      const personSale: TPerson = {
+        id: person?.id,
+      } as any;
+      setSale((prev) => ({ ...prev, person: personSale }));
+    }
+  }, [sale]);
 
   /**Funções para Envio da Venda */
   async function saveSale(sale: TSale) {
@@ -148,23 +149,55 @@ export default function CheckoutStep() {
 
   function handleSaveSale() {
     if (responseIdSale === 0) {
-      // loadItemsSale(sale);
       saveSale(sale);
     } else {
       setMsg("Esta venda já foi gravada");
     }
   }
 
-  function hanldeSubmit(e: Event) {
-    e.preventDefault();
-    handleSaveSale();
-  }
+  useEffect(() => {
+    if (responsePayPal) {
+      if (responsePayPal.status === "COMPLETED") {
+        handleSaveSale();
+      }
+    }
+  }, [responsePayPal]);
+
+  useEffect(() => {
+    const newAccountsReceivable: TAccountsReceivable[] = {
+      id: 1,
+      createdAt: new Date(),
+      updatedAt: null,
+      branch: { id: 1 },
+      user: { id: user?.id },
+      payer: { id: person?.id || 0 },
+      sale: { id: 0 },
+      value: totalSale,
+      receivedValue: 0,
+      balance: totalSale,
+      dueDate: setDays(0) as any,
+      cancel: false,
+      description: "",
+      situation: "OPEN",
+      observations: "CARTÃO DE CRÉDITO",
+      lateFee: 0,
+      interest: 0,
+      discount: 0,
+      type: "CASH",
+      idTypeOperation: responsePayPal?.purchase_units[0]?.payments?.captures[0]?.id as any,
+      descriptionTypeOperation: `Parcela ${1} de ${1}`,
+    } as any;
+    setSale({
+      ...sale,
+      accountsReceivable: newAccountsReceivable,
+    });
+  }, [responsePayPal, totalSale, person, user]);
 
   return (
     <>
-      {/* <pre className="bg-gray-600 p-4 rounded-lg text-xs overflow-auto max-h-96">
+      <pre className="bg-gray-600 p-4 rounded-lg text-xs overflow-auto max-h-96">
         {JSON.stringify(sale, null, 2)}
-      </pre> */}
+      </pre>
       <CheckoutStepForm
         itemsSale={itemsSale}
         responseImages={responseImages}
@@ -173,6 +206,8 @@ export default function CheckoutStep() {
         setPerson={setPerson as any}
         quantityTotal={quantityTotal}
         totalSale={totalSale}
+        setOrderPayPal={setOrderPayPal as any}
+        setPaymentPayPal={setResponsePayPal as any}
       />
     </>
   );

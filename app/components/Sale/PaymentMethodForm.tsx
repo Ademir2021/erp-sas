@@ -102,7 +102,7 @@ export default function PaymentMethod({
           type="button"
           onClick={handlePix}
           disabled={!customerSelected}
-          className=" cursor-pointer flex flex-col items-center justify-center gap-3 min-h-[180px] p-6 rounded-xl border bg-white shadow-sm transition hover:shadow-md hover:border-green-500 hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className=" cursor-pointer flex flex-col items-center justify-center gap-3 min-h-[180] p-6 rounded-xl border bg-white shadow-sm transition hover:shadow-md hover:border-green-500 hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <div className="text-5xl">▣</div>
           <div className="text-center">
@@ -115,7 +115,7 @@ export default function PaymentMethod({
           type="button"
           onClick={handleCard}
           disabled={!customerSelected}
-          className=" cursor-pointer flex flex-col items-center justify-center gap-3 min-h-[180px] p-6 rounded-xl border bg-white shadow-sm transition hover:shadow-md hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className=" cursor-pointer flex flex-col items-center justify-center gap-3 min-h-[180] p-6 rounded-xl border bg-white shadow-sm transition hover:shadow-md hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <div className="text-5xl">▰</div>
           <div className="text-center">

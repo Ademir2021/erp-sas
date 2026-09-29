@@ -8,6 +8,9 @@ import { useRouter } from "next/navigation";
 import PaymentMethodForm from "./PaymentMethodForm";
 import { TPerson } from "@/app/models/TPerson";
 import PixPayment from "./PixPayment";
+import CardPaymentForm from "./CardPaymentForm";
+import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse";
+import { TResponsePayPal } from "@/app/models/TResponsePayPal";
 
 type CheckoutStep =
   | "itemsSale"
@@ -21,48 +24,51 @@ type CheckoutStep =
 
 type Props = {
   itemsSale: TItemsSale[];
-  setItemsSale: Dispatch<SetStateAction<TItemsSale[]>>
-  responseImages:TResponseImages[]
-  person:TPerson[]
+  setItemsSale: Dispatch<SetStateAction<TItemsSale[]>>;
+  responseImages: TResponseImages[];
+  person: TPerson[];
   setPerson: Dispatch<SetStateAction<TPerson>>;
-  quantityTotal:number
-  totalSale:number
+  quantityTotal: number;
+  totalSale: number;
+  setPaymentPayPal: Dispatch<SetStateAction<TPayPalOrderResponse>>;
+  setOrderPayPal: Dispatch<SetStateAction<TResponsePayPal>>;
 };
 
 export default function CheckoutStepForm({
-    itemsSale,
-    setItemsSale,
-    responseImages,
-    person,
-    setPerson,
-    quantityTotal,
-    totalSale
+  itemsSale,
+  setItemsSale,
+  responseImages,
+  person,
+  setPerson,
+  quantityTotal,
+  totalSale,
+  setPaymentPayPal,
+  setOrderPayPal,
 }: Props) {
-
   const [checkoutStep, setCheckoutStep] =
     useState<CheckoutStep>("itemsInTheCard");
   function nextStep(step: CheckoutStep) {
     setCheckoutStep(step);
   }
 
-  const router = useRouter()
-  
-useEffect(() => {
-  if (checkoutStep === "itemsSale") {
-    router.push("/store");
-  }
-}, [checkoutStep, router]);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (checkoutStep === "itemsSale") {
+      router.push("/store");
+    }
+  }, [checkoutStep, router]);
 
   return (
     <div className="w-full">
-      {checkoutStep === "itemsSale" && (
-        // <ItemsSale
-        //   itemsSale={itemsSale}
-        //   setItemsSale={setItemsSale}
-        //   onNext={() => nextStep("itemsInTheCard")}
-        // />
+      {/* {checkoutStep === "itemsSale" && (
+        <ItemsSale
+          itemsSale={itemsSale}
+          setItemsSale={setItemsSale}
+          onNext={() => nextStep("itemsInTheCard")}
+        />
         <a href="store" >Store</a>
-      )}
+      )} */}
 
       {checkoutStep === "itemsInTheCard" && (
         <ItemsInTheCardForm
@@ -97,13 +103,15 @@ useEffect(() => {
       )}
 
       {checkoutStep === "card" && (
-        // <CardPayment
-        //   itemsSale={itemsSale}
-        //   onBack={() => nextStep("paymentMethod")}
-        //   onComplete={() => nextStep("completeSale")}
-        //   onError={() => nextStep("saleNotCompleted")}
-        // />
-        <p>CardPament</p>
+        <CardPaymentForm
+          itemsSale={itemsSale}
+          onBack={() => nextStep("paymentMethod")}
+          onComplete={() => nextStep("completeSale")}
+          onError={() => nextStep("saleNotCompleted")}
+          totalSale={totalSale}
+          setOrderPayPal={setOrderPayPal}
+          setPaymentPayPal={setPaymentPayPal}
+        />
       )}
 
       {checkoutStep === "completeSale" && (

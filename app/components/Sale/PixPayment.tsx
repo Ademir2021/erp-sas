@@ -41,7 +41,6 @@ export default function PixPayment({
     try {
       setLoading(true);
       setError("");
-
       const response = await fetch("/api/paymentpix", {
         method: "POST",
         headers: {
@@ -56,9 +55,7 @@ export default function PixPayment({
       if (!response.ok) {
         throw new Error("Não foi possível criar o pagamento PIX.");
       }
-
       const data: PixPaymentResponse = await response.json();
-
       setPix(data);
     } catch (err) {
       console.error(err);
@@ -71,7 +68,6 @@ export default function PixPayment({
 
   async function checkPayment() {
     if (!pix?.id) return;
-
     try {
       setChecking(true);
       //`/api/paymentpix/${pix.id}`,

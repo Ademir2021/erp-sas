@@ -1,483 +1,532 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from "react"
-import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale"
-import { TUser, UserRole } from "@/app/models/TUser"
-import { useRouter } from 'next/navigation'
-import SaleForm from "@/app/components/Sale/SaleForm"
-import { TItem } from "@/app/models/TItem"
-import { TResponseMessage } from "@/app/models/TMessage"
-import { TPerson } from "@/app/models/TPerson"
-import { loadHandle } from "@/app/lib/handleApi"
-import pagSeguroCardJSON from "../../json/pagSeguroCard.json"
-import pagSeguroPixJSON from "../../json/pagSeguroPix.json"
-import { TPagSeguroCard, TPagSeguroResponseCard, TPublicKey } from "@/app/models/TPagSeguroCard"
-import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPagSeguroPix"
-import { TAccountsReceivable } from "@/app/models/TAccountsReceivable"
-import { setDays } from "@/app/lib/momentDays"
-import { mapFieldsPagSeguroCard, mapFieldsPagSeguroPix } from "./handlePagSeguro"
-import { userAuth } from "@/app/lib/userAuth"
-import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse"
-import orderPayPalJSON from '../../json/orderPayPal.json'
-import responsePayPalJSON from '../../json/responsePayPal.json'
-import { TResponsePayPal } from "@/app/models/TResponsePayPal"
+import { useEffect, useState } from "react";
+import {
+  TCreditCart,
+  TItemsSale,
+  TOperationSale,
+  TSale,
+} from "@/app/models/TSale";
+import { TUser, UserRole } from "@/app/models/TUser";
+import { useRouter } from "next/navigation";
+import SaleForm from "@/app/components/Sale/SaleForm";
+import { TItem } from "@/app/models/TItem";
+import { TResponseMessage } from "@/app/models/TMessage";
+import { TPerson } from "@/app/models/TPerson";
+import { loadHandle } from "@/app/lib/handleApi";
+import pagSeguroCardJSON from "../../json/pagSeguroCard.json";
+import pagSeguroPixJSON from "../../json/pagSeguroPix.json";
+import {
+  TPagSeguroCard,
+  TPagSeguroResponseCard,
+  TPublicKey,
+} from "@/app/models/TPagSeguroCard";
+import { TResponsePixQRCode, TPagSeguroPix } from "@/app/models/TPagSeguroPix";
+import { TAccountsReceivable } from "@/app/models/TAccountsReceivable";
+import { setDays } from "@/app/lib/momentDays";
+import {
+  mapFieldsPagSeguroCard,
+  mapFieldsPagSeguroPix,
+} from "./handlePagSeguro";
+import { userAuth } from "@/app/lib/userAuth";
+import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse";
+import orderPayPalJSON from "../../json/orderPayPal.json";
+import responsePayPalJSON from "../../json/responsePayPal.json";
+import { TResponsePayPal } from "@/app/models/TResponsePayPal";
 
 declare global {
-    interface Window {
-        PagSeguro?: any;
-    }
+  interface Window {
+    PagSeguro?: any;
+  }
 }
 
 export default function Sales() {
+  const router = useRouter();
+  const { user } = userAuth();
 
-    const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(orderPayPalJSON as TPayPalOrderResponse) // caputa o peido mas ainda não aprovado
-    const [responsePayPal, setResponsePayPal] = useState<TResponsePayPal>(responsePayPalJSON as TResponsePayPal)
+  const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(
+    orderPayPalJSON as TPayPalOrderResponse,
+  ); // caputa o peido mas ainda não aprovado
+  const [responsePayPal, setResponsePayPal] = useState<TResponsePayPal>(
+    responsePayPalJSON as TResponsePayPal,
+  );
 
-    const router = useRouter();
-    const { user } = userAuth();
-
-    const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(pagSeguroCardJSON as TPagSeguroCard);
-    const [responsePagSeguroCard, setResponsePagSeguroCard] = useState<TPagSeguroResponseCard>({
-        id: "", charges: [{
-            id: "", reference_id: "", status: 'PENDING',
-            created_at: "", paid_at: "", description: ""
-        }]
-    });
-    const [publicKey, setPublicKey] = useState<TPublicKey>({
-        public_key: '', created_at: ''
-    });
-    const [creditCard, setCreditCard] = useState<TCreditCart>({
-        public_key: "", holder: "", number: "",
-        ex_month: "", ex_year: "", secure_code: "", encrypted: "",
-        installments: 1, payment: 0
-    });
-    const [pagSeguroPix, setPagSeguroPix] = useState<TPagSeguroPix>(pagSeguroPixJSON as TPagSeguroPix);
-    const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
-        id: "",
-        qr_codes: [{ id: "", text: "", amount: { value: 0 } }],
-        error_messages: [{ code: "", description: "", parameter_name: "" }]
-    });
-    const [cash, setCash] = useState(0);
-    const [msgCreditCard, setMsgCreditCard] = useState('')
-    const [msg, setMsg] = useState('')
-    const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([])
-    const [persons, setPersons] = useState<TPerson[]>([])
-    const [responseIdSale, setResponseIdSale] = useState(0)
-    const [searchItemName, setSearchITemName] = useState("")
-    const [items, setItems] = useState<TItem[]>([])
-    const [itemsSale, setItemsSale] = useState<TItemsSale[]>([])
-    const [sale, setSale] = useState<TSale>({
-        branch: { id: 1, name: '' },
-        user: {
-            id: 0,
-            login: '',
-            password: '',
-            role: "USER" as UserRole,
-            token: ''
+  const [pagSeguroCard, setPagSeguroCard] = useState<TPagSeguroCard>(
+    pagSeguroCardJSON as TPagSeguroCard,
+  );
+  const [responsePagSeguroCard, setResponsePagSeguroCard] =
+    useState<TPagSeguroResponseCard>({
+      id: "",
+      charges: [
+        {
+          id: "",
+          reference_id: "",
+          status: "PENDING",
+          created_at: "",
+          paid_at: "",
+          description: "",
         },
-        person: { id: 0 },
-        tSale: 0,
-        discount: 0,
-        itemsSale: [],
-        operationSale: {
-            id: 0, description: '', type: "", controlsStock: false,
-            generateFinancial: false, allowDiscount: false, updateCost: false,
-            finalConsumer: true, requiresInvoice: false,
-            isReturn: false, cfop: '', defaultNature: '', active: true
-        },
-        accountsReceivable: []
+      ],
     });
-    const [operationSale, setOperationSale] = useState<TOperationSale>(sale.operationSale)
-    const [person, setPerson] = useState<TPerson | null>()
-    const [installmentAccount, setInstallmentAccount] = useState(0)
-    const [, setSaleAccountsReceivables] = useState<TAccountsReceivable[]>([])
+  const [publicKey, setPublicKey] = useState<TPublicKey>({
+    public_key: "",
+    created_at: "",
+  });
+  const [creditCard, setCreditCard] = useState<TCreditCart>({
+    public_key: "",
+    holder: "",
+    number: "",
+    ex_month: "",
+    ex_year: "",
+    secure_code: "",
+    encrypted: "",
+    installments: 1,
+    payment: 0,
+  });
+  const [pagSeguroPix, setPagSeguroPix] = useState<TPagSeguroPix>(
+    pagSeguroPixJSON as TPagSeguroPix,
+  );
+  const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
+    id: "",
+    qr_codes: [{ id: "", text: "", amount: { value: 0 } }],
+    error_messages: [{ code: "", description: "", parameter_name: "" }],
+  });
+  const [cash, setCash] = useState(0);
+  const [msgCreditCard, setMsgCreditCard] = useState("");
+  const [msg, setMsg] = useState("");
+  const [operationsSale, setOperationsSale] = useState<TOperationSale[]>([]);
+  const [persons, setPersons] = useState<TPerson[]>([]);
+  const [responseIdSale, setResponseIdSale] = useState(0);
+  const [searchItemName, setSearchITemName] = useState("");
+  const [items, setItems] = useState<TItem[]>([]);
+  const [itemsSale, setItemsSale] = useState<TItemsSale[]>([]);
+  const [sale, setSale] = useState<TSale>({
+    branch: { id: 1, name: "" },
+    user: {
+      id: 0,
+      login: "",
+      password: "",
+      role: "USER" as UserRole,
+      token: "",
+    },
+    person: { id: 0 },
+    tSale: 0,
+    discount: 0,
+    itemsSale: [],
+    operationSale: {
+      id: 0,
+      description: "",
+      type: "",
+      controlsStock: false,
+      generateFinancial: false,
+      allowDiscount: false,
+      updateCost: false,
+      finalConsumer: true,
+      requiresInvoice: false,
+      isReturn: false,
+      cfop: "",
+      defaultNature: "",
+      active: true,
+    },
+    accountsReceivable: [],
+  });
+  const [operationSale, setOperationSale] = useState<TOperationSale>(
+    sale.operationSale,
+  );
+  const [person, setPerson] = useState<TPerson | null>();
+  const [installmentAccount, setInstallmentAccount] = useState(0);
+  const [, setSaleAccountsReceivables] = useState<TAccountsReceivable[]>([]);
 
-    function handleItemAmount(): { handleItem: string; handleAmount: number } {
-        if (searchItemName.includes('*')) {
-            const [amount, item] = searchItemName.split('*');
-            return {
-                handleItem: item || '',
-                handleAmount: Number(amount) || 1
-            };
-        } else {
-            return {
-                handleItem: searchItemName,
-                handleAmount: 1
-            };
+  function handleItemAmount(): { handleItem: string; handleAmount: number } {
+    if (searchItemName.includes("*")) {
+      const [amount, item] = searchItemName.split("*");
+      return {
+        handleItem: item || "",
+        handleAmount: Number(amount) || 1,
+      };
+    } else {
+      return {
+        handleItem: searchItemName,
+        handleAmount: 1,
+      };
+    }
+  }
+  const { handleAmount, handleItem } = handleItemAmount();
+
+  useEffect(() => {
+    if (!installmentAccount || installmentAccount <= 0) {
+      setSaleAccountsReceivables([]);
+      return;
+    }
+
+    function setObservationsAccounts() {
+      if (qrcodePagSeguro?.qr_codes[0]?.amount?.value > 0) {
+        return "PIX";
+      }
+      if (operationSale.id === 2) {
+        return "CARTÃO DE CRÉDITO";
+      }
+      return "CREDIÁRIO LOJA";
+    }
+
+    function setIdTypeOperationAccounts() {
+      const qrcodeID = qrcodePagSeguro?.id as any;
+      const resPagSeguroCardID = responsePagSeguroCard?.id as any;
+      const resPayPalID = responsePayPal?.purchase_units[0]?.payments
+        ?.captures[0]?.id as any;
+      if (qrcodeID) return qrcodeID;
+      if (resPagSeguroCardID) return resPagSeguroCardID;
+      if (resPayPalID) return resPayPalID;
+      return `ID:${operationSale.id.toString()} - ${operationSale.description}`;
+    }
+
+    const newAccountsReceivable: TAccountsReceivable[] = Array.from(
+      { length: installmentAccount },
+      (_, i) => {
+        const remaining = (
+          (Number(sale.tSale) || 0) - (Number(cash) || 0)
+        ).toFixed(2) as any;
+        const installmentNumber = i + 1;
+        const VALUE = Number((remaining / installmentAccount).toFixed(2));
+        return {
+          id: 0,
+          createdAt: new Date(),
+          updatedAt: null,
+          branch: { id: 1 },
+          user: { id: user?.id },
+          payer: { id: person?.id || 0 },
+          sale: { id: 0 },
+          value: VALUE,
+          receivedValue: 0,
+          balance: VALUE,
+          dueDate: setDays(i) as any,
+          cancel: false,
+          description: "",
+          situation: "OPEN",
+          observations: setObservationsAccounts(),
+          lateFee: 0,
+          interest: 0,
+          discount: 0,
+          type: "CASH",
+          idTypeOperation: setIdTypeOperationAccounts(),
+          descriptionTypeOperation: `Parcela ${installmentNumber} de ${installmentAccount}`,
+        };
+      },
+    );
+    setSaleAccountsReceivables(newAccountsReceivable);
+    // Se quiser atualizar o objeto sale diretamente, faça isso com cuidado
+    sale.accountsReceivable = newAccountsReceivable;
+  }, [
+    sale.tSale,
+    installmentAccount,
+    user?.id,
+    person?.id,
+    cash,
+    sale.discount,
+    qrcodePagSeguro,
+    responsePagSeguroCard,
+    operationSale,
+    creditCard,
+    responsePayPal,
+  ]);
+
+  useEffect(() => {
+    // Se não for parcelado zera o Array
+    if (operationSale.id === 3 || operationSale.id === 2) {
+      setInstallmentAccount(1);
+    } else {
+      setSaleAccountsReceivables([]);
+      setSale((prev) => ({
+        ...prev,
+        accountsReceivable: [],
+      }));
+    }
+  }, [operationSale.id]);
+
+  useEffect(() => {
+    // Se for cartão de crédito, seta o número de parcelas selecionado
+    if (operationSale.id === 2) setInstallmentAccount(creditCard.installments);
+  }, [creditCard, operationSale]);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = process.env.NEXT_PUBLIC_SDK_PAGSEGURO as string;
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
+  useEffect(() => {
+    function loadUser() {
+      if (user) {
+        const userSale: TUser = {
+          id: user.id,
+          login: user.login,
+        } as any;
+        setSale({ ...sale, user: userSale });
+      }
+    }
+    loadUser();
+  }, [user]);
+
+  useEffect(() => {
+    const token = user?.token as string;
+    loadHandle(token, setPersons, "person", router);
+    loadHandle(token, setOperationsSale, "operationsale", router);
+    loadHandle(token, setPublicKey, "pagseguropublickey", router);
+  }, [user]);
+
+  useEffect(() => {
+    async function searchItemsByName() {
+      const token = user?.token;
+      const params = new URLSearchParams({
+        name: handleItem,
+      });
+      try {
+        if (!token) return;
+        const response = await fetch(`/api/itemsale?${params.toString()}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`Erro: ${response.status}`);
         }
-    };
-    const { handleAmount, handleItem } = handleItemAmount();
+        const data: TItem[] = await response.json();
+        setItems(data);
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+      }
+    }
+    setItems([]);
+    searchItemsByName();
+  }, [user, searchItemName]);
 
-    useEffect(() => {
-        if (!installmentAccount || installmentAccount <= 0) {
-            setSaleAccountsReceivables([]);
-            return;
-        };
+  function loadItemsSale(sale: TSale | any) {
+    if (itemsSale.length > 0) {
+      sale.itemsSale = itemsSale.map((i) => ({
+        item: { id: i.item.id },
+        amount: i.amount,
+        price: i.price,
+        tItem: i.amount * i.price,
+      }));
+    }
+  }
 
-        function setObservationsAccounts() {
-            if (qrcodePagSeguro?.qr_codes[0]?.amount?.value > 0) {
-                return "PIX"
-            };
-            if (operationSale.id === 2) {
-                return "CARTÃO DE CRÉDITO"
-            };
-            return "CREDIÁRIO LOJA"
-        };
+  useEffect(() => {
+    if (responsePayPal) {
+      if (responsePayPal.status === "COMPLETED") {
+        handleSaveSale();
+      }
+    }
+  }, [responsePayPal]);
 
-        function setIdTypeOperationAccounts() {
-            const qrcodeID = qrcodePagSeguro?.id as any
-            const resPagSeguroCardID = responsePagSeguroCard?.id as any
-            const resPayPalID = responsePayPal?.purchase_units[0]?.payments?.captures[0]?.id as any
-            if (qrcodeID)
-                return qrcodeID
-            if (resPagSeguroCardID)
-                return resPagSeguroCardID
-            if (resPayPalID)
-                return resPayPalID
-            return `ID:${operationSale.id.toString()} - ${operationSale.description}`
-        };
-
-        const newAccountsReceivable: TAccountsReceivable[] = Array.from(
-            { length: installmentAccount },
-            (_, i) => {
-                const remaining = ((Number(sale.tSale) || 0) -
-                    (Number(cash) || 0)).toFixed(2) as any;
-                const installmentNumber = i + 1;
-                const VALUE = Number((remaining / installmentAccount).toFixed(2));
-                return {
-                    id: 0,
-                    createdAt: new Date(),
-                    updatedAt: null,
-                    branch: { id: 1 },
-                    user: { id: user?.id },
-                    payer: { id: person?.id || 0 },
-                    sale: { id: 0 },
-                    value: VALUE,
-                    receivedValue: 0,
-                    balance: VALUE,
-                    dueDate: setDays(i) as any,
-                    cancel:false,
-                    description: '',
-                    situation: 'OPEN',
-                    observations: setObservationsAccounts(),
-                    lateFee: 0,
-                    interest: 0,
-                    discount: 0,
-                    type: 'CASH',
-                    idTypeOperation: setIdTypeOperationAccounts(),
-                    descriptionTypeOperation: `Parcela ${installmentNumber} de ${installmentAccount}`,
-                };
-            }
+  async function registerPagSeguroCard() {
+    try {
+      const response = await fetch("/api/paymentcard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(pagSeguroCard),
+      });
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      const data: TPagSeguroResponseCard = await response.json();
+      const charge = data?.charges?.[0];
+      if (!charge) {
+        throw new Error("Resposta inválida do PagSeguro");
+      }
+      const msgStatus = charge.status;
+      if (msgStatus === "PAID") {
+        setMsgCreditCard(
+          `Pagamento aprovado! ID: ${charge.id ? charge.id : "N/A"}`,
         );
-        setSaleAccountsReceivables(newAccountsReceivable);
-        // Se quiser atualizar o objeto sale diretamente, faça isso com cuidado
-        sale.accountsReceivable = newAccountsReceivable;
-    }, [
-        sale.tSale,
-        installmentAccount,
-        user?.id,
-        person?.id,
-        cash,
-        sale.discount,
-        qrcodePagSeguro,
-        responsePagSeguroCard,
+        setInstallmentAccount(creditCard.installments);
+        setResponsePagSeguroCard(data);
+        handleSaveSale();
+      } else if (msgStatus === "DECLINED") {
+        setMsgCreditCard("Pagamento recusado. verifique os dados do cartão.");
+      } else if (msgStatus === "CANCELED") {
+        setMsgCreditCard("Pagamento cancelado.");
+      } else if (msgStatus === "AUTHORIZED") {
+        setMsgCreditCard("Pagamento autorizado, aguardando captura.");
+      } else if (msgStatus === "PENDING") {
+        setMsgCreditCard("Pagamento pendente. aguardando processamento.");
+      } else {
+        setMsgCreditCard("Status desconhecido do pagamento.");
+        console.warn("Status inesperado:", msgStatus, data);
+      }
+    } catch (error: any) {
+      console.error("Erro geral:", error);
+      setMsgCreditCard(`Erro:${error}`);
+    }
+  }
+
+  function getPagSeguroCard() {
+    setPagSeguroCard((prev) =>
+      mapFieldsPagSeguroCard({
+        p: prev,
+        sale,
         operationSale,
         creditCard,
-        responsePayPal
-    ]);
-
-    useEffect(() => { // Se não for parcelado zera o Array
-        if (operationSale.id === 3 || operationSale.id === 2) {
-            setInstallmentAccount(1);
-        } else {
-            setSaleAccountsReceivables([]);
-            setSale(prev => ({
-                ...prev,
-                accountsReceivable: []
-            }));
-        }
-    }, [operationSale.id]);
-
-    useEffect(() => { // Se for cartão de crédito, seta o número de parcelas selecionado
-        if (operationSale.id === 2)
-            setInstallmentAccount(creditCard.installments)
-    }, [creditCard, operationSale])
-
-    useEffect(() => {
-        const script = document.createElement("script");
-        script.src = process.env.NEXT_PUBLIC_SDK_PAGSEGURO as string;
-        script.async = true;
-        document.body.appendChild(script);
-    }, []);
-
-    useEffect(() => {
-        function loadUser() {
-            if (user) {
-                const userSale: TUser = {
-                    id: user.id,
-                    login: user.login,
-                } as any
-                setSale({ ...sale, user: userSale })
-            }
-        }
-        loadUser()
-    }, [user]);
-
-    useEffect(() => {
-        const token = user?.token as string
-        loadHandle(token, setPersons, 'person', router)
-        loadHandle(token, setOperationsSale, 'operationsale', router)
-        loadHandle(token, setPublicKey, 'pagseguropublickey', router)
-    }, [user]);
-
-    useEffect(() => {
-        async function searchItemsByName() {
-            const token = user?.token
-            const params = new URLSearchParams({
-                name: handleItem
-            })
-            try {
-                if (!token) return
-                const response = await fetch(`/api/itemsale?${params.toString()}`, {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                if (!response.ok) {
-                    throw new Error(`Erro: ${response.status}`)
-                }
-                const data: TItem[] = await response.json()
-                setItems(data)
-            } catch (error) {
-                console.error("Erro na requisição:", error)
-            }
-        }
-        setItems([])
-        searchItemsByName()
-    }, [user, searchItemName])
-
-    function loadItemsSale(sale: TSale | any) {
-        if (itemsSale.length > 0) {
-            sale.itemsSale = itemsSale.map(i => ({
-                item: { id: i.item.id },
-                amount: i.amount,
-                price: i.price,
-                tItem: i.amount * i.price
-            }))
-        };
-    };
-
-    useEffect(() => {
-        if (responsePayPal) {
-            if (responsePayPal.status === "COMPLETED") {
-                handleSaveSale()
-            }
-        }
-    }, [responsePayPal])
-
-    async function registerPagSeguroCard() {
-        try {
-            const response = await fetch("/api/paymentcard", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(pagSeguroCard),
-            });
-            if (!response.ok) {
-                throw new Error(`Erro HTTP: ${response.status}`);
-            }
-            const data: TPagSeguroResponseCard = await response.json();
-            const charge = data?.charges?.[0];
-            if (!charge) {
-                throw new Error("Resposta inválida do PagSeguro");
-            }
-            const msgStatus = charge.status;
-            if (msgStatus === "PAID") {
-                setMsgCreditCard(`Pagamento aprovado! ID: ${charge.id ? charge.id : 'N/A'}`);
-                setInstallmentAccount(creditCard.installments);
-                setResponsePagSeguroCard(data);
-                handleSaveSale();
-            } else if (msgStatus === "DECLINED") {
-                setMsgCreditCard("Pagamento recusado. verifique os dados do cartão.");
-            } else if (msgStatus === "CANCELED") {
-                setMsgCreditCard("Pagamento cancelado.");
-            } else if (msgStatus === "AUTHORIZED") {
-                setMsgCreditCard("Pagamento autorizado, aguardando captura.");
-            } else if (msgStatus === "PENDING") {
-                setMsgCreditCard("Pagamento pendente. aguardando processamento.");
-            } else {
-                setMsgCreditCard("Status desconhecido do pagamento.");
-                console.warn("Status inesperado:", msgStatus, data);
-            }
-        } catch (error: any) {
-            console.error("Erro geral:", error);
-            setMsgCreditCard(`Erro:${error}`);
-        }
-    };
-
-    function getPagSeguroCard() {
-        setPagSeguroCard(prev =>
-            mapFieldsPagSeguroCard({
-                p: prev,
-                sale,
-                operationSale,
-                creditCard,
-                person: sale.person! as TPerson,
-                itemsSale
-            }))
-    };
-    useEffect(() => {
-        getPagSeguroCard()
-    }, [sale, operationSale, person, creditCard,
-        itemsSale]
+        person: sale.person! as TPerson,
+        itemsSale,
+      }),
     );
+  }
+  useEffect(() => {
+    getPagSeguroCard();
+  }, [sale, operationSale, person, creditCard, itemsSale]);
 
-    const sdkPagSeguro = async () => {
-        if (!window.PagSeguro || !publicKey) {
-            setMsgCreditCard("SDK não carregado corretamente.");
-            return;
-        } try {
-            const encrypted = await window.PagSeguro.encryptCard({
-                publicKey: publicKey.public_key,
-                holder: creditCard.holder,
-                number: creditCard.number,
-                expMonth: creditCard.ex_month,
-                expYear: creditCard.ex_year,
-                securityCode: creditCard.secure_code,
-            });
-            if (encrypted) {
-                const encrypted_ = encrypted.encryptedCard
-                getPagSeguroCard()
-                pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted_;
-                registerPagSeguroCard()
-            }
-            if (encrypted.hasErrors === true) {
-                setMsgCreditCard(JSON.stringify(encrypted.errors[0].code))
-            }
-        } catch (err: unknown) {
-            setMsgCreditCard('ErroEncryptCard: ' + err)
-        }
-    };
+  const sdkPagSeguro = async () => {
+    if (!window.PagSeguro || !publicKey) {
+      setMsgCreditCard("SDK não carregado corretamente.");
+      return;
+    }
+    try {
+      const encrypted = await window.PagSeguro.encryptCard({
+        publicKey: publicKey.public_key,
+        holder: creditCard.holder,
+        number: creditCard.number,
+        expMonth: creditCard.ex_month,
+        expYear: creditCard.ex_year,
+        securityCode: creditCard.secure_code,
+      });
+      if (encrypted) {
+        const encrypted_ = encrypted.encryptedCard;
+        getPagSeguroCard();
+        pagSeguroCard.charges[0].payment_method.card.encrypted = encrypted_;
+        registerPagSeguroCard();
+      }
+      if (encrypted.hasErrors === true) {
+        setMsgCreditCard(JSON.stringify(encrypted.errors[0].code));
+      }
+    } catch (err: unknown) {
+      setMsgCreditCard("ErroEncryptCard: " + err);
+    }
+  };
 
-    const getPagSeguroPix = () => {
-        setPagSeguroPix(prev =>
-            mapFieldsPagSeguroPix({
-                p: prev,
-                sale,
-                operationSale,
-                person: sale.person! as TPerson,
-                itemsSale,
-                cash
-            }));
-    };
-    useEffect(() => {
-        getPagSeguroPix()
-    }, [sale, operationSale, person, creditCard,
-        itemsSale, cash]
+  const getPagSeguroPix = () => {
+    setPagSeguroPix((prev) =>
+      mapFieldsPagSeguroPix({
+        p: prev,
+        sale,
+        operationSale,
+        person: sale.person! as TPerson,
+        itemsSale,
+        cash,
+      }),
     );
+  };
+  useEffect(() => {
+    getPagSeguroPix();
+  }, [sale, operationSale, person, creditCard, itemsSale, cash]);
 
-    async function registerPagSeguroPIX() {
-        try {
-            const response = await fetch("/api/paymentpix", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(pagSeguroPix),
-            });
-            if (!response.ok) {
-                throw new Error(`Erro HTTP: ${response.status}`);
-            }
-            const data: TResponsePixQRCode = await response.json()
-            if (!data.qr_codes) {
-                setMsg(`Erro ao gerar QRCode: ${data.error_messages?.[0]?.description || 'Erro desconhecido'}`)
-            } else {
-                setQrcode(data)
-                if (data.qr_codes[0].amount.value > 0) {
-                    setInstallmentAccount(1) // Gera apenas 1 parcela do PIX
-                }
-            }
+  async function registerPagSeguroPIX() {
+    try {
+      const response = await fetch("/api/paymentpix", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(pagSeguroPix),
+      });
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      const data: TResponsePixQRCode = await response.json();
+      if (!data.qr_codes) {
+        setMsg(
+          `Erro ao gerar QRCode: ${data.error_messages?.[0]?.description || "Erro desconhecido"}`,
+        );
+      } else {
+        setQrcode(data);
+        if (data.qr_codes[0].amount.value > 0) {
+          setInstallmentAccount(1); // Gera apenas 1 parcela do PIX
         }
-        catch (error: any) {
-            console.error("Erro geral:", error);
-        }
-    };
+      }
+    } catch (error: any) {
+      console.error("Erro geral:", error);
+    }
+  }
 
-    async function saveSale(sale: TSale) {
-        const res = await fetch('/api/sale', {
-            method: 'POST',
-            body: JSON.stringify(sale),
-        })
-        const resp: TResponseMessage = await res.json()
-        if (!res.ok) {
-            setMsg(`Erro ao registrar Venda: ${JSON.stringify(resp)}`)
-            return
-        }
-        router.push('/sale')
-        setMsg(`${resp.data.message} ID ${String(resp.data.id).padStart(6, '0')}`)
-        const idSale = resp.data.id as number
-        setResponseIdSale(idSale)
-        router.refresh()
-    };
-    
-    function handleSaveSale() {
-        if (responseIdSale === 0) {
-            loadItemsSale(sale)
-            saveSale(sale)
-        } else {
-            setMsg("Esta venda já foi gravada")
-        };
-    };
-    function hanldeSubmit(e: Event) {
-        e.preventDefault()
-        handleSaveSale()
-    };
-    function handleSubmitCreditCard(e: Event) {
-        e.preventDefault()
-        sdkPagSeguro()
-    };
+  async function saveSale(sale: TSale) {
+    const res = await fetch("/api/sale", {
+      method: "POST",
+      body: JSON.stringify(sale),
+    });
+    const resp: TResponseMessage = await res.json();
+    if (!res.ok) {
+      setMsg(`Erro ao registrar Venda: ${JSON.stringify(resp)}`);
+      return;
+    }
+    router.push("/sale");
+    setMsg(`${resp.data.message} ID ${String(resp.data.id).padStart(6, "0")}`);
+    const idSale = resp.data.id as number;
+    setResponseIdSale(idSale);
+    router.refresh();
+  }
 
-    function handleSubmitPix(e: Event) {
-        e.preventDefault()
-        loadItemsSale(sale)
-        getPagSeguroPix()
-        registerPagSeguroPIX()
-    };
-    return <>
-        <SaleForm
-            setSearchITemName={setSearchITemName}
-            items={items}
-            setItems={setItems}
-            itemsSale={itemsSale}
-            setItemsSale={setItemsSale}
-            handleSubmit={hanldeSubmit}
-            msg={msg}
-            setChildren={setSale}
-            persons={persons}
-            operationsSale={operationsSale}
-            setOperationSale={setOperationSale}
-            operationSale={operationSale}
-            creditCard={creditCard}
-            setCreditCard={setCreditCard}
-            handleSubmitCreditCard={handleSubmitCreditCard}
-            person={person as any}
-            setPerson={setPerson}
-            msgCreditCard={msgCreditCard}
-            responseIdSale={responseIdSale}
-            handleSubmitPix={handleSubmitPix}
-            qrcode={qrcodePagSeguro || null}
-            setInstallmentAccount={setInstallmentAccount}
-            cash={cash}
-            setCash={setCash}
-            handleAmount={handleAmount}
-            handleItem={handleItem}
-            searchItemName={searchItemName}
-            setPaymentPayPal={setResponsePayPal}
-            setOrderPayPal={setOrderPayPal}
-        >
-            {sale}
-        </SaleForm>
+  function handleSaveSale() {
+    if (responseIdSale === 0) {
+      loadItemsSale(sale);
+      saveSale(sale);
+    } else {
+      setMsg("Esta venda já foi gravada");
+    }
+  }
+  function hanldeSubmit(e: Event) {
+    e.preventDefault();
+    handleSaveSale();
+  }
+  function handleSubmitCreditCard(e: Event) {
+    e.preventDefault();
+    sdkPagSeguro();
+  }
+
+  function handleSubmitPix(e: Event) {
+    e.preventDefault();
+    loadItemsSale(sale);
+    getPagSeguroPix();
+    registerPagSeguroPIX();
+  }
+  return (
+    <>
+      <SaleForm
+        setSearchITemName={setSearchITemName}
+        items={items}
+        setItems={setItems}
+        itemsSale={itemsSale}
+        setItemsSale={setItemsSale}
+        handleSubmit={hanldeSubmit}
+        msg={msg}
+        setChildren={setSale}
+        persons={persons}
+        operationsSale={operationsSale}
+        setOperationSale={setOperationSale}
+        operationSale={operationSale}
+        creditCard={creditCard}
+        setCreditCard={setCreditCard}
+        handleSubmitCreditCard={handleSubmitCreditCard}
+        person={person as any}
+        setPerson={setPerson}
+        msgCreditCard={msgCreditCard}
+        responseIdSale={responseIdSale}
+        handleSubmitPix={handleSubmitPix}
+        qrcode={qrcodePagSeguro || null}
+        setInstallmentAccount={setInstallmentAccount}
+        cash={cash}
+        setCash={setCash}
+        handleAmount={handleAmount}
+        handleItem={handleItem}
+        searchItemName={searchItemName}
+        setPaymentPayPal={setResponsePayPal}
+        setOrderPayPal={setOrderPayPal}
+      >
+        {sale}
+      </SaleForm>
     </>
+  );
 }
