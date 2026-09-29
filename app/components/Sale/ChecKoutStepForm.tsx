@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { TItemsSale } from "@/app/models/TSale";
 import ItemsInTheCardForm from "./ItemsInTheCardForm";
 import { TResponseImages } from "@/app/models/TItem";
+import { useRouter } from "next/navigation";
 
 type CheckoutStep =
   | "itemsSale"
@@ -33,6 +34,13 @@ export default function CheckoutStepForm({
     setCheckoutStep(step);
   }
 
+  const router = useRouter()
+
+  if(checkoutStep == 'itemsSale'){
+    router.push('store')
+    router.refresh()
+  }
+
   return (
     <div className="w-full">
       {checkoutStep === "itemsSale" && (
@@ -41,7 +49,7 @@ export default function CheckoutStepForm({
         //   setItemsSale={setItemsSale}
         //   onNext={() => nextStep("itemsInTheCard")}
         // />
-        <p>Items Sale</p>
+        <a href="store" >Store</a>
       )}
 
       {checkoutStep === "itemsInTheCard" && (

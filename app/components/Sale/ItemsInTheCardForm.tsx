@@ -2,6 +2,9 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { TItemsSale } from "@/app/models/TSale";
 import { TResponseImages } from "@/app/models/TItem";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 type Props = {
   itemsSale: TItemsSale[];
@@ -29,8 +32,7 @@ export default function ItemsInTheCardForm({
   );
 
   function findImageItem(saleItem: TItemsSale) {
-    const image = responseImages.find((img) =>
-      img.idItem === saleItem.item.id);
+    const image = responseImages.find((img) => img.idItem === saleItem.item.id);
     return image?.fileName ?? null;
   }
 
@@ -63,6 +65,12 @@ export default function ItemsInTheCardForm({
           tItem: saleItem.price * newAmount,
         };
       }),
+    );
+  }
+
+  function removeItem(itemId: number) {
+    setItemsSale((prev) =>
+      prev.filter((saleItem) => saleItem.item.id !== itemId),
     );
   }
 
@@ -126,10 +134,7 @@ export default function ItemsInTheCardForm({
                   </div>
                   {/* Quantidade */}
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-gray-500">Quantidade:</span>
-                    <span className="min-w-[40px] rounded bg-gray-800 px-3 py-2 text-center font-semibold">
-                      {saleItem.amount}
-                    </span>
+                    <span className="text-sm text-gray-900">Quantidade:</span>
                   </div>
                   <div className="flex">
                     <button
@@ -137,14 +142,28 @@ export default function ItemsInTheCardForm({
                       className="cursor-pointer text-sm m-1 text-black"
                       onClick={() => decreaseQuantity(saleItem.item.id)}
                     >
-                      -
+                      <RemoveIcon titleAccess="Remover" fontSize="medium"/>
                     </button>
+                    <span className="min-w-1 rounded bg-gray-500 px-3 py-2 text-center font-semibold">
+                      {saleItem.amount}
+                    </span>
                     <button
                       type="button"
                       className="cursor-pointer text-sm m-1 text-black"
                       onClick={() => increaseQuantity(saleItem.item.id)}
                     >
-                      +
+                      <AddIcon titleAccess="Adicionar" fontSize="medium"/>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeItem(saleItem.item.id)}
+                      className="p-1 ml-2 cursor-pointer bg-red-500 hover:bg-red-600 rounded-md"
+                      title="Excluir item"
+                    >
+                      <DeleteForeverIcon
+                        titleAccess="Deletar"
+                        fontSize="medium"
+                      />
                     </button>
                   </div>
                   {/* Total do item */}
