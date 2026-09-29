@@ -3,8 +3,8 @@ import React, { Dispatch, SetStateAction } from "react";
 import { TItemsSale } from "@/app/models/TSale";
 import { TResponseImages } from "@/app/models/TItem";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 type Props = {
   itemsSale: TItemsSale[];
@@ -107,7 +107,7 @@ export default function ItemsInTheCardForm({
                   className=" flex flex-col gap-3 rounded-lg border bg-white p-4 shadow-sm sm:flex-row sm:items-center"
                 >
                   {/* Imagem */}
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-">
                     {saleItem.item.id ? (
                       <img
                         src={`${process.env.NEXT_PUBLIC_API_IMG}/${saleItem.item.id}/${findImageItem(saleItem)}`}
@@ -142,7 +142,7 @@ export default function ItemsInTheCardForm({
                       className="cursor-pointer text-sm m-1 text-black"
                       onClick={() => decreaseQuantity(saleItem.item.id)}
                     >
-                      <RemoveIcon titleAccess="Remover" fontSize="medium"/>
+                      <RemoveIcon titleAccess="Remover" fontSize="medium" />
                     </button>
                     <span className="min-w-1 rounded bg-gray-500 px-3 py-2 text-center font-semibold">
                       {saleItem.amount}
@@ -152,7 +152,7 @@ export default function ItemsInTheCardForm({
                       className="cursor-pointer text-sm m-1 text-black"
                       onClick={() => increaseQuantity(saleItem.item.id)}
                     >
-                      <AddIcon titleAccess="Adicionar" fontSize="medium"/>
+                      <AddIcon titleAccess="Adicionar" fontSize="medium" />
                     </button>
                     <button
                       type="button"
@@ -167,7 +167,7 @@ export default function ItemsInTheCardForm({
                     </button>
                   </div>
                   {/* Total do item */}
-                  <div className=" min-w-[120px] text-right">
+                  <div className=" min-w-120px text-right">
                     <p className="text-sm text-gray-500">Total</p>
                     <p className="font-bold text-black">
                       R$ {saleItem.tItem?.toFixed(2)}
@@ -199,7 +199,7 @@ export default function ItemsInTheCardForm({
               <button
                 type="button"
                 onClick={onBack}
-                className="rounded-lg border border-gray-300 px-6 py-3 font-semibold text-gray-700 hover:bg-gray-100"
+                className="rounded-lg cursor-pointer border border-gray-300 px-6 py-3 font-semibold text-gray-700 hover:bg-gray-100"
               >
                 Voltar
               </button>
@@ -208,7 +208,7 @@ export default function ItemsInTheCardForm({
                 type="button"
                 disabled={itemsSale.length === 0}
                 onClick={onNext}
-                className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                className="cursor-pointer rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Escolher pagamento
               </button>

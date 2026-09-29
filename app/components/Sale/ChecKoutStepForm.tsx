@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TItemsSale } from "@/app/models/TSale";
 import ItemsInTheCardForm from "./ItemsInTheCardForm";
 import { TResponseImages } from "@/app/models/TItem";
@@ -35,11 +35,12 @@ export default function CheckoutStepForm({
   }
 
   const router = useRouter()
-
-  if(checkoutStep == 'itemsSale'){
-    router.push('store')
-    router.refresh()
+  
+useEffect(() => {
+  if (checkoutStep === "itemsSale") {
+    router.push("/store");
   }
+}, [checkoutStep, router]);
 
   return (
     <div className="w-full">
