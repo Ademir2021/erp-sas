@@ -421,6 +421,7 @@ export default function Sales() {
         setResponseIdSale(idSale)
         router.refresh()
     };
+    
     function handleSaveSale() {
         if (responseIdSale === 0) {
             loadItemsSale(sale)
@@ -445,7 +446,6 @@ export default function Sales() {
         registerPagSeguroPIX()
     };
     return <>
-        {/* <p>{JSON.stringify(itemsSale)}</p> */}
         <SaleForm
             setSearchITemName={setSearchITemName}
             items={items}

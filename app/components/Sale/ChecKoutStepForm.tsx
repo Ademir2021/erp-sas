@@ -5,6 +5,9 @@ import { TItemsSale } from "@/app/models/TSale";
 import ItemsInTheCardForm from "./ItemsInTheCardForm";
 import { TResponseImages } from "@/app/models/TItem";
 import { useRouter } from "next/navigation";
+import PaymentMethodForm from "./PaymentMethodForm";
+import { TPerson } from "@/app/models/TPerson";
+import PixPayment from "./PixPayment";
 
 type CheckoutStep =
   | "itemsSale"
@@ -20,12 +23,20 @@ type Props = {
   itemsSale: TItemsSale[];
   setItemsSale: Dispatch<SetStateAction<TItemsSale[]>>
   responseImages:TResponseImages[]
+  person:TPerson[]
+  setPerson: Dispatch<SetStateAction<TPerson>>;
+  quantityTotal:number
+  totalSale:number
 };
 
 export default function CheckoutStepForm({
     itemsSale,
     setItemsSale,
-    responseImages
+    responseImages,
+    person,
+    setPerson,
+    quantityTotal,
+    totalSale
 }: Props) {
 
   const [checkoutStep, setCheckoutStep] =
@@ -60,26 +71,29 @@ useEffect(() => {
           onNext={() => nextStep("paymentMethod")}
           responseImages={responseImages}
           setItemsSale={setItemsSale}
+          quantityTotal={quantityTotal}
+          totalSale={totalSale}
         />
       )}
 
       {checkoutStep === "paymentMethod" && (
-        // <PaymentMethod
-        //   onBack={() => nextStep("itemsInTheCard")}
-        //   onPix={() => nextStep("pix")}
-        //   onCard={() => nextStep("card")}
-        // />
-        <p>PaymentMethod</p>
+        <PaymentMethodForm
+          onBack={() => nextStep("itemsInTheCard")}
+          onPix={() => nextStep("pix")}
+          onCard={() => nextStep("card")}
+          customers={person}
+          setCustomer={setPerson}
+        />
       )}
 
       {checkoutStep === "pix" && (
-        // <PixPayment
-        //   itemsSale={itemsSale}
-        //   onBack={() => nextStep("paymentMethod")}
-        //   onComplete={() => nextStep("completeSale")}
-        //   onError={() => nextStep("saleNotCompleted")}
-        // />
-        <p>Pix Payment</p>
+        <PixPayment
+          itemsSale={itemsSale}
+          onBack={() => nextStep("paymentMethod")}
+          onComplete={() => nextStep("completeSale")}
+          onError={() => nextStep("saleNotCompleted")}
+          totalSale={totalSale}
+        />
       )}
 
       {checkoutStep === "card" && (

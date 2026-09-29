@@ -12,6 +12,8 @@ type Props = {
   onBack: () => void;
   onNext: () => void;
   responseImages: TResponseImages[];
+  quantityTotal: number;
+  totalSale: number;
 };
 
 export default function ItemsInTheCardForm({
@@ -20,17 +22,9 @@ export default function ItemsInTheCardForm({
   onBack,
   onNext,
   responseImages,
+  quantityTotal,
+  totalSale,
 }: Props) {
-  const quantityTotal = itemsSale.reduce(
-    (total, item) => total + item.amount,
-    0,
-  );
-
-  const totalSale = itemsSale.reduce(
-    (total, item: any) => total + item.tItem,
-    0,
-  );
-
   function findImageItem(saleItem: TItemsSale) {
     const image = responseImages.find((img) => img.idItem === saleItem.item.id);
     return image?.fileName ?? null;
@@ -157,12 +151,13 @@ export default function ItemsInTheCardForm({
                     <button
                       type="button"
                       onClick={() => removeItem(saleItem.item.id)}
-                      className="p-1 ml-2 cursor-pointer bg-red-500 hover:bg-red-600 rounded-md"
+                      className="py-1 px-1 ml-4 cursor-pointer bg-gray-100 hover:bg-gray-500 rounded-md"
                       title="Excluir item"
                     >
                       <DeleteForeverIcon
                         titleAccess="Deletar"
                         fontSize="medium"
+                        color="error"
                       />
                     </button>
                   </div>
