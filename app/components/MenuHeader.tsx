@@ -4,7 +4,7 @@ import Link from "next/link"
 import Logo from "./Logo"
 import { LogoutButton } from "./LogoutButton"
 import { userAuth } from "../lib/userAuth"
-
+import CardIconItems from "./Sale/helpers/CardIconItems"
 
 export default function MenuHeader() {
 
@@ -16,6 +16,8 @@ export default function MenuHeader() {
     shadow-md px-4 md:px-8 py-2">
 
       <Logo />
+
+      <CardIconItems/>
 
       {user ? <p><LogoutButton /></p> :
         <Link className="font-bold text-sm" href={"/login"}>

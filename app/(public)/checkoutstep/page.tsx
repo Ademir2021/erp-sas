@@ -27,16 +27,12 @@ export default function CheckoutStep() {
 
   const { user } = userAuth();
   const router = useRouter();
-
   const [msg, setMsg] = useState("Conclua sua compra");
   const [responseIdSale, setResponseIdSale] = useState(0);
-
   const [persons, setPersons] = useState<TPerson[]>([]);
   const [person, setPerson] = useState<TPerson | null>();
-
   const [itemsSale, setItemsSale] = useState<TItemsSale[]>([]);
   const [responseImages, setResponseImages] = useState<TResponseImages[]>([]);
-
   const [sale, setSale] = useState<TSale>({
     branch: { id: 1, name: "" },
     user: {

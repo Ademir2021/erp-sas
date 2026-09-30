@@ -25,6 +25,8 @@ export default function ItemsInTheCardForm({
   quantityTotal,
   totalSale,
 }: Props) {
+
+
   function findImageItem(saleItem: TItemsSale) {
     const image = responseImages.find((img) => img.idItem === saleItem.item.id);
     return image?.fileName ?? null;
