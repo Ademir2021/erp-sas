@@ -28,7 +28,7 @@ export default function CheckoutStep() {
   const { user } = userAuth();
   const router = useRouter();
 
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState("Conclua sua compra");
   const [responseIdSale, setResponseIdSale] = useState(0);
 
   const [persons, setPersons] = useState<TPerson[]>([]);
@@ -84,6 +84,44 @@ export default function CheckoutStep() {
     loadHandle(token, setPersons, "person", router);
   }, [user]);
 
+  const newAccountsReceivable: TAccountsReceivable[] = [{
+    id: 0,
+    createdAt: new Date(),
+    updatedAt: null,
+    branch: { id: 1 },
+    user: { id: user?.id },
+    payer: { id: person?.id || 0 },
+    sale: { id: 0 },
+    value: Number(totalSale),
+    receivedValue: 0,
+    balance: Number(totalSale),
+    dueDate: setDays(0) as any,
+    cancel: false,
+    description: "",
+    situation: "OPEN",
+    observations: "CARTÃO DE CRÉDITO",
+    lateFee: 0,
+    interest: 0,
+    discount: 0,
+    type: "CASH",
+    idTypeOperation: responsePayPal?.purchase_units[0]?.payments?.captures[0]?.id as any,
+    descriptionTypeOperation: `Parcela ${1} de ${1}`,
+  }] as any;
+
+  useEffect(() => {
+    setSale((prev: any) => {
+      const newSale = {
+        ...prev,
+        itemsSale,
+        accountsReceivable: newAccountsReceivable,
+        user: user ? { id: user.id, login: user.login } : prev.user,
+        person: person ? { id: person.id } : prev.person,
+      };
+      setSale(newSale);
+      return newSale;
+    });
+  }, [itemsSale, user, person, responsePayPal, totalSale]);
+
   useEffect(() => {
     const savedItems = localStorage.getItem("itemsSale");
     if (savedItems) {
@@ -99,37 +137,7 @@ export default function CheckoutStep() {
     }
   }, [itemsSale]);
 
-  useEffect(() => {
-    setSale((prev) => ({
-      ...prev,
-      itemsSale,
-    }));
-  }, [itemsSale, sale]);
-
-  useEffect(() => {
-    if (!sale.user.id)
-      setSale(
-        (prev) =>
-          ({
-            ...prev,
-            user: {
-              id: user?.id,
-              login: user?.login,
-            },
-          }) as any,
-      );
-  }, [sale]);
-
-  useEffect(() => {
-    if (person?.id) {
-      const personSale: TPerson = {
-        id: person?.id,
-      } as any;
-      setSale((prev) => ({ ...prev, person: personSale }));
-    }
-  }, [sale]);
-
-  /**Funções para Envio da Venda */
+  /**Função para envio da venda */
   async function saveSale(sale: TSale) {
     const res = await fetch("/api/sale", {
       method: "POST",
@@ -140,7 +148,7 @@ export default function CheckoutStep() {
       setMsg(`Erro ao registrar Venda: ${JSON.stringify(resp)}`);
       return;
     }
-    router.push("/sale");
+    router.push("/checkoutstep");
     setMsg(`${resp.data.message} ID ${String(resp.data.id).padStart(6, "0")}`);
     const idSale = resp.data.id as number;
     setResponseIdSale(idSale);
@@ -161,43 +169,13 @@ export default function CheckoutStep() {
         handleSaveSale();
       }
     }
-  }, [responsePayPal]);
-
-  useEffect(() => {
-    const newAccountsReceivable: TAccountsReceivable[] = {
-      id: 1,
-      createdAt: new Date(),
-      updatedAt: null,
-      branch: { id: 1 },
-      user: { id: user?.id },
-      payer: { id: person?.id || 0 },
-      sale: { id: 0 },
-      value: totalSale,
-      receivedValue: 0,
-      balance: totalSale,
-      dueDate: setDays(0) as any,
-      cancel: false,
-      description: "",
-      situation: "OPEN",
-      observations: "CARTÃO DE CRÉDITO",
-      lateFee: 0,
-      interest: 0,
-      discount: 0,
-      type: "CASH",
-      idTypeOperation: responsePayPal?.purchase_units[0]?.payments?.captures[0]?.id as any,
-      descriptionTypeOperation: `Parcela ${1} de ${1}`,
-    } as any;
-    setSale({
-      ...sale,
-      accountsReceivable: newAccountsReceivable,
-    });
-  }, [responsePayPal, totalSale, person, user]);
+  }, [responsePayPal, person]);
 
   return (
     <>
-      <pre className="bg-gray-600 p-4 rounded-lg text-xs overflow-auto max-h-96">
+      {/* <pre className="bg-gray-600 p-4 rounded-lg text-xs overflow-auto max-h-96">
         {JSON.stringify(sale, null, 2)}
-      </pre>
+      </pre> */}
       <CheckoutStepForm
         itemsSale={itemsSale}
         responseImages={responseImages}
@@ -208,6 +186,7 @@ export default function CheckoutStep() {
         totalSale={totalSale}
         setOrderPayPal={setOrderPayPal as any}
         setPaymentPayPal={setResponsePayPal as any}
+        msg={msg}
       />
     </>
   );

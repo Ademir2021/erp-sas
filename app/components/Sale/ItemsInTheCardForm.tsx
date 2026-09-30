@@ -68,9 +68,7 @@ export default function ItemsInTheCardForm({
     );
   }
 
-  return (
-    <>
-      {/* <p className="text-amber-50">{JSON.stringify('')}</p> */}
+  return <>
       <div className="w-full p-4">
         {/* Cabeçalho */}
         <div className="mb-6">
@@ -212,5 +210,4 @@ export default function ItemsInTheCardForm({
         )}
       </div>
     </>
-  );
 }

@@ -32,6 +32,7 @@ type Props = {
   totalSale: number;
   setPaymentPayPal: Dispatch<SetStateAction<TPayPalOrderResponse>>;
   setOrderPayPal: Dispatch<SetStateAction<TResponsePayPal>>;
+  msg:string
 };
 
 export default function CheckoutStepForm({
@@ -44,6 +45,7 @@ export default function CheckoutStepForm({
   totalSale,
   setPaymentPayPal,
   setOrderPayPal,
+  msg
 }: Props) {
   const [checkoutStep, setCheckoutStep] =
     useState<CheckoutStep>("itemsInTheCard");
@@ -61,14 +63,14 @@ export default function CheckoutStepForm({
 
   return (
     <div className="w-full">
-      {/* {checkoutStep === "itemsSale" && (
-        <ItemsSale
-          itemsSale={itemsSale}
-          setItemsSale={setItemsSale}
-          onNext={() => nextStep("itemsInTheCard")}
-        />
+      {checkoutStep === "itemsSale" && (
+        // <ItemsSale
+        //   itemsSale={itemsSale}
+        //   setItemsSale={setItemsSale}
+        //   onNext={() => nextStep("itemsInTheCard")}
+        // />
         <a href="store" >Store</a>
-      )} */}
+      )}
 
       {checkoutStep === "itemsInTheCard" && (
         <ItemsInTheCardForm
@@ -89,6 +91,7 @@ export default function CheckoutStepForm({
           onCard={() => nextStep("card")}
           customers={person}
           setCustomer={setPerson}
+          msg={msg}
         />
       )}
 
@@ -99,6 +102,7 @@ export default function CheckoutStepForm({
           onComplete={() => nextStep("completeSale")}
           onError={() => nextStep("saleNotCompleted")}
           totalSale={totalSale}
+          msg={msg}
         />
       )}
 
@@ -111,6 +115,7 @@ export default function CheckoutStepForm({
           totalSale={totalSale}
           setOrderPayPal={setOrderPayPal}
           setPaymentPayPal={setPaymentPayPal}
+          msg={msg}
         />
       )}
 

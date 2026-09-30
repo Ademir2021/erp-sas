@@ -24,6 +24,8 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import RestoreIcon from '@mui/icons-material/Restore';
 import LegalNoticeLGPD from "./LegalNoticeLGPD"
 
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+
 type FormData = z.infer<typeof cadastroSchema>
 
 type Props = {
@@ -507,8 +509,13 @@ ${zipcode?.code}`}</option>
         </div>
         <p className="text-gray-300 ">{msg && msg}</p>
       </form>
+      <button className="cursor-pointer"
+      onClick={() => router.push('checkoutstep')}
+      ><ShoppingCartCheckoutIcon
+      titleAccess="Carrinho de Compras"
+      fontSize="large" color="info"/></button>
       {url_plano !== "person" && <button
-        className="cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-lg"
+        className="cursor-pointer ml-12 px-4 py-2 bg-blue-600 text-white rounded-lg"
         onClick={() => router.push(url_plano)}
       >Retornar ao Plano</button>}
     </div>}

@@ -5,6 +5,7 @@ import { TItemsSale } from "@/app/models/TSale";
 import { useEffect, useMemo, useState } from "react";
 import pagSeguroPixJSON from "../../json/pagSeguroPix.json";
 import { uuidv4 } from "zod";
+import { MsgMethodPay } from "./helpers/MsgMethodPay";
 
 type Props = {
   itemsSale: TItemsSale[];
@@ -12,6 +13,7 @@ type Props = {
   onComplete: () => void;
   onError: () => void;
   totalSale: number;
+  msg:string
 };
 
 type PixPaymentResponse = {
@@ -28,6 +30,7 @@ export default function PixPayment({
   onComplete,
   onError,
   totalSale,
+  msg
 }: Props) {
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(false);
@@ -77,7 +80,7 @@ export default function PixPayment({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          reference_id:  uuidv4(),
+          reference_id: uuidv4(),
           description: "Pagamento teste Pix - homologação",
           customer: {
             name: "João da Silva",
@@ -102,7 +105,7 @@ export default function PixPayment({
           qr_codes: [
             {
               amount: {
-                value:  Math.round(Number(2000) * 100),
+                value: Math.round(Number(2000) * 100),
               },
               expiration_date: "2026-04-02T14:30:00Z",
               links: [
@@ -206,7 +209,6 @@ export default function PixPayment({
             >
               {loading ? "Gerando PIX..." : "Gerar pagamento PIX"}
             </button>
-
             <button
               type="button"
               onClick={onBack}
@@ -215,6 +217,7 @@ export default function PixPayment({
             >
               Voltar
             </button>
+               <MsgMethodPay msg={msg} />
           </div>
         )}
 

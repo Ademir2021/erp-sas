@@ -5,6 +5,7 @@ import { TItemsSale } from "@/app/models/TSale";
 import PaypalCheckout from "../PaypalCheckout";
 import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse";
 import { TResponsePayPal } from "@/app/models/TResponsePayPal";
+import { MsgMethodPay } from "./helpers/MsgMethodPay";
 
 type Props = {
   itemsSale: TItemsSale[];
@@ -14,6 +15,7 @@ type Props = {
   totalSale: number;
   setPaymentPayPal: Dispatch<SetStateAction<TPayPalOrderResponse>>;
   setOrderPayPal: Dispatch<SetStateAction<TResponsePayPal>>;
+  msg: string;
 };
 
 export default function CardPaymentForm({
@@ -21,6 +23,7 @@ export default function CardPaymentForm({
   totalSale,
   setPaymentPayPal,
   setOrderPayPal,
+  msg,
 }: Props) {
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +42,7 @@ export default function CardPaymentForm({
         </div>
       </div>
 
-      {/**xxx */}
+      {/**PayPal */}
       <PaypalCheckout
         amount={Number(totalSale).toFixed(2)}
         onSuccess={(details) => {
@@ -49,7 +52,7 @@ export default function CardPaymentForm({
           setOrderPayPal(details);
         }}
       />
-
+      <MsgMethodPay msg={msg} />
       {/* Botões */}
       <div className="flex gap-3">
         <button

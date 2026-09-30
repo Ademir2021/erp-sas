@@ -2,6 +2,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import { TPerson } from "@/app/models/TPerson";
+import { MsgMethodPay } from "./helpers/MsgMethodPay";
 
 type Props = {
   onBack: () => void;
@@ -9,6 +10,7 @@ type Props = {
   onCard: (customer: TPerson) => void;
   customers: TPerson[];
   setCustomer: Dispatch<SetStateAction<TPerson>>;
+  msg: string;
 };
 
 export default function PaymentMethod({
@@ -17,6 +19,7 @@ export default function PaymentMethod({
   onCard,
   customers,
   setCustomer,
+  msg,
 }: Props) {
   const [customerId, setCustomerId] = useState<number | "">("");
 
@@ -59,7 +62,8 @@ export default function PaymentMethod({
           htmlFor="customer"
           className="block mb-2 font-semibold text-gray-700"
         >
-          Cliente
+          Selecionar o Cliente ou <span className="m-2 p-1 bg-gray-100 text-blue-700 shadow-sm"
+          ><a href="\person">Incluir</a></span> um novo.
         </label>
         <select
           id="customer"
@@ -89,6 +93,7 @@ export default function PaymentMethod({
             )}
           </div>
         )}
+        <MsgMethodPay msg={msg} />
       </div>
       {/* MÉTODOS DE PAGAMENTO */}
       <div className="mb-3">
