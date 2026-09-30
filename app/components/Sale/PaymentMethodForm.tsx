@@ -1,8 +1,10 @@
 "use client";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
+import { useRouter } from "next/navigation";
 import { TPerson } from "@/app/models/TPerson";
 import { MsgMethodPay } from "./helpers/MsgMethodPay";
+import { userAuth } from "@/app/lib/userAuth";
 
 type Props = {
   onBack: () => void;
@@ -21,6 +23,9 @@ export default function PaymentMethod({
   setCustomer,
   msg,
 }: Props) {
+  const user = userAuth();
+  const router = useRouter();
+
   const [customerId, setCustomerId] = useState<number | "">("");
 
   const customerSelected = customers.find(
@@ -57,44 +62,66 @@ export default function PaymentMethod({
         </p>
       </div>
       {/* CLIENTE */}
-      <div className="mb-6 bg-white border rounded-xl p-4 shadow-sm">
-        <label
-          htmlFor="customer"
-          className="block mb-2 font-semibold text-gray-700"
-        >
-          Selecionar o Cliente ou <span className="m-2 p-1 bg-gray-100 text-blue-700 shadow-sm"
-          ><a href="\person">Incluir</a></span> um novo.
-        </label>
-        <select
-          id="customer"
-          value={customerId}
-          onChange={(e) =>
-            setCustomerId(e.target.value ? Number(e.target.value) : "")
-          }
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="">Selecione o cliente</option>
-          {customers.map((customer) => (
-            <option key={customer.id} value={customer.id}>
-              {customer.name}
-              {customer.cpf ? ` - ${customer.cpf}` : ""}
-            </option>
-          ))}
-        </select>
-        {/* Cliente selecionado */}
-        {customerSelected && (
-          <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-500">Cliente selecionado</p>
-            <p className="font-semibold text-gray-800">
-              {customerSelected.name}
-            </p>
-            {customerSelected.cpf && (
-              <p className="text-sm text-gray-600">{customerSelected.cpf}</p>
-            )}
-          </div>
-        )}
-        <MsgMethodPay msg={msg} />
-      </div>
+      {user.isUser ? (
+        <div className="mb-6 bg-white border rounded-xl p-4 shadow-sm">
+          <label
+            htmlFor="customer"
+            className="block mb-2 font-semibold text-gray-700"
+          >
+            Selecionar o Cliente ou{" "}
+            <span className="m-2 p-1 bg-gray-100 text-blue-700 shadow-sm">
+              <a href="\person">Incluir</a>
+            </span>{" "}
+            um novo.
+          </label>
+          <select
+            id="customer"
+            value={customerId}
+            onChange={(e) =>
+              setCustomerId(e.target.value ? Number(e.target.value) : "")
+            }
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Selecione o cliente</option>
+            {customers.map((customer) => (
+              <option key={customer.id} value={customer.id}>
+                {customer.name}
+                {customer.cpf ? ` - ${customer.cpf}` : ""}
+              </option>
+            ))}
+          </select>
+          {/* Cliente selecionado */}
+          {customerSelected && (
+            <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-500">Cliente selecionado</p>
+              <p className="font-semibold text-gray-800">
+                {customerSelected.name}
+              </p>
+              {customerSelected.cpf && (
+                <p className="text-sm text-gray-600">{customerSelected.cpf}</p>
+              )}
+            </div>
+          )}
+          <MsgMethodPay msg={msg} />
+        </div>
+      ) : (
+        <div className="mb-6 flex items-center justify-center gap-3 rounded-xl border bg-white p-4 shadow-sm">
+          <button
+            type="button"
+            onClick={() => router.push("/login")}
+            className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+          >
+            Entrar
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/register")}
+            className="cursor-pointer rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+          >
+            Criar conta
+          </button>
+        </div>
+      )}
       {/* MÉTODOS DE PAGAMENTO */}
       <div className="mb-3">
         <h3 className="text-lg font-semibold text-gray-800">

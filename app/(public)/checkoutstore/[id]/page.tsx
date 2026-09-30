@@ -4,14 +4,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { TItem, TResponseImages } from "@/app/models/TItem";
 import CheckoutStoreForm from "@/app/components/Store/CheckoutStoreForm";
-import { userAuth } from "@/app/lib/userAuth";
 import { useRouter } from "next/navigation";
-import { loadHandle } from "@/app/lib/handleApi";
 import { TItemsSale } from "@/app/models/TSale";
 
 export default function CheckoutStorePage() {
   const router = useRouter();
-  const { user } = userAuth();
+
   const [items, setItems] = useState<TItem[]>([]);
   const [responseImages, setResponseImages] = useState<TResponseImages[]>([]);
   const [item] = useState<TItem>({
@@ -33,23 +31,33 @@ export default function CheckoutStorePage() {
   const res = params.id as keyof typeof items;
 
   useEffect(() => {
-    const token = user?.token as string;
-    loadHandle(token, setResponseImages, "images", router);
-  }, [user]);
+    async function imagesItems() {
+      try {
+        const response = await fetch("/api/images", {
+          method: "GET",
+          cache: "no-store",
+        });
+        if (!response.ok) {
+          throw new Error(`Erro: ${response.status}`);
+        }
+        const data: TResponseImages[] = await response.json();
+        setResponseImages(data);
+      } catch (error) {
+        console.error("Erro ao buscar imagens:", error);
+        setResponseImages([]);
+      }
+    }
+    imagesItems();
+  }, []);
 
   useEffect(() => {
     async function searchItemsByName() {
-      const token = user?.token;
       const params = new URLSearchParams({
         name: res.toString(),
       });
       try {
-        if (!token) return;
         const response = await fetch(`/api/itemsale?${params.toString()}`, {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         });
         if (!response.ok) {
           throw new Error(`Erro: ${response.status}`);
@@ -62,7 +70,7 @@ export default function CheckoutStorePage() {
     }
     setItems([]);
     searchItemsByName();
-  }, [user, res]);
+  }, [res]);
 
   useEffect(() => {
     const savedItems = localStorage.getItem("itemsSale");
@@ -83,7 +91,7 @@ export default function CheckoutStorePage() {
     const newItemSale: TItemsSale = {
       item: {
         id: items[0]?.id,
-        name:items[0]?.name
+        name: items[0]?.name,
       } as any,
       amount: amount,
       price: items[0].priceMax,
@@ -106,18 +114,16 @@ export default function CheckoutStorePage() {
 
   function buyNow() {
     handleItemsSale();
-    router.push('/checkoutstep')
+    router.push("/checkoutstep");
   }
-
   function addToCart() {
     handleItemsSale();
   }
-
   return (
     <>
       {/* <pre className="text-xs bg-gray-500 p-1 rounded overflow-auto">
-        {JSON.stringify(itemsSale, null, 2)}
-      </pre> */}
+{JSON.stringify(itemsSale, null, 2)}
+</pre> */}
       <CheckoutStoreForm
         item={items[0] || item}
         responseImages={responseImages}
