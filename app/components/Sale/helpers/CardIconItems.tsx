@@ -3,32 +3,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
+import { LoadLocalStorge } from "@/app/(public)/checkoutstore/helpers/loadLocalStorage";
 
 export default function CardIconItems() {
   const router = useRouter();
-  const [totalItems, setTotalItems] = useState(0);
+  const [itemsSale, setItemsSale] = useState([]);
+  const loadLocalStorage = new LoadLocalStorge();
 
-  useEffect(() => {
-    function loadItemsSale() {
-      const savedItems = localStorage.getItem("itemsSale");
-
-      if (!savedItems) {
-        setTotalItems(0);
-        return;
-      }
-      const items = JSON.parse(savedItems);
-      const total = items.reduce(
-        (sum: number, item: any) => sum + Number(item.amount || 0),
-        0,
-      );
-      setTotalItems(total);
-    }
-    loadItemsSale();
-    window.addEventListener("itemsSaleUpdated", loadItemsSale);
-    return () => {
-      window.removeEventListener("itemsSaleUpdated", loadItemsSale);
-    };
-  }, []);
+  // useEffect(() => {
+  //   loadLocalStorage.loadsetLocalStorage(setItemsSale);
+  // }, []);
 
   return (
     <div className="flex-1 flex justify-end mr-8">
@@ -36,13 +20,14 @@ export default function CardIconItems() {
         type="button"
         onClick={() => router.push("/checkoutstep")}
         className="flex items-center cursor-pointer"
-        aria-label={`Carrinho com ${totalItems} itens`}
+        aria-label={`Carrinho com ${itemsSale.length} itens`}
       >
-        <span className="text-yellow-400 font-semibold mr-1">{totalItems}</span>
-        <ShoppingCartCheckoutIcon
-          titleAccess="Carrinho de compras"
-          color="warning"
-        />
+        <span className="flex absolute text-blue-100 font-semibold">
+          {itemsSale.length > 0 && itemsSale.length}
+        </span>
+        <div className="text-gray-400 ml-2">
+          <ShoppingCartCheckoutIcon titleAccess="Carrinho de compras" />
+        </div>
       </button>
     </div>
   );

@@ -48,3 +48,12 @@ complete saleNotCompleted
 {JSON.stringify(<object>, null, 2)}
 </pre>
 ```
+
+# Copiar para fora do docker
+docker cp <container>:/caminho/dentro/container ./pasta-no-host
+
+exemplo:
+docker cp springboot_api:/app/imgs/items ./imgs
+
+Se quiser gravar em uma pasta especifica:
+docker cp springboot_api:/app/imgs/items C:Users/Cliente/Documents/imgs/items

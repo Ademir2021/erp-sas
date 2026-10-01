@@ -10,12 +10,13 @@ import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse";
 import { TPerson } from "@/app/models/TPerson";
 import { TResponsePayPal } from "@/app/models/TResponsePayPal";
 import { TItemsSale, TSale } from "@/app/models/TSale";
-import { TUser, UserRole } from "@/app/models/TUser";
+import { UserRole } from "@/app/models/TUser";
 import { useRouter } from "next/navigation";
 import orderPayPalJSON from "../../json/orderPayPal.json";
 import responsePayPalJSON from "../../json/responsePayPal.json";
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable";
 import { setDays } from "@/app/lib/momentDays";
+import { LoadLocalStorge } from "../checkoutstore/helpers/loadLocalStorage";
 
 export default function CheckoutStep() {
   const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(
@@ -27,6 +28,7 @@ export default function CheckoutStep() {
 
   const { user } = userAuth();
   const router = useRouter();
+
   const [msg, setMsg] = useState("Conclua sua compra");
   const [responseIdSale, setResponseIdSale] = useState(0);
   const [persons, setPersons] = useState<TPerson[]>([]);
@@ -74,54 +76,43 @@ export default function CheckoutStep() {
     0,
   );
 
+  const loadLocalStorage = new LoadLocalStorge();
+
   useEffect(() => {
     const token = user?.token as string;
     loadHandle(token, setPersons, "person", router);
   }, [user]);
 
-    useEffect(() => {
-    async function imagesItems() {
-      try {
-        const response = await fetch("/api/images", {
-          method: "GET",
-          cache: "no-store",
-        });
-        if (!response.ok) {
-          throw new Error(`Erro: ${response.status}`);
-        }
-        const data: TResponseImages[] = await response.json();
-        setResponseImages(data);
-      } catch (error) {
-        console.error("Erro ao buscar imagens:", error);
-        setResponseImages([]);
-      }
-    }
-    imagesItems();
+  useEffect(() => {
+    loadHandle("permitAll()", setResponseImages, "images", router);
   }, []);
 
-  const newAccountsReceivable: TAccountsReceivable[] = [{
-    id: 0,
-    createdAt: new Date(),
-    updatedAt: null,
-    branch: { id: 1 },
-    user: { id: user?.id },
-    payer: { id: person?.id || 0 },
-    sale: { id: 0 },
-    value: Number(totalSale),
-    receivedValue: 0,
-    balance: Number(totalSale),
-    dueDate: setDays(0) as any,
-    cancel: false,
-    description: "",
-    situation: "OPEN",
-    observations: "CARTÃO DE CRÉDITO",
-    lateFee: 0,
-    interest: 0,
-    discount: 0,
-    type: "CASH",
-    idTypeOperation: responsePayPal?.purchase_units[0]?.payments?.captures[0]?.id as any,
-    descriptionTypeOperation: `Parcela ${1} de ${1}`,
-  }] as any;
+  const newAccountsReceivable: TAccountsReceivable[] = [
+    {
+      id: 0,
+      createdAt: new Date(),
+      updatedAt: null,
+      branch: { id: 1 },
+      user: { id: user?.id },
+      payer: { id: person?.id || 0 },
+      sale: { id: 0 },
+      value: Number(totalSale),
+      receivedValue: 0,
+      balance: Number(totalSale),
+      dueDate: setDays(0) as any,
+      cancel: false,
+      description: "",
+      situation: "OPEN",
+      observations: "CARTÃO DE CRÉDITO",
+      lateFee: 0,
+      interest: 0,
+      discount: 0,
+      type: "CASH",
+      idTypeOperation: responsePayPal?.purchase_units[0]?.payments?.captures[0]
+        ?.id as any,
+      descriptionTypeOperation: `Parcela ${1} de ${1}`,
+    },
+  ] as any;
 
   useEffect(() => {
     setSale((prev: any) => {
@@ -138,18 +129,11 @@ export default function CheckoutStep() {
   }, [itemsSale, user, person, responsePayPal, totalSale]);
 
   useEffect(() => {
-    const savedItems = localStorage.getItem("itemsSale");
-    if (savedItems) {
-      setItemsSale(JSON.parse(savedItems));
-    }
+    loadLocalStorage.loadsetLocalStorage(setItemsSale);
   }, []);
 
   useEffect(() => {
-    if (itemsSale.length > 0) {
-      localStorage.setItem("itemsSale", JSON.stringify(itemsSale));
-    } else {
-      localStorage.removeItem("itemsSale");
-    }
+    loadLocalStorage.loadgetLocalStorage(itemsSale);
   }, [itemsSale]);
 
   /**Função para envio da venda */
@@ -189,8 +173,8 @@ export default function CheckoutStep() {
   return (
     <>
       {/* <pre className="bg-gray-600 p-4 rounded-lg text-xs overflow-auto max-h-96">
-        {JSON.stringify(sale, null, 2)}
-      </pre> */}
+{JSON.stringify(sale, null, 2)}
+</pre> */}
       <CheckoutStepForm
         itemsSale={itemsSale}
         responseImages={responseImages}

@@ -4,30 +4,17 @@ import { useEffect, useState } from "react";
 import StoreForm from "@/app/components/Store/StoreForm";
 import { TItem, TResponseImages } from "@/app/models/TItem";
 
+import { useRouter } from 'next/navigation'
+import { loadHandle } from "@/app/lib/handleApi";
+
 export default function Store() {
+  const router = useRouter()
   const [searchItemName, setSearchITemName] = useState("");
   const [items, setItems] = useState<TItem[]>([]);
   const [responseImages, setResponseImages] = useState<TResponseImages[]>([]);
 
   useEffect(() => {
-    async function imagesItems() {
-      try {
-        const response = await fetch("/api/images", {
-          method: "GET",
-          cache: "no-store",
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erro: ${response.status}`);
-        }
-        const data: TResponseImages[] = await response.json();
-        setResponseImages(data);
-      } catch (error) {
-        console.error("Erro ao buscar imagens:", error);
-        setResponseImages([]);
-      }
-    }
-    imagesItems();
+    loadHandle('permitAll()', setResponseImages, 'images', router)
   }, []);
 
   useEffect(() => {

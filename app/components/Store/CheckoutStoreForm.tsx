@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { TItem, TResponseImages } from "@/app/models/TItem";
 import { Dispatch, useState } from "react";
+import { MsgMethodPay } from "../Sale/helpers/MsgMethodPay";
 
 type Props = {
   item: TItem;
@@ -9,6 +10,7 @@ type Props = {
   addToCart:Function
   amount:number
   setAmount:Dispatch<number>
+  sucess:string
 };
 
 export default function CheckoutStorePage({
@@ -17,7 +19,8 @@ export default function CheckoutStorePage({
     buyNow,
     addToCart,
     amount,
-    setAmount }: Props) {
+    setAmount,
+  sucess }: Props) {
 
   const router = useRouter();
 
@@ -171,6 +174,7 @@ export default function CheckoutStorePage({
               >
                 Adicionar ao carrinho
               </button>
+              {sucess && <MsgMethodPay msg={amount + " " + sucess}/>}
               {/* SEGURANÇA */}
               <div className="mt-6 text-sm text-gray-500">
                 <p className="mb-2">🔒 Compra segura</p>

@@ -1,15 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { useParams } from "next/navigation";
 import { TItem, TResponseImages } from "@/app/models/TItem";
 import CheckoutStoreForm from "@/app/components/Store/CheckoutStoreForm";
 import { useRouter } from "next/navigation";
 import { TItemsSale } from "@/app/models/TSale";
+import { loadHandle } from "@/app/lib/handleApi";
+import { LoadLocalStorge } from "../helpers/loadLocalStorage";
 
 export default function CheckoutStorePage() {
   const router = useRouter();
-
+  
+  const [sucess, setSucess] = useState("");
   const [items, setItems] = useState<TItem[]>([]);
   const [responseImages, setResponseImages] = useState<TResponseImages[]>([]);
   const [item] = useState<TItem>({
@@ -30,24 +34,10 @@ export default function CheckoutStorePage() {
   const params = useParams();
   const res = params.id as keyof typeof items;
 
+  const loadLocalStorage = new LoadLocalStorge();
+
   useEffect(() => {
-    async function imagesItems() {
-      try {
-        const response = await fetch("/api/images", {
-          method: "GET",
-          cache: "no-store",
-        });
-        if (!response.ok) {
-          throw new Error(`Erro: ${response.status}`);
-        }
-        const data: TResponseImages[] = await response.json();
-        setResponseImages(data);
-      } catch (error) {
-        console.error("Erro ao buscar imagens:", error);
-        setResponseImages([]);
-      }
-    }
-    imagesItems();
+    loadHandle("permitAll()", setResponseImages, "images", router);
   }, []);
 
   useEffect(() => {
@@ -73,18 +63,11 @@ export default function CheckoutStorePage() {
   }, [res]);
 
   useEffect(() => {
-    const savedItems = localStorage.getItem("itemsSale");
-    if (savedItems) {
-      setItemsSale(JSON.parse(savedItems));
-    }
+    loadLocalStorage.loadsetLocalStorage(setItemsSale);
   }, []);
 
   useEffect(() => {
-    if (itemsSale.length > 0) {
-      localStorage.setItem("itemsSale", JSON.stringify(itemsSale));
-    } else {
-      localStorage.removeItem("itemsSale");
-    }
+    loadLocalStorage.loadgetLocalStorage(itemsSale);
   }, [itemsSale]);
 
   function handleItemsSale() {
@@ -117,7 +100,11 @@ export default function CheckoutStorePage() {
     router.push("/checkoutstep");
   }
   function addToCart() {
+    setSucess("Item adicionado com sucesso.")
     handleItemsSale();
+    setTimeout(()=>{
+      setSucess("")
+    },2000)
   }
   return (
     <>
@@ -131,6 +118,7 @@ export default function CheckoutStorePage() {
         addToCart={addToCart}
         amount={amount}
         setAmount={setAmount}
+        sucess={sucess}
       />
     </>
   );
