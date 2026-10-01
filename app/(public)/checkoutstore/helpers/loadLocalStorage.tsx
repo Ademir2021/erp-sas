@@ -14,5 +14,7 @@ export class LoadLocalStorge {
     } else {
       localStorage.removeItem("itemsSale");
     }
+    // Dispara um evento personalizado para notificar outros componentes sobre a atualização
+     window.dispatchEvent(new Event("itemsSaleUpdated"));
   }
 }
