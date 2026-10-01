@@ -11,6 +11,7 @@ import PixPayment from "./PixPayment";
 import CardPaymentForm from "./CardPaymentForm";
 import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse";
 import { TResponsePayPal } from "@/app/models/TResponsePayPal";
+import { TResponsePixQRCode } from "@/app/models/TPagSeguroPix";
 
 type CheckoutStep =
   | "itemsSale"
@@ -33,6 +34,8 @@ type Props = {
   setPaymentPayPal: Dispatch<SetStateAction<TPayPalOrderResponse>>;
   setOrderPayPal: Dispatch<SetStateAction<TResponsePayPal>>;
   msg:string
+  qrcode: TResponsePixQRCode;
+   handleSubmitPix: any
 };
 
 export default function CheckoutStepForm({
@@ -45,7 +48,9 @@ export default function CheckoutStepForm({
   totalSale,
   setPaymentPayPal,
   setOrderPayPal,
-  msg
+  msg,
+  qrcode,
+  handleSubmitPix
 }: Props) {
   const [checkoutStep, setCheckoutStep] =
     useState<CheckoutStep>("itemsInTheCard");
@@ -103,6 +108,8 @@ export default function CheckoutStepForm({
           onError={() => nextStep("saleNotCompleted")}
           totalSale={totalSale}
           msg={msg}
+          qrcode={qrcode}
+          handleSubmitPix={handleSubmitPix}
         />
       )}
 
