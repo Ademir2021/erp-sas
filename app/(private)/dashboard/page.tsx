@@ -40,7 +40,7 @@ export default function Dashboard() {
                   />
                 </button>
                 <button
-                  className="cursor-pointer ml-8 text-blue-400 hover:text-blue-600"
+                  className="cursor-pointer ml-4 text-blue-400 hover:text-blue-600"
                   onClick={() => router.push("/checkoutstep")}
                 >
                   <ShoppingCartCheckoutIcon
@@ -48,7 +48,7 @@ export default function Dashboard() {
                     titleAccess="Continuar Carrinho"
                   />Carrinho.
                 </button>
-                <span className="m-12 text-gray-500">
+                <span className="ml-6 text-gray-500">
                   {" "}
                   {" | "}{" "}
                   <a

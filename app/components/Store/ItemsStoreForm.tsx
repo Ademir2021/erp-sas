@@ -32,7 +32,7 @@ export default function ITemsStoreForm({ items, responseImages }: Props) {
     <>
       <div className="bg-transparent p-1 rounded-2xl shadow-lg flex flex-col justify-between">
         <main className="min-h-screen bg-gray-400 text-white p-1 rounded-2xl shadow-lg">
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-1">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-1">
             {currentItems.map((item: TItem) => {
               const image: TResponseImages[] = responseImages.filter(
                 (img) => img.idItem === item.id,
@@ -48,7 +48,7 @@ export default function ITemsStoreForm({ items, responseImages }: Props) {
                       <img
                         src={`${process.env.NEXT_PUBLIC_API_IMG}/${item.id}/${image[0]?.fileName}`}
                         alt={item.imagem}
-                        className="min-w-24 max-w-26 h-auto object-contain rounded-lg"
+                        className="min-w-auto max-w-36 h-auto object-contain rounded-lg"
                       />
                     </li>
                     <li className="flex  text-xs m-1 text-gray-800 ">

@@ -17,10 +17,9 @@ import responsePayPalJSON from "../../json/responsePayPal.json";
 import { TAccountsReceivable } from "@/app/models/TAccountsReceivable";
 import { setDays } from "@/app/lib/momentDays";
 import { LoadLocalStorge } from "../checkoutstore/helpers/loadLocalStorage";
-
 import pagSeguroPixJSON from "../../json/pagSeguroPix.json";
 import { TPagSeguroPix, TResponsePixQRCode } from "@/app/models/TPagSeguroPix";
-import { mapFieldsPagSeguroPix } from "@/app/(private)/sale/handlePagSeguro";
+import { mapFieldsPagSeguroPix, registerPagSeguroPIX } from "@/app/(private)/sale/handlePagSeguro";
 
 export default function CheckoutStep() {
   const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
@@ -28,24 +27,22 @@ export default function CheckoutStep() {
     qr_codes: [{ id: "", text: "", amount: { value: 0 } }],
     error_messages: [{ code: "", description: "", parameter_name: "" }],
   });
-
+  const qrCodeValue = qrcodePagSeguro.qr_codes[0].amount.value;
+  const qrCodeId = qrcodePagSeguro.id || "id não gerado";
   const [pagSeguroPix, setPagSeguroPix] = useState<TPagSeguroPix>(
     pagSeguroPixJSON as TPagSeguroPix,
   );
-
   const [installmentAccount, setInstallmentAccount] = useState(0);
   const [cash, setCash] = useState(0);
-
   const [orderPayPal, setOrderPayPal] = useState<TPayPalOrderResponse>(
     orderPayPalJSON as TPayPalOrderResponse,
   ); // captura o pedido mas ainda não aprovado
   const [responsePayPal, setResponsePayPal] = useState<TResponsePayPal>(
     responsePayPalJSON as TResponsePayPal,
   );
-
+  const payPalId = responsePayPal.purchase_units[0].payments.captures[0].id;
   const { user } = userAuth();
   const router = useRouter();
-
   const [msg, setMsg] = useState("Conclua sua compra");
   const [responseIdSale, setResponseIdSale] = useState(0);
   const [persons, setPersons] = useState<TPerson[]>([]);
@@ -104,32 +101,36 @@ export default function CheckoutStep() {
     loadHandle("permitAll()", setResponseImages, "images", router);
   }, []);
 
+  useEffect(() => {
+    // Atualiza o estado do QR Code quando qrCodeValue muda
+    setQrcode({ ...qrcodePagSeguro });
+  }, [qrCodeValue]);
+
   const newAccountsReceivable: TAccountsReceivable[] = [
     {
       id: 0,
       createdAt: new Date(),
       updatedAt: null,
       branch: { id: 1 },
-      user: { id: user?.id },
+      user: { id: user?.id || 0 },
       payer: { id: person?.id || 0 },
       sale: { id: 0 },
-      value: Number(totalSale),
+      value: totalSale,
       receivedValue: 0,
-      balance: Number(totalSale),
+      balance: totalSale,
       dueDate: setDays(0) as any,
       cancel: false,
       description: "",
       situation: "OPEN",
-      observations: "CARTÃO DE CRÉDITO",
+      observations: "CHECKOUT STEP",
       lateFee: 0,
       interest: 0,
       discount: 0,
       type: "CASH",
-      idTypeOperation: responsePayPal?.purchase_units[0]?.payments?.captures[0]
-        ?.id as any,
-      descriptionTypeOperation: `Parcela ${1} de ${1}`,
+      idTypeOperation: payPalId ? payPalId : qrCodeId,
+      descriptionTypeOperation: "Parcela unica",
     },
-  ] as any;
+  ];
 
   useEffect(() => {
     setSale((prev: any) => {
@@ -144,7 +145,16 @@ export default function CheckoutStep() {
       setSale(newSale);
       return newSale;
     });
-  }, [itemsSale, user, person, responsePayPal, totalSale]);
+  }, [
+    itemsSale,
+    user,
+    person,
+    responsePayPal,
+    totalSale,
+    qrcodePagSeguro,
+    qrCodeValue,
+    qrCodeId,
+  ]);
 
   useEffect(() => {
     loadLocalStorage.loadsetLocalStorage(setItemsSale);
@@ -180,8 +190,6 @@ export default function CheckoutStep() {
     }
   }
 
-  const qrCodeValue = qrcodePagSeguro.qr_codes[0].amount.value;
-
   useEffect(() => {
     if (responsePayPal || qrCodeValue > 0) {
       if (responsePayPal.status === "COMPLETED" || qrCodeValue > 0) {
@@ -207,45 +215,22 @@ export default function CheckoutStep() {
     getPagSeguroPix();
   }, [sale, person, itemsSale, cash]);
 
-  async function registerPagSeguroPIX() {
-    try {
-      const response = await fetch("/api/paymentpix", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(pagSeguroPix),
-      });
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      const data: TResponsePixQRCode = await response.json();
-      if (!data.qr_codes) {
-        setMsg(
-          `Erro ao gerar QRCode: ${data.error_messages?.[0]?.description || "Erro desconhecido"}`,
-        );
-      } else {
-        setQrcode(data);
-        if (data.qr_codes[0].amount.value > 0) {
-          setInstallmentAccount(1); // Gera apenas 1 parcela do PIX
-        }
-      }
-    } catch (error: any) {
-      console.error("Erro geral:", error);
-    }
-  }
-
   function handleSubmitPix(e: Event) {
     e.preventDefault();
     getPagSeguroPix();
-    registerPagSeguroPIX();
+    registerPagSeguroPIX(
+      pagSeguroPix,
+      setQrcode,
+      setMsg,
+      setInstallmentAccount,
+    );
   }
 
   return (
     <>
       {/* <pre className="bg-gray-600 p-4 rounded-lg text-xs overflow-auto max-h-96">
-{JSON.stringify(qrcodePagSeguro, null, 2)}
-</pre> */}
+        {JSON.stringify(qrcodePagSeguro.id, null, 2)}
+      </pre> */}
       <CheckoutStepForm
         itemsSale={itemsSale}
         responseImages={responseImages}

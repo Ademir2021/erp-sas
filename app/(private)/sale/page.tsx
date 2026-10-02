@@ -27,6 +27,7 @@ import { setDays } from "@/app/lib/momentDays";
 import {
   mapFieldsPagSeguroCard,
   mapFieldsPagSeguroPix,
+  registerPagSeguroPIX,
 } from "./handlePagSeguro";
 import { userAuth } from "@/app/lib/userAuth";
 import { TPayPalOrderResponse } from "@/app/models/TPayPalOrderResponse";
@@ -424,34 +425,6 @@ export default function Sales() {
     getPagSeguroPix();
   }, [sale, operationSale, person, creditCard, itemsSale, cash]);
 
-  async function registerPagSeguroPIX() {
-    try {
-      const response = await fetch("/api/paymentpix", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(pagSeguroPix),
-      });
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      const data: TResponsePixQRCode = await response.json();
-      if (!data.qr_codes) {
-        setMsg(
-          `Erro ao gerar QRCode: ${data.error_messages?.[0]?.description || "Erro desconhecido"}`,
-        );
-      } else {
-        setQrcode(data);
-        if (data.qr_codes[0].amount.value > 0) {
-          setInstallmentAccount(1); // Gera apenas 1 parcela do PIX
-        }
-      }
-    } catch (error: any) {
-      console.error("Erro geral:", error);
-    }
-  }
-
   async function saveSale(sale: TSale) {
     const res = await fetch("/api/sale", {
       method: "POST",
@@ -490,7 +463,12 @@ export default function Sales() {
     e.preventDefault();
     loadItemsSale(sale);
     getPagSeguroPix();
-    registerPagSeguroPIX();
+    registerPagSeguroPIX(
+      pagSeguroPix,
+      setQrcode,
+      setMsg,
+      setInstallmentAccount,
+    );
   }
   return (
     <>

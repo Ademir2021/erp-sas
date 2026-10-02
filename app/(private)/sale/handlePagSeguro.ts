@@ -1,150 +1,187 @@
 import { TPagSeguroCard, TPagSeguroItems } from "@/app/models/TPagSeguroCard";
-import { TPagSeguroPix } from "@/app/models/TPagSeguroPix";
+import { TPagSeguroPix, TResponsePixQRCode } from "@/app/models/TPagSeguroPix";
 import { TPerson } from "@/app/models/TPerson";
-import { TCreditCart, TItemsSale, TOperationSale, TSale } from "@/app/models/TSale";
-import { v4 as uuidv4 } from 'uuid';
+import {
+  TCreditCart,
+  TItemsSale,
+  TOperationSale,
+  TSale,
+} from "@/app/models/TSale";
+import { Dispatch } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export function arrayItems(p: TPagSeguroCard, saleItens: TItemsSale[]) {
-    p.items = []
-    for (let i of saleItens) {
-        const newItem: TPagSeguroItems = {
-            reference_id: i.item.id.toString(),
-            name: i.item.name.toString(),
-            quantity: i.amount,
-            unit_amount: Math.round(Number(i.price) * 100)
-        }
-        p.items.push(newItem)
-    }
-};
+  p.items = [];
+  for (let i of saleItens) {
+    const newItem: TPagSeguroItems = {
+      reference_id: i.item.id.toString(),
+      name: i.item.name.toString(),
+      quantity: i.amount,
+      unit_amount: Math.round(Number(i.price) * 100),
+    };
+    p.items.push(newItem);
+  }
+}
 
 const mapCustomer = (person: TPerson, sale: TSale) => ({
-    name: person?.name ?? "",
-    email: sale?.user?.login ?? "",
-    tax_id: person?.cpf || person?.cnpj || "",
-    phones: [{
-        number: person?.phone?.substring(2) ?? "",
-        country: person?.address?.zipCode?.city?.country?.ddi ?? "55",
-        area: person?.phone?.slice(0, -9) ?? "",
-        type: "MOBILE"
-    }]
-})
+  name: person?.name ?? "",
+  email: sale?.user?.login ?? "",
+  tax_id: person?.cpf || person?.cnpj || "",
+  phones: [
+    {
+      number: person?.phone?.substring(2) ?? "",
+      country: person?.address?.zipCode?.city?.country?.ddi ?? "55",
+      area: person?.phone?.slice(0, -9) ?? "",
+      type: "MOBILE",
+    },
+  ],
+});
 
 const mapShipping = (person: TPerson) => ({
-    address: {
-        street: person?.address?.street ?? "",
-        number: person?.address?.number ?? "",
-        complement: person?.address?.complement ?? "",
-        locality: person?.address?.neighborhood ?? "",
-        city: person?.address?.zipCode?.city?.name ?? "",
-        region_code: person?.address?.zipCode?.city?.state?.acronym ?? "",
-        country: person?.address?.zipCode?.city?.country?.acronym ?? "",
-        postal_code: person?.address?.zipCode?.code?.replace(/[.-]/g, '') ?? ""
-    }
-})
+  address: {
+    street: person?.address?.street ?? "",
+    number: person?.address?.number ?? "",
+    complement: person?.address?.complement ?? "",
+    locality: person?.address?.neighborhood ?? "",
+    city: person?.address?.zipCode?.city?.name ?? "",
+    region_code: person?.address?.zipCode?.city?.state?.acronym ?? "",
+    country: person?.address?.zipCode?.city?.country?.acronym ?? "",
+    postal_code: person?.address?.zipCode?.code?.replace(/[.-]/g, "") ?? "",
+  },
+});
 
-const mapQrCode = (
-    sale: TSale,
-    cash: number
-) => {
-    const time = new Date();
-    const expiration_date_qrcode = new Date();
-    expiration_date_qrcode.setHours(time.getHours() + 48);
-    return [{
-        type: "PIX",
-        amount: {
-            currency: "BRL",
-            value: Math.round(Number(sale.tSale - cash - sale.discount) * 100)
-        },
-        expiration_date: expiration_date_qrcode,
-        links: [{ href: "https://meusite.com/notificacoes" }]
-    },]
-}
+const mapQrCode = (sale: TSale, cash: number) => {
+  const time = new Date();
+  const expiration_date_qrcode = new Date();
+  expiration_date_qrcode.setHours(time.getHours() + 48);
+  return [
+    {
+      type: "PIX",
+      amount: {
+        currency: "BRL",
+        value: Math.round(Number(sale.tSale - cash - sale.discount) * 100),
+      },
+      expiration_date: expiration_date_qrcode,
+      links: [{ href: "https://meusite.com/notificacoes" }],
+    },
+  ];
+};
 
 const mapCharges = (
-    creditCard: TCreditCart,
-    person: TPerson,
-    operationSale: TOperationSale,
-    baseCharge: any,
+  creditCard: TCreditCart,
+  person: TPerson,
+  operationSale: TOperationSale,
+  baseCharge: any,
 ) => {
-    const valorCentavos = Math.round((creditCard?.payment ?? 0) * 100)
-    return [{
-        ...baseCharge,
-        reference_id: uuidv4(),
-        description: operationSale.description,
-        amount: {
-            currency: "BRL",
-            value: valorCentavos
+  const valorCentavos = Math.round((creditCard?.payment ?? 0) * 100);
+  return [
+    {
+      ...baseCharge,
+      reference_id: uuidv4(),
+      description: operationSale.description,
+      amount: {
+        currency: "BRL",
+        value: valorCentavos,
+      },
+      payment_method: {
+        ...baseCharge.payment_method,
+        installments: creditCard.installments,
+        holder: {
+          name: person?.name ?? "",
+          tax_id: person?.cpf || person?.cnpj || "",
         },
-        payment_method: {
-            ...baseCharge.payment_method,
-            installments: creditCard.installments,
-            holder: {
-                name: person?.name ?? "",
-                tax_id: person?.cpf || person?.cnpj || ""
-            }
-        }
-    }]
-}
+      },
+    },
+  ];
+};
 
 type PropsCard = {
-    p: TPagSeguroCard;
-    sale: TSale;
-    operationSale: TOperationSale;
-    person: TPerson;
-    creditCard: TCreditCart;
-    itemsSale: TItemsSale[];
-}
+  p: TPagSeguroCard;
+  sale: TSale;
+  operationSale: TOperationSale;
+  person: TPerson;
+  creditCard: TCreditCart;
+  itemsSale: TItemsSale[];
+};
 
 export const mapFieldsPagSeguroCard = ({
-    p,
-    sale,
-    operationSale,
-    person,
-    creditCard,
-    itemsSale,
+  p,
+  sale,
+  operationSale,
+  person,
+  creditCard,
+  itemsSale,
 }: PropsCard): TPagSeguroCard => {
-    const newP = {
-        ...p,
-        reference_id: uuidv4(),
-        description: operationSale.description,
-        customer: mapCustomer(person, sale),
-        shipping: mapShipping(person),
-        charges: mapCharges(
-            creditCard,
-            person,
-            operationSale,
-            p.charges[0]
-        )
-    }
-    arrayItems(newP as TPagSeguroCard, itemsSale)
-    return newP as TPagSeguroCard
-}
+  const newP = {
+    ...p,
+    reference_id: uuidv4(),
+    description: operationSale.description,
+    customer: mapCustomer(person, sale),
+    shipping: mapShipping(person),
+    charges: mapCharges(creditCard, person, operationSale, p.charges[0]),
+  };
+  arrayItems(newP as TPagSeguroCard, itemsSale);
+  return newP as TPagSeguroCard;
+};
 
 type PropsPIX = {
-    p: TPagSeguroPix;
-    sale: TSale;
-    operationSale: TOperationSale;
-    person: TPerson;
-    itemsSale: TItemsSale[];
-    cash: number;
-}
+  p: TPagSeguroPix;
+  sale: TSale;
+  operationSale: TOperationSale;
+  person: TPerson;
+  itemsSale: TItemsSale[];
+  cash: number;
+};
 
 export const mapFieldsPagSeguroPix = ({
-    p,
-    sale,
-    operationSale,
-    person,
-    itemsSale,
-    cash
+  p,
+  sale,
+  operationSale,
+  person,
+  itemsSale,
+  cash,
 }: PropsPIX): TPagSeguroPix => {
-    const newP = {
-        ...p,
-        reference_id: uuidv4(),
-        description: operationSale.description,
-        customer: mapCustomer(person, sale),
-        shipping: mapShipping(person),
-        qr_codes: mapQrCode(sale, cash),
+  const newP = {
+    ...p,
+    reference_id: uuidv4(),
+    description: operationSale.description,
+    customer: mapCustomer(person, sale),
+    shipping: mapShipping(person),
+    qr_codes: mapQrCode(sale, cash),
+  };
+  arrayItems(newP as any, itemsSale);
+  return newP as TPagSeguroPix;
+};
+
+export async function registerPagSeguroPIX(
+  pagSeguroPix: TPagSeguroPix,
+  setQrcode: Dispatch<TResponsePixQRCode>,
+  setMsg: Dispatch<string>,
+  setInstallmentAccount: Dispatch<number>,
+) {
+  try {
+    const response = await fetch("/api/paymentpix", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pagSeguroPix),
+    });
+    if (!response.ok) {
+      throw new Error(`Erro HTTP: ${response.status}`);
     }
-    arrayItems(newP as any, itemsSale)
-    return newP as TPagSeguroPix;
+    const data: TResponsePixQRCode = await response.json();
+    if (!data.qr_codes) {
+      setMsg(
+        `Erro ao gerar QRCode: ${data.error_messages?.[0]?.description || "Erro desconhecido"}`,
+      );
+    } else {
+      setQrcode(data);
+      if (data.qr_codes[0].amount.value > 0) {
+        setInstallmentAccount(1); // Gera apenas 1 parcela do PIX
+      }
+    }
+  } catch (error: any) {
+    console.error("Erro geral:", error);
+  }
 }
