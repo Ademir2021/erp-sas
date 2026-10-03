@@ -19,7 +19,10 @@ import { setDays } from "@/app/lib/momentDays";
 import { LoadLocalStorge } from "../checkoutstore/helpers/loadLocalStorage";
 import pagSeguroPixJSON from "../../json/pagSeguroPix.json";
 import { TPagSeguroPix, TResponsePixQRCode } from "@/app/models/TPagSeguroPix";
-import { mapFieldsPagSeguroPix, registerPagSeguroPIX } from "@/app/(private)/sale/handlePagSeguro";
+import {
+  mapFieldsPagSeguroPix,
+  registerPagSeguroPIX,
+} from "@/app/(private)/sale/handlePagSeguro";
 
 export default function CheckoutStep() {
   const [qrcodePagSeguro, setQrcode] = useState<TResponsePixQRCode>({
@@ -63,15 +66,15 @@ export default function CheckoutStep() {
     discount: 0,
     itemsSale: [],
     operationSale: {
-      id: 2,
+      id: 6,
       description: "",
       type: "",
-      controlsStock: false,
-      generateFinancial: false,
-      allowDiscount: false,
-      updateCost: false,
+      controlsStock: true,
+      generateFinancial: true,
+      allowDiscount: true,
+      updateCost: true,
       finalConsumer: true,
-      requiresInvoice: false,
+      requiresInvoice: true,
       isReturn: false,
       cfop: "",
       defaultNature: "",
@@ -101,36 +104,31 @@ export default function CheckoutStep() {
     loadHandle("permitAll()", setResponseImages, "images", router);
   }, []);
 
-  useEffect(() => {
-    // Atualiza o estado do QR Code quando qrCodeValue muda
-    setQrcode({ ...qrcodePagSeguro });
-  }, [qrCodeValue]);
-
-  const newAccountsReceivable: TAccountsReceivable[] = [
-    {
-      id: 0,
-      createdAt: new Date(),
-      updatedAt: null,
-      branch: { id: 1 },
-      user: { id: user?.id || 0 },
-      payer: { id: person?.id || 0 },
-      sale: { id: 0 },
-      value: totalSale,
-      receivedValue: 0,
-      balance: totalSale,
-      dueDate: setDays(0) as any,
-      cancel: false,
-      description: "",
-      situation: "OPEN",
-      observations: "CHECKOUT STEP",
-      lateFee: 0,
-      interest: 0,
-      discount: 0,
-      type: "CASH",
-      idTypeOperation: payPalId ? payPalId : qrCodeId,
-      descriptionTypeOperation: "Parcela unica",
-    },
-  ];
+    const newAccountsReceivable: TAccountsReceivable[] = [
+      {
+        id: 0,
+        createdAt: new Date(),
+        updatedAt: null,
+        branch: { id: 1 },
+        user: { id: user?.id || 0 },
+        payer: { id: person?.id || 0 },
+        sale: { id: 0 },
+        value: totalSale,
+        receivedValue: 0,
+        balance: totalSale,
+        dueDate: setDays(0) as any,
+        cancel: false,
+        description: "",
+        situation: "OPEN",
+        observations: "CHECKOUT STEP",
+        lateFee: 0,
+        interest: 0,
+        discount: 0,
+        type: "CASH",
+        idTypeOperation: payPalId ? payPalId : qrCodeId,
+        descriptionTypeOperation: "Parcela unica",
+      },
+    ];
 
   useEffect(() => {
     setSale((prev: any) => {
@@ -196,7 +194,7 @@ export default function CheckoutStep() {
         handleSaveSale();
       }
     }
-  }, [responsePayPal, person, qrcodePagSeguro]);
+  }, [responsePayPal, person, qrCodeValue]);
 
   /** Funções para envio do pagamento via pagSeguro PIX */
   const getPagSeguroPix = () => {
