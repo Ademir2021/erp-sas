@@ -52,7 +52,7 @@ export default function CardPaymentForm({
           setOrderPayPal(details);
         }}
       />
-      <MsgMethodPay msg={msg} />
+     {msg && <MsgMethodPay msg={msg} />}
       {/* Botões */}
       <div className="flex gap-3">
         <button
@@ -63,15 +63,6 @@ export default function CardPaymentForm({
         >
           Voltar
         </button>
-
-        {/* <button
-          type="button"
-          onClick={handlePayment}
-          disabled={loading}
-          className="flex-1 cursor-pointer bg-green-600 text-white rounded-lg p-3 font-semibold disabled:opacity-50"
-        >
-          {loading ? "Processando..." : "Pagar"}
-        </button> */}
       </div>
     </div>
   );

@@ -102,7 +102,7 @@ export default function PaymentMethod({
               )}
             </div>
           )}
-          <MsgMethodPay msg={msg} />
+          {msg && <MsgMethodPay msg={msg} />}
         </div>
       ) : (
         <div className="mb-6 flex items-center justify-center gap-3 rounded-xl border bg-white p-4 shadow-sm">

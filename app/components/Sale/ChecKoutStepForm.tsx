@@ -68,14 +68,6 @@ export default function CheckoutStepForm({
 
   return (
     <div className="w-full">
-      {checkoutStep === "itemsSale" && (
-        // <ItemsSale
-        //   itemsSale={itemsSale}
-        //   setItemsSale={setItemsSale}
-        //   onNext={() => nextStep("itemsInTheCard")}
-        // />
-        <a href="store" >Store</a>
-      )}
 
       {checkoutStep === "itemsInTheCard" && (
         <ItemsInTheCardForm
@@ -124,33 +116,6 @@ export default function CheckoutStepForm({
           setPaymentPayPal={setPaymentPayPal}
           msg={msg}
         />
-      )}
-
-      {checkoutStep === "completeSale" && (
-        // <CompleteSale
-        //   itemsSale={itemsSale}
-        //   onSuccess={() => nextStep("saleCompleted")}
-        //   onError={() => nextStep("saleNotCompleted")}
-        // />
-        <p>Completed Sale</p>
-      )}
-
-      {checkoutStep === "saleCompleted" && (
-        // <SaleCompleted
-        //   onNewSale={() => {
-        //     setItemsSale([]);
-        //     nextStep("itemsSale");
-        //   }}
-        // />
-        <p>Sale Completed</p>
-      )}
-
-      {checkoutStep === "saleNotCompleted" && (
-        // <SaleNotCompleted
-        //   onTryAgain={() => nextStep("paymentMethod")}
-        //   onBack={() => nextStep("itemsInTheCard")}
-        // />
-        <p>Sale Not Completed</p>
       )}
     </div>
   );

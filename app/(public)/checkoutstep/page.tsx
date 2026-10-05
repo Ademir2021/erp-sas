@@ -46,7 +46,7 @@ export default function CheckoutStep() {
   const payPalId = responsePayPal.purchase_units[0].payments.captures[0].id;
   const { user } = userAuth();
   const router = useRouter();
-  const [msg, setMsg] = useState("Conclua sua compra");
+  const [msg, setMsg] = useState("");
   const [responseIdSale, setResponseIdSale] = useState(0);
   const [persons, setPersons] = useState<TPerson[]>([]);
   const [person, setPerson] = useState<TPerson | null>();
@@ -189,7 +189,7 @@ export default function CheckoutStep() {
   }
 
   useEffect(() => {
-    if (responsePayPal || qrCodeValue > 0) {
+    if (responsePayPal || qrCodeValue) {
       if (responsePayPal.status === "COMPLETED" || qrCodeValue > 0) {
         handleSaveSale();
       }

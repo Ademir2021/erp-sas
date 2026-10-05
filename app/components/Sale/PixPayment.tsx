@@ -95,7 +95,7 @@ export default function PixPayment({
             Gerar PIX
           </button>
         )}
-          <MsgMethodPay msg={msg} />
+          {msg && <MsgMethodPay msg={msg} />}
         <button
           type="button"
           onClick={onBack}
