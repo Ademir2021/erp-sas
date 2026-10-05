@@ -189,14 +189,12 @@ export default function CheckoutStep() {
   }
 
   useEffect(() => {
-    if (responsePayPal || qrCodeValue) {
       if (responsePayPal.status === "COMPLETED" || qrCodeValue > 0) {
         handleSaveSale();
       }
-    }
   }, [responsePayPal, person, qrCodeValue]);
 
-  /** Funções para envio do pagamento via pagSeguro PIX */
+  /** pagSeguro PIX */
   const getPagSeguroPix = () => {
     setPagSeguroPix((prev) =>
       mapFieldsPagSeguroPix({
@@ -224,11 +222,7 @@ export default function CheckoutStep() {
     );
   }
 
-  return (
-    <>
-      {/* <pre className="bg-gray-600 p-4 rounded-lg text-xs overflow-auto max-h-96">
-        {JSON.stringify(qrcodePagSeguro.id, null, 2)}
-      </pre> */}
+  return <>
       <CheckoutStepForm
         itemsSale={itemsSale}
         responseImages={responseImages}
@@ -244,5 +238,4 @@ export default function CheckoutStep() {
         handleSubmitPix={handleSubmitPix}
       />
     </>
-  );
 }

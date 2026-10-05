@@ -32,7 +32,6 @@ export default function CardPaymentForm({
       <h2 className="text-2xl font-bold text-gray-500 mb-6">
         Pagamento com cartão
       </h2>
-
       {/* Total */}
       <div className="bg-gray-100 rounded-lg p-4 mb-6">
         <div className="text-sm text-gray-500">Total da venda</div>
@@ -41,7 +40,6 @@ export default function CardPaymentForm({
           R$ {totalSale.toFixed(2)}
         </div>
       </div>
-
       {/**PayPal */}
       <PaypalCheckout
         amount={Number(totalSale).toFixed(2)}

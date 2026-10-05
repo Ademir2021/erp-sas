@@ -25,9 +25,7 @@ export default function PaymentMethod({
 }: Props) {
   const user = userAuth();
   const router = useRouter();
-
   const [customerId, setCustomerId] = useState<number | "">("");
-
   const customerSelected = customers.find(
     (customer) => customer.id === Number(customerId),
   );
@@ -51,7 +49,7 @@ export default function PaymentMethod({
     }
     onCard(customerSelected);
   }
-
+  
   return (
     <div className="w-full max-w-4xl mx-auto p-4">
       {/* Título */}

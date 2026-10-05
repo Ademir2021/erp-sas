@@ -15,18 +15,13 @@ type Props = {
 };
 
 export default function PixPayment({
-  itemsSale,
   onBack,
-  onComplete,
-  onError,
   totalSale,
   msg,
   qrcode,
   handleSubmitPix,
 }: Props) {
-
-  
-     const qrCodeValue = qrcode.qr_codes[0].amount.value;
+  const qrCodeValue = qrcode.qr_codes[0].amount.value;
 
   return (
     <div className="w-full max-w-xl mx-auto p-4">
@@ -72,7 +67,7 @@ export default function PixPayment({
                 onClick={() =>
                   navigator.clipboard.writeText(qrcode.qr_codes[0].text)
                 }
-                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
+                className="bg-green-600 cursor-pointer hover:bg-green-700 text-white px-4 py-2 rounded-lg transition"
               >
                 Copiar código PIX
               </button>
@@ -82,25 +77,24 @@ export default function PixPayment({
         {/**PIX */}
         {qrCodeValue > 0 && (
           <div className="flex justify-center text-blue-500 mt-2">
-            Valor do PIX: R$ $
-            {(qrCodeValue / 100).toFixed(2)}
+            Valor do PIX: R$ ${(qrCodeValue / 100).toFixed(2)}
           </div>
         )}
 
         {!!!qrCodeValue && (
           <button
-            className="px-2 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
+            type="button"
+            className="w-full cursor-pointer mt-6 bg-gray-600 hover:bg-gray-400 py-3 rounded-lg"
             onClick={handleSubmitPix}
           >
             Gerar PIX
           </button>
         )}
-          {msg && <MsgMethodPay msg={msg} />}
+        {msg && <MsgMethodPay msg={msg} />}
         <button
           type="button"
           onClick={onBack}
-          className="w-full mt-6 bg-gray-200
-                         hover:bg-gray-300 py-3 rounded-lg"
+          className="w-full mt-6 cursor-pointer bg-gray-200 cursor-pointerhover:bg-gray-300 py-3 rounded-lg"
         >
           Voltar
         </button>
