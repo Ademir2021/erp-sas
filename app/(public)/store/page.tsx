@@ -4,17 +4,17 @@ import { useEffect, useState } from "react";
 import StoreForm from "@/app/components/Store/StoreForm";
 import { TItem, TResponseImages } from "@/app/models/TItem";
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { loadHandle } from "@/app/lib/handleApi";
 
 export default function Store() {
-  const router = useRouter()
+  const router = useRouter();
   const [searchItemName, setSearchITemName] = useState("");
   const [items, setItems] = useState<TItem[]>([]);
   const [responseImages, setResponseImages] = useState<TResponseImages[]>([]);
 
   useEffect(() => {
-    loadHandle('permitAll()', setResponseImages, 'images', router)
+    loadHandle("permitAll()", setResponseImages, "images", router);
   }, []);
 
   useEffect(() => {
@@ -31,7 +31,10 @@ export default function Store() {
           throw new Error(`Erro: ${response.status}`);
         }
         const data: TItem[] = await response.json();
-        setItems(data);
+
+        /**Filtrar itens que não são do tipo 3 Serviços */
+        setItems(data.filter((item) => item.typeItem.id === 1));
+
       } catch (error) {
         console.error("Erro na requisição:", error);
         setItems([]);
