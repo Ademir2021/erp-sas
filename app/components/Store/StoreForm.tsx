@@ -7,6 +7,7 @@ type Props = {
   setSearchITemName: Function;
   setItemsSale: Function;
   responseImages: TResponseImages[];
+  stopAlternating: () => void;
 };
 
 export default function StoreForm({
@@ -15,6 +16,7 @@ export default function StoreForm({
   setSearchITemName,
   setItemsSale,
   responseImages,
+  stopAlternating,
 }: Props) {
   return (
     <>
@@ -28,7 +30,9 @@ focus:ring-blue-100 focus:border-blue-500"
             type="search"
             placeholder="Buscar produtos marcas e muito mais ..."
             autoFocus
-            onChange={(e) => setSearchITemName(e.target.value)}
+            onChange={(e) => {
+              stopAlternating();
+              setSearchITemName(e.target.value)}}
           />
         </div>
         <ITemsStoreForm

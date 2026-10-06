@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import StoreForm from "@/app/components/Store/StoreForm";
 import { TItem, TResponseImages } from "@/app/models/TItem";
 
 import { useRouter } from "next/navigation";
 import { loadHandle } from "@/app/lib/handleApi";
+import BannerForm from "@/app/components/Banner/BannerForm";
 
 export default function Store() {
   const router = useRouter();
@@ -16,6 +17,29 @@ export default function Store() {
   useEffect(() => {
     loadHandle("permitAll()", setResponseImages, "images", router);
   }, []);
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  function toogleStrings() {
+    const strings = process.env.NEXT_PUBLIC_TOOGLE_STRINGS?.split(",") ?? [];
+    let i = 0;
+    intervalRef.current = setInterval(() => {
+      setSearchITemName(strings[i]);
+      i = (i + 1) % strings.length;
+    }, 6000);
+  }
+
+  useEffect(() => {
+    toogleStrings();
+    return () => stopAlternating();
+  }, []);
+
+  function stopAlternating() {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }
 
   useEffect(() => {
     async function searchItemsByName() {
@@ -34,7 +58,6 @@ export default function Store() {
 
         /**Filtrar itens que não são do tipo 3 Serviços */
         setItems(data.filter((item) => item.typeItem.id === 1));
-
       } catch (error) {
         console.error("Erro na requisição:", error);
         setItems([]);
@@ -49,12 +72,14 @@ export default function Store() {
 
   return (
     <>
+      <BannerForm />
       <StoreForm
         searchItemName={searchItemName}
         items={items}
         setSearchITemName={setSearchITemName}
         setItemsSale={setItems}
         responseImages={responseImages}
+        stopAlternating={stopAlternating}
       />
     </>
   );
