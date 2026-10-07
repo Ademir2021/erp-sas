@@ -57,7 +57,7 @@ export default function CardPaymentForm({
           type="button"
           onClick={onBack}
           disabled={loading}
-          className="flex-1 cursor-pointer border text-gray-500 border-gray-300 rounded-lg p-3"
+          className="flex-1 cursor-pointer border bg-gray-500 hover:bg-gray-300 text-gray-100 rounded-lg p-3"
         >
           Voltar
         </button>

@@ -84,7 +84,7 @@ export default function PixPayment({
         {!!!qrCodeValue && (
           <button
             type="button"
-            className="w-full cursor-pointer mt-6 bg-gray-600 hover:bg-gray-400 py-3 rounded-lg"
+            className="w-full cursor-pointer mt-6 bg-gray-700 hover:bg-gray-400 py-3 rounded-lg"
             onClick={handleSubmitPix}
           >
             Gerar PIX
@@ -94,7 +94,7 @@ export default function PixPayment({
         <button
           type="button"
           onClick={onBack}
-          className="w-full mt-6 cursor-pointer bg-gray-200 cursor-pointerhover:bg-gray-300 py-3 rounded-lg"
+          className="w-full mt-6 bg-gray-400 cursor-pointer hover:bg-gray-300 py-3 rounded-lg"
         >
           Voltar
         </button>
