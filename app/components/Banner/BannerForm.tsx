@@ -4,52 +4,39 @@ import { useState } from "react";
 import Link from "next/link";
 
 export default function BannerForm() {
-  const banners: string[] =
-    process.env.NEXT_PUBLIC_BANNERS?.split(",") ?? [];
-
-  const items: string[] = 
+  const banners: string[] = process.env.NEXT_PUBLIC_BANNERS?.split(",") ?? [];
+  const items: string[] =
     process.env.NEXT_PUBLIC_BANNER_ID_ITEMS?.split(",") ?? [];
-
   const total = Math.min(banners.length, items.length);
-
   const [currentIndex, setCurrentIndex] = useState(0);
-
   const handlePrevious = () => {
-    setCurrentIndex((current) =>
-      current === 0 ? total - 1 : current - 1
-    );
+    setCurrentIndex((current) => (current === 0 ? total - 1 : current - 1));
   };
-
   const handleNext = () => {
-    setCurrentIndex((current) =>
-      current === total - 1 ? 0 : current + 1
-    );
+    setCurrentIndex((current) => (current === total - 1 ? 0 : current + 1));
   };
-
   // Evita problemas caso não existam banners
   if (total === 0) {
     return null;
   }
-
   const currentBanner = banners[currentIndex];
   const currentItem = items[currentIndex];
-
   return (
     <section className="relative w-full overflow-hidden rounded-none">
       <img
         src={`/imgs/banners/${currentBanner}`}
         alt={`Banner ${currentIndex} não disponível`}
-        className="h-80 w-full object-cover"
+        className="h-68 w-full object-cover"
       />
 
       {/* Conteúdo sobre o banner */}
       <div className="absolute inset-0 flex items-center">
-        <div className="px-6 mt-1 text-gray-600 md:px-12 lg:px-20">
+        <div className="px-6 mt-1 text-gray-900 md:px-12 lg:px-20">
           <h1 className="text-2xl font-bold md:text-4xl lg:text-5xl">
             Tecnologia para vc ou sua empresa
           </h1>
 
-          <p className="mt-1 max-w-xl text-sm md:text-lg">
+          <p className="mt-1 max-w-xl text-gray-900 text-sm md:text-lg">
             Os melhores produtos vc so encontra aqui.
           </p>
 
