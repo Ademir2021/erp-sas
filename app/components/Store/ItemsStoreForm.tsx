@@ -2,6 +2,7 @@ import { TItem, TResponseImages } from "@/app/models/TItem";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Pagination from "../Pagination/Pagination";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 
 type Props = {
   items: TItem[];
@@ -46,16 +47,26 @@ export default function ITemsStoreForm({ items, responseImages }: Props) {
                   <ul className="">
                     <li className="mb-3">
                       <img
+                        className="min-w-auto max-w-36 h-auto object-contain rounded-b-sm"
                         src={`${process.env.NEXT_PUBLIC_API_IMG}/${item.id}/${image[0]?.fileName}`}
                         alt={item.imagem}
-                        className="min-w-auto max-w-36 h-auto object-contain rounded-lg"
                       />
                     </li>
-                    <li className="flex  text-xs m-1 text-gray-800 ">
-                      {item.name}{" "}
+                    <li className="flex-1 p-1 mb-1 text-left text-sm text-gray-700 ">
+                      {item.name}
                     </li>
-                    <li className="flex p-1 m-1 text-blue-700">
+                    <li className="flex ml-1 text-gray-800 text-xs">
+                      {item.priceMax > 50
+                        ? `6x de R$ ${(item.priceMax / 6).toFixed(2)} sem juros`
+                        : null}
+                    </li>
+                    <li className="flex ml-1 text-sm font-bold">
                       R$ {item.priceMax.toFixed(2)}
+                    </li>
+                    <li>
+                      <span className="flex p-1 text-xs font-bold text-green-700">
+                        Frete grátis
+                      </span>
                     </li>
                   </ul>
                 </button>
