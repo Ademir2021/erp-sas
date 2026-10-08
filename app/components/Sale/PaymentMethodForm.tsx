@@ -1,5 +1,7 @@
 "use client";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import PixIcon from '@mui/icons-material/Pix';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 
 import { useRouter } from "next/navigation";
 import { TPerson } from "@/app/models/TPerson";
@@ -134,7 +136,10 @@ export default function PaymentMethod({
           disabled={!customerSelected}
           className=" cursor-pointer flex flex-col items-center justify-center gap-3 min-h-[180] p-6 rounded-xl border bg-white shadow-sm transition hover:shadow-md hover:border-green-500 hover:bg-green-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <div className="text-5xl">▣</div>
+          <div className="text-5xl text-gray-700"><PixIcon
+          titleAccess="PIX"
+          fontSize="inherit"
+          /></div>
           <div className="text-center">
             <h3 className="text-lg font-bold text-gray-800">PIX</h3>
             <p className="text-sm text-gray-500">Pagamento instantâneo</p>
@@ -147,7 +152,10 @@ export default function PaymentMethod({
           disabled={!customerSelected}
           className=" cursor-pointer flex flex-col items-center justify-center gap-3 min-h-[180] p-6 rounded-xl border bg-white shadow-sm transition hover:shadow-md hover:border-blue-500 hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <div className="text-5xl">▰</div>
+          <div className="text-5xl text-gray-700"><CreditCardIcon
+          titleAccess="Cartão débito ou crédito"
+          fontSize="inherit"
+          /></div>
           <div className="text-center">
             <h3 className="text-lg font-bold text-gray-800">Cartão</h3>
             <p className="text-sm text-gray-500">Crédito ou débito</p>
