@@ -85,9 +85,9 @@ export default function Solutions() {
         "Brinquedos",
         "Conveniências",
         "Ferreagens",
-        "Lojas de Confecções",
-        "Lojas de Varejo",
-        "Comercio em Geral"
+        "Lojas de confecções",
+        "Lojas de varejo",
+        "Comercio em geral"
       ].map((segmento) => (
         <li
           key={segmento}
