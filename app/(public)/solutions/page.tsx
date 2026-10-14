@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import planos from "../checkout/[plano]/planos.json";
+import SegmentIcon from '@mui/icons-material/Segment';
 
 export default function Solutions() {
   const router = useRouter();
@@ -84,7 +85,7 @@ export default function Solutions() {
         "Hotéis e restaurantes",
         "Brinquedos",
         "Conveniências",
-        "Ferreagens",
+        "Ferragens",
         "Lojas de confecções",
         "Lojas de varejo",
         "Comércio em geral"
@@ -93,17 +94,17 @@ export default function Solutions() {
           key={segmento}
           className="flex items-center gap-3 rounded-lg
                      bg-gray-50 px-4 py-3 text-sm
-                     font-medium text-gray-700
+                     font-sans text-gray-700
                      transition-colors hover:bg-blue-50
                      hover:text-blue-700"
         >
           <span
-            className="flex h-6 w-6 shrink-0 items-center
+            className="flex h-7 w-9 shrink-0 cursor-pointer items-center
                        justify-center rounded-full bg-blue-100
                        text-blue-600"
             aria-hidden="true"
           >
-            ✓
+            <SegmentIcon titleAccess="Segmento Atendido" color="action"/>
           </span>
 
           {segmento}
