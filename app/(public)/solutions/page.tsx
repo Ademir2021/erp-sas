@@ -28,7 +28,6 @@ export default function Solutions() {
             <span className="text-sm text-gray-400">/mês</span>
           </p>
         </div>
-
         <button
           onClick={() => router.push(rota)}
           className="mt-4 cursor-pointer bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg"
@@ -58,7 +57,6 @@ export default function Solutions() {
       a melhor forma de atender você.
     </p>
   </header>
-
   <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
     <div className="mb-6">
       <h2 className="text-xl font-semibold text-gray-900">
@@ -69,7 +67,6 @@ export default function Solutions() {
         Atendemos empresas de diferentes setores do mercado.
       </p>
     </div>
-
     <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {[
         "Mercados e supermercados",
@@ -112,14 +109,11 @@ export default function Solutions() {
       ))}
     </ul>
   </div>
-
   <hr className="my-8 border-gray-200" />
 <p className="mt-2 text-sm leading-6 text-gray-600">
   Contrate um plano para dar o primeiro passo e iniciar com a solução ideal para o seu negócio.
 </p>
 </section>
-
-     
       <div className="grid md:grid-cols-3 gap-8">
         <Card
           titulo={`${planos.basico.nome}`}
