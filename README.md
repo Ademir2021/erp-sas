@@ -2,7 +2,7 @@
 
 - Baixar o projeto:
 
-`git clonehttps://github.com/Ademir2021/erp-sas.git`
+`git clone https://github.com/Ademir2021/erp-sas.git`
 
 - Instale o projeto na sua maquina:
 
