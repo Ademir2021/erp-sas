@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+.env.examples
+Dockerfile
+docker-compose.yml
+npm-debug.log
+git_push.sh
+create_build.sh
+README_.md
+README.md

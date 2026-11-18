@@ -1,0 +1,10 @@
+services:
+  nextjs:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - WATCHPACK_POLLING=true # Útil para hot reload no Docker em alguns sistemas
