@@ -44,7 +44,7 @@ export default function Solutions() {
       <section className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
   <header className="mb-8 text-center">
     <span className="mb-3 inline-block text-sm font-semibold uppercase tracking-widest text-blue-600">
-      Nossos planos
+      Nossos planos <span className="text-amber-50">|</span> <a className="text-amber-300" href="#plns">Ver Planos !</a>
     </span>
 
     <h1 className="text-3xl font-bold tracking-tight text-gray-200 sm:text-4xl">
@@ -110,7 +110,7 @@ export default function Solutions() {
     </ul>
   </div>
   <hr className="my-8 border-gray-200" />
-<p className="mt-2 text-sm leading-6 text-gray-600">
+<p id="plns" className="mt-2 text-sm leading-6 text-gray-600">
   Contrate um plano para dar o primeiro passo e iniciar com a solução ideal para o seu negócio.
 </p>
 </section>

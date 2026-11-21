@@ -1,6 +1,7 @@
-import { globalStyles_form } from "@/app/components/GlobalStyles";
 import pkg from "../../../package.json";
+
 export default function About() {
+  
   return (
    <div className="max-w-3xl mx-auto bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 border border-zinc-700">
 
@@ -10,8 +11,8 @@ export default function About() {
       <span className="text-4xl">🚀</span>
 
       <div>
-        <h1 className="text-3xl font-bold bg-gradient-to from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-          Sobre o ERP
+        <h1 className="text-3xl font-bold bg-gradient-to from-blue-400 to-cyan-300 bg-clip-text text-amber-300">
+          Sobre o ERP !
         </h1>
 
         <p className="text-sm text-gray-400">
