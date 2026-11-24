@@ -20,7 +20,8 @@ type Props = {
     items: TItem[]
     images: File[]
     setImages: Function
-     responseImages:TResponseImages[]
+    responseImages:TResponseImages[]
+     handleDeleteImage: (id: number) => void;
 }
 
 export default function ItemsForm({
@@ -38,7 +39,8 @@ export default function ItemsForm({
     items,
     images,
     setImages,
-    responseImages
+    responseImages,
+     handleDeleteImage
 }: Props) {
 
     const [showForm, setShowForm] = useState(false)
@@ -276,6 +278,7 @@ export default function ItemsForm({
             setChildren={setChildren}
             setShowForm={setShowForm}
             responseImages={responseImages}
+             handleDeleteImage={ handleDeleteImage}
         />
     </>
 }

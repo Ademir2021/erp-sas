@@ -13,7 +13,8 @@ sudo rm $DIR/package-lock.json
 sudo rm $DIR/package.json
 
 echo "Criando build com docker"
-docker run --rm -v "$(pwd)":/app -w /app node:22-alpine sh -c "npm ci && npm run build"
+docker run --rm -v "$(pwd)":/app -w /app \
+node:22-alpine sh -c "npm ci && npm run build"
 
 echo "copiando build for ERP-SAS"
 sudo cp -rf .next $DIR

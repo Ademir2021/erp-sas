@@ -1,7 +1,7 @@
 import { API_URL } from '@/app/lib/auth'
 import { loadToken } from '@/app/lib/endPoint'
 import { TItem } from '@/app/models/TItem'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
 
@@ -145,23 +145,23 @@ export async function PUT(request: Request) {
   }
 
   // Novo FormData para enviar ao Spring Boot
-    const springFormData = new FormData();
-    // Item como JSON
-    springFormData.append(
-      "item",
-      new Blob(
-        [JSON.stringify(item)],
-        {
-          type: "application/json"
-        }
-      )
-    );
-    // Imagens
-    images.forEach((image) => {
-      if (image instanceof File) {
-        springFormData.append("images", image, image.name);
+  const springFormData = new FormData();
+  // Item como JSON
+  springFormData.append(
+    "item",
+    new Blob(
+      [JSON.stringify(item)],
+      {
+        type: "application/json"
       }
-    });
+    )
+  );
+  // Imagens
+  images.forEach((image) => {
+    if (image instanceof File) {
+      springFormData.append("images", image, image.name);
+    }
+  });
 
   const apiResponse = await fetch(`${API_URL}/item/${item.id}`, {
     method: "PUT",

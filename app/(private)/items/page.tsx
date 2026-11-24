@@ -100,7 +100,7 @@ export default function Items() {
         router.refresh()
     }
 
-    
+
     async function saveItem(item: TItem) {
         try {
             const formData = formDataImages(item)
@@ -152,6 +152,39 @@ export default function Items() {
         return 'Falta preencher os campos: ' + missing.join(', ') + '.';
     }
 
+
+    async function handleDeleteImage(id: number) {
+
+        try {
+
+            const response = await fetch("/api/images", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id })
+            });
+            
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Erro ao excluir imagem.");
+            }
+
+            // console.log(data.message);
+
+            alert(JSON.stringify(data.message))
+            
+            // Atualiza a lista sem precisar recarregar a página
+            setResponseImages(prev =>
+                prev.filter(image => image.id !== id)
+            );
+
+        } catch (error) {
+            console.error("Erro ao excluir:", error);
+        }
+    }
+
     function handleSubmit(e: Event) {
         e.preventDefault()
         if (valFields(item) === true) {
@@ -179,6 +212,7 @@ export default function Items() {
             images={images}
             setImages={setImages}
             responseImages={responseImages}
+            handleDeleteImage={handleDeleteImage}
         >
             {item}
         </ItemsForm>
