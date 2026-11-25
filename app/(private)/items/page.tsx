@@ -38,6 +38,7 @@ export default function Items() {
     }
     const [item, setItem] = useState<TItem>(initialItem)
     const [images, setImages] = useState<File[]>([]);
+    const [imagesSelected, setImagesSelected] = useState<TResponseImages[]>([]);
 
     const handleChange = (e: any) => {
         const { name, value } = e.target
@@ -152,11 +153,8 @@ export default function Items() {
         return 'Falta preencher os campos: ' + missing.join(', ') + '.';
     }
 
-
     async function handleDeleteImage(id: number) {
-
         try {
-
             const response = await fetch("/api/images", {
                 method: "DELETE",
                 headers: {
@@ -164,22 +162,15 @@ export default function Items() {
                 },
                 body: JSON.stringify({ id })
             });
-            
             const data = await response.json();
-
             if (!response.ok) {
                 throw new Error(data.message || "Erro ao excluir imagem.");
             }
-
-            // console.log(data.message);
-
             alert(JSON.stringify(data.message))
-            
             // Atualiza a lista sem precisar recarregar a página
-            setResponseImages(prev =>
+            setImagesSelected(prev =>
                 prev.filter(image => image.id !== id)
             );
-
         } catch (error) {
             console.error("Erro ao excluir:", error);
         }
@@ -213,6 +204,8 @@ export default function Items() {
             setImages={setImages}
             responseImages={responseImages}
             handleDeleteImage={handleDeleteImage}
+            imagesSelected={imagesSelected}
+            setImagesSelected={setImagesSelected}
         >
             {item}
         </ItemsForm>

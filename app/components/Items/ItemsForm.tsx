@@ -1,6 +1,6 @@
 import { TItem, TBrand, TsubGroup, TTaxGroup, TTypeItem, TItemClass, TUnitMeasure, TResponseImages } from "@/app/models/TItem"
 import ItemsList from "./ItemsList"
-import { useState } from "react"
+import { Dispatch, useState } from "react"
 import ShowForm from "../ShowForm"
 import { globalStyles_form, globalStyles_select } from "../GlobalStyles"
 import CloseForm from "../CloseForm"
@@ -20,8 +20,10 @@ type Props = {
     items: TItem[]
     images: File[]
     setImages: Function
-    responseImages:TResponseImages[]
-     handleDeleteImage: (id: number) => void;
+    responseImages: TResponseImages[]
+    handleDeleteImage: (id: number) => void;
+    imagesSelected: TResponseImages[]
+    setImagesSelected: Dispatch<TResponseImages[]>
 }
 
 export default function ItemsForm({
@@ -40,7 +42,9 @@ export default function ItemsForm({
     images,
     setImages,
     responseImages,
-     handleDeleteImage
+    handleDeleteImage,
+    imagesSelected,
+    setImagesSelected
 }: Props) {
 
     const [showForm, setShowForm] = useState(false)
@@ -278,7 +282,9 @@ export default function ItemsForm({
             setChildren={setChildren}
             setShowForm={setShowForm}
             responseImages={responseImages}
-             handleDeleteImage={ handleDeleteImage}
+            handleDeleteImage={handleDeleteImage}
+            imagesSelected={imagesSelected}
+            setImagesSelected={setImagesSelected}
         />
     </>
 }

@@ -1,6 +1,6 @@
 import { TItem, TResponseImages } from "@/app/models/TItem"
 import { globalStyles_btn_list, globalStyles_overflow, globalStyles_table_list, globalStyles_tbody_list, globalStyles_td, globalStyles_th, globalStyles_thead_list, globalStyles_tr } from "../GlobalStyles"
-import { useEffect, useState } from "react"
+import { Dispatch, useEffect, useState } from "react"
 import Pagination from "../Pagination/Pagination"
 import CloseForm from "../CloseForm"
 
@@ -11,6 +11,8 @@ type Props = {
     setShowForm: React.Dispatch<React.SetStateAction<boolean>>
     responseImages: TResponseImages[]
     handleDeleteImage: (id: number) => void;
+    imagesSelected:TResponseImages[]
+    setImagesSelected:Dispatch<TResponseImages[]>
 }
 
 export default function ItemsList({
@@ -18,7 +20,9 @@ export default function ItemsList({
     setChildren,
     setShowForm,
     responseImages,
-    handleDeleteImage
+    handleDeleteImage,
+    imagesSelected,
+    setImagesSelected
 }: Props) {
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -28,7 +32,6 @@ export default function ItemsList({
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
     const currentItems = items.slice(indexOfFirstItem, indexOfLastItem)
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-    const [imagesSelected, setImagesSelected] = useState<TResponseImages[]>([]);
     const [showFormImg, setShowFormImg] = useState(false);
 
     useEffect(() => {
@@ -97,7 +100,7 @@ export default function ItemsList({
                                         {/* Cabeçalho */}
                                         <div className="flex justify-end mb-1 shrink-0">
                                             <p className="flex-1 justify-center text-white font-extrabold">
-                                                Remover imagem do Item com ID : {imagesSelected[0].idItem}</p>
+                                                Remover imagem do Item {item.id}  </p>
                                             <CloseForm setCloseForm={setShowFormImg} />
                                         </div>
 
@@ -138,7 +141,6 @@ export default function ItemsList({
                                                     </button>
                                                 </div>
                                             ))}
-
                                         </div>
 
                                         {/* Rodapé */}
