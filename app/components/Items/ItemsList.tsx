@@ -11,8 +11,8 @@ type Props = {
     setShowForm: React.Dispatch<React.SetStateAction<boolean>>
     responseImages: TResponseImages[]
     handleDeleteImage: (id: number) => void;
-    imagesSelected:TResponseImages[]
-    setImagesSelected:Dispatch<TResponseImages[]>
+    imagesSelected: TResponseImages[]
+    setImagesSelected: Dispatch<TResponseImages[]>
 }
 
 export default function ItemsList({
@@ -120,7 +120,11 @@ export default function ItemsList({
 
                                                     <button
                                                         type="button"
-                                                        onClick={() => handleDeleteImage(image.id)}
+                                                        onClick={() => {
+                                                            if (window.confirm("Tem certeza que deseja excluir esta imagem?")) {
+                                                                handleDeleteImage(image.id);
+                                                            }
+                                                        }}
                                                         title="Remover imagem"
                                                         className="absolute top-1 right-1 bg-red-600 hover:bg-red-700 text-white rounded-full w-7 h-7 flex items-center justify-center shadow-md transition-all duration-200 hover:scale-110 cursor-pointer"
                                                     >
@@ -168,7 +172,6 @@ export default function ItemsList({
                 </tbody>
             </table>
         </div>
-
         <Pagination
             props={items}
             setCurrentPage={setCurrentPage}

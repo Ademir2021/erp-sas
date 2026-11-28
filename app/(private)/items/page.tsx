@@ -166,7 +166,9 @@ export default function Items() {
             if (!response.ok) {
                 throw new Error(data.message || "Erro ao excluir imagem.");
             }
-            alert(JSON.stringify(data.message))
+
+            // console.log(data.message)
+
             // Atualiza a lista sem precisar recarregar a página
             setImagesSelected(prev =>
                 prev.filter(image => image.id !== id)

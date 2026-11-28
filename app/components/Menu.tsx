@@ -44,7 +44,7 @@ export default function Menu({ setCollapsed }: Props) {
         </li>{hr}
         {isAdmin && <>
           {<div><a href='##' onClick={() => (setShowForm(prev => !prev))}>CADASTROS</a></div>}
-          <div className="flex justify-end absolute top-57 right-[30]"> <ShowForm
+          <div className="flex justify-end absolute top-73 right-[30]"> <ShowForm
             showForm={showForm}
             setShowForm={setShowForm}
           /></div>{!showForm && hr}</>} {showForm && <>
